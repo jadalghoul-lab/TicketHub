@@ -14,6 +14,7 @@ class Organizer extends Model
     protected $fillable = [
         'user_id',
         'company_name',
+        'logo',
         'slug',
         'contact_email',
         'payout_email',
