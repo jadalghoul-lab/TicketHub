@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('ticket_number')->unique();
             $table->string('status')->default('valid'); // valid, used, cancelled, refunded
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('event_id');
             $table->index('uuid');
