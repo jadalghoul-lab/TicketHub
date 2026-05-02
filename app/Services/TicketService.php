@@ -73,4 +73,48 @@ class TicketService
             'ticket' => $ticket->load(['user', 'ticketType'])
         ];
     }
+
+    /**
+     * Validate a ticket globally (for any event owned by the organizer).
+     */
+    public function validateAndCheckInGlobal(string $code, int $organizerId, int $scannerUserId): array
+    {
+        $ticket = Ticket::whereHas('event', function ($query) use ($organizerId) {
+                $query->where('organizer_id', $organizerId);
+            })
+            ->where(function ($query) use ($code) {
+                $query->where('uuid', $code)
+                      ->orWhere('ticket_number', $code);
+            })
+            ->with(['event', 'user', 'ticketType'])
+            ->first();
+
+        if (!$ticket) {
+            return ['success' => false, 'message' => 'Invalid ticket code or event mismatch.'];
+        }
+
+        if ($ticket->status === 'used') {
+            return [
+                'success' => false, 
+                'message' => 'Ticket already used at ' . ($ticket->scanned_at ? $ticket->scanned_at->format('H:i:s') : 'unknown time'),
+                'ticket' => $ticket
+            ];
+        }
+
+        if ($ticket->status !== 'valid') {
+            return ['success' => false, 'message' => 'Ticket is ' . $ticket->status . '.'];
+        }
+
+        $ticket->update([
+            'status' => 'used',
+            'scanned_at' => now(),
+            'scanned_by' => $scannerUserId
+        ]);
+
+        return [
+            'success' => true,
+            'message' => 'Access Granted for ' . $ticket->event->title . '!',
+            'ticket' => $ticket
+        ];
+    }
 }
