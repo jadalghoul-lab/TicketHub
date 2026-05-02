@@ -185,10 +185,10 @@
                         @endforelse
                     </div>
                     
-                    <button class="w-full bg-white/10 hover:bg-white/20 transition-all text-white rounded-2xl py-3 font-bold mt-8 flex items-center justify-center gap-2 text-sm">
+                    <a href="{{ route('organizer.events.index', ['create' => 1]) }}" wire:navigate class="w-full bg-white/10 hover:bg-white/20 transition-all text-white rounded-2xl py-3 font-bold mt-8 flex items-center justify-center gap-2 text-sm">
                         <span class="material-symbols-outlined text-sm">add</span>
                         Create New Event
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Active Scanner Shortcut -->

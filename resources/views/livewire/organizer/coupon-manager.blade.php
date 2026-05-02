@@ -198,6 +198,18 @@
                                     </div>
                                 </div>
 
+                                <!-- One per customer toggle -->
+                                <div class="flex items-center justify-between p-6 bg-slate-50 dark:bg-zinc-800 rounded-2xl">
+                                    <div>
+                                        <h4 class="text-sm font-black text-slate-900 dark:text-white">Once per customer</h4>
+                                        <p class="text-[10px] text-slate-500 dark:text-zinc-500 font-bold uppercase tracking-widest">Restrict each user to one use</p>
+                                    </div>
+                                    <button type="button" wire:click="$toggle('once_per_customer')" 
+                                            class="w-14 h-8 rounded-full transition-all relative {{ $once_per_customer ? 'bg-indigo-600' : 'bg-slate-200 dark:bg-zinc-700' }}">
+                                        <div class="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-transform {{ $once_per_customer ? 'translate-x-6' : '' }}"></div>
+                                    </button>
+                                </div>
+
                                 <div class="pt-8 flex gap-4">
                                     <button type="button" wire:click="$set('showModal', false)" 
                                             class="flex-1 px-8 py-4 rounded-2xl font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all">

@@ -89,3 +89,16 @@ test('organizer can delete a coupon', function () {
 
     expect(Coupon::where('id', $coupon->id)->exists())->toBeFalse();
 });
+
+test('organizer can toggle once per customer restriction', function () {
+    Livewire::actingAs($this->user)
+        ->test(CouponManager::class)
+        ->set('code', 'ONCEONLY')
+        ->set('type', 'percentage')
+        ->set('value', 10)
+        ->set('once_per_customer', true)
+        ->call('saveCoupon')
+        ->assertHasNoErrors();
+
+    expect(Coupon::where('code', 'ONCEONLY')->first()->once_per_customer)->toBeTrue();
+});
