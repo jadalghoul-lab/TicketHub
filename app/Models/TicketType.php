@@ -12,6 +12,7 @@ class TicketType extends Model
 
     protected $fillable = [
         'event_id',
+        'zone_id',
         'name',
         'price',
         'quantity',
@@ -35,5 +36,10 @@ class TicketType extends Model
     public function event()
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
     }
 }

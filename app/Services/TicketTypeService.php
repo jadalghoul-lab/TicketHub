@@ -12,6 +12,14 @@ class TicketTypeService
      */
     public function createTicketType(Event $event, array $data): TicketType
     {
+        // If a zone is selected, ensure we don't exceed its capacity
+        if (!empty($data['zone_id'])) {
+            $zone = \App\Models\Zone::find($data['zone_id']);
+            if ($zone && $data['quantity'] > $zone->capacity) {
+                throw new \Exception("Ticket quantity exceeds zone capacity.");
+            }
+        }
+
         $ticketType = new TicketType($data);
         $ticketType->event_id = $event->id;
         $ticketType->save();
