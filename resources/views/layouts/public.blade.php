@@ -38,23 +38,24 @@
             </div>
             <div class="flex items-center gap-4">
                 <div class="hidden lg:flex items-center gap-2">
-                    <button class="p-2 transition-colors duration-200 hover:bg-slate-100 rounded-md active:scale-95">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                    </button>
-                    <button class="p-2 transition-colors duration-200 hover:bg-slate-100 rounded-md active:scale-95">
-                        <span class="material-symbols-outlined">notifications</span>
-                    </button>
+                    <livewire:public.cart-icon />
+                    <livewire:public.notification-bell />
                     @auth
-                        <a href="{{ route('dashboard') }}" class="p-2 transition-colors duration-200 hover:bg-slate-100 rounded-md active:scale-95">
+                        <a href="{{ route('dashboard') }}" class="p-2 transition-colors duration-200 hover:bg-slate-100 rounded-md active:scale-95" title="Dashboard">
                             <span class="material-symbols-outlined">account_circle</span>
                         </a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="p-2 transition-colors duration-200 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-md active:scale-95" title="Logout">
+                                <span class="material-symbols-outlined">logout</span>
+                            </button>
+                        </form>
                     @else
-                        <a href="{{ route('login') }}" class="p-2 transition-colors duration-200 hover:bg-slate-100 rounded-md active:scale-95">
+                        <a href="{{ route('login') }}" class="p-2 transition-colors duration-200 hover:bg-slate-100 rounded-md active:scale-95" title="Login">
                             <span class="material-symbols-outlined">login</span>
                         </a>
                     @endauth
                 </div>
-                <a href="{{ route('register') }}" class="bg-[#4f46e5] text-white px-4 py-2 rounded-lg font-semibold active:scale-95 transition-transform">Get Started</a>
             </div>
         </div>
     </header>

@@ -79,24 +79,34 @@ class EventController extends Controller
      */
     public function show(string $slug)
     {
-        // We use withTrashed() to find it, but then we filter access
-        $query = Event::withoutGlobalScopes()
+        $event = Event::withoutGlobalScopes()
             ->withTrashed()
-            ->with(['venue', 'organizer', 'ticketTypes']);
+            ->with(['venue', 'organizer', 'ticketTypes'])
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $user = auth()->user();
         
-        $event = $query->where('slug', $slug)->firstOrFail();
-
-        // Check Access
-        $isOwner = auth()->check() && auth()->user()->organizer && auth()->user()->organizer->id === $event->organizer_id;
-        $isAdmin = auth()->check() && auth()->user()->isAdmin();
-
-        // 1. If it's trashed, only Admin or Owner can see it
-        if ($event->trashed() && !$isOwner && !$isAdmin) {
-            abort(404);
+        // Robust Admin check
+        $isAdmin = false;
+        if ($user) {
+            $isAdmin = $user->role === \App\Enums\Role::ADMIN || $user->role->value === 'admin' || (method_exists($user, 'isAdmin') && $user->isAdmin());
         }
 
-        // 2. If not published, only Admin or Owner can see it
-        if ($event->status !== \App\Enums\EventStatus::PUBLISHED && !$isOwner && !$isAdmin) {
+        // Owner check
+        $isOwner = false;
+        if ($user && $user->organizer) {
+            $isOwner = $user->organizer->id === $event->organizer_id;
+        }
+
+        // Publicly visible only if published and NOT trashed
+        $isPubliclyVisible = $event->status === \App\Enums\EventStatus::PUBLISHED && !$event->trashed();
+
+        if (!$isPubliclyVisible && !$isAdmin && !$isOwner) {
+            // Log for debugging if it's the specific slug the user mentioned
+            if ($slug === 'food-wine-festival-223') {
+                \Log::info("Access denied for food-wine-festival-223. User: " . ($user ? $user->email : 'Guest') . " Admin: " . ($isAdmin ? 'Yes' : 'No'));
+            }
             abort(404);
         }
 

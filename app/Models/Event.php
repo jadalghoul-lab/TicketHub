@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\BelongsToOrganizer;
 use App\Enums\EventStatus;
 
 class Event extends Model
 {
-    use SoftDeletes, BelongsToOrganizer;
+    use SoftDeletes, BelongsToOrganizer, HasFactory;
 
     protected $fillable = [
         'organizer_id',

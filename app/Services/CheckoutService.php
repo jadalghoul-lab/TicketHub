@@ -77,6 +77,9 @@ class CheckoutService
 
             // 6. Send Email (via Queue)
             \App\Jobs\SendOrderTicketsJob::dispatch($order);
+
+            // 7. Send In-App Notification
+            $order->user->notify(new \App\Notifications\OrderConfirmed($order));
         });
 
         Log::info("Order #{$order->id} fulfilled successfully via CheckoutService.");
