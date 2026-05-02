@@ -79,11 +79,26 @@ class EventController extends Controller
      */
     public function show(string $slug)
     {
-        $event = Event::published()
-            ->with(['venue', 'organizer', 'ticketTypes'])
-            ->withoutGlobalScopes()
-            ->where('slug', $slug)
-            ->firstOrFail();
+        // We use withTrashed() to find it, but then we filter access
+        $query = Event::withoutGlobalScopes()
+            ->withTrashed()
+            ->with(['venue', 'organizer', 'ticketTypes']);
+        
+        $event = $query->where('slug', $slug)->firstOrFail();
+
+        // Check Access
+        $isOwner = auth()->check() && auth()->user()->organizer && auth()->user()->organizer->id === $event->organizer_id;
+        $isAdmin = auth()->check() && auth()->user()->isAdmin();
+
+        // 1. If it's trashed, only Admin or Owner can see it
+        if ($event->trashed() && !$isOwner && !$isAdmin) {
+            abort(404);
+        }
+
+        // 2. If not published, only Admin or Owner can see it
+        if ($event->status !== \App\Enums\EventStatus::PUBLISHED && !$isOwner && !$isAdmin) {
+            abort(404);
+        }
 
         return view('public.events.show', compact('event'));
     }

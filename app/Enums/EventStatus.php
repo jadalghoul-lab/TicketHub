@@ -9,4 +9,5 @@ enum EventStatus: string
     case SOLD_OUT = 'sold_out';
     case FINISHED = 'finished';
     case CANCELLED = 'cancelled';
+    case BLOCKED = 'blocked';
 }
