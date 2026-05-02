@@ -59,7 +59,10 @@ class Checkout extends Component
 
     public function mount($slug)
     {
-        $this->event = Event::published()->where('slug', $slug)->firstOrFail();
+        $this->event = Event::published()
+            ->withoutGlobalScopes()
+            ->where('slug', $slug)
+            ->firstOrFail();
         
         // Pre-select first ticket type if available
         if ($this->event->ticketTypes->count() > 0) {

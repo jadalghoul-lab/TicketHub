@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
@@ -21,6 +21,9 @@
                     @if(auth()->user()->isOrganizer())
                         <flux:sidebar.item icon="home" :href="route('organizer.dashboard')" :current="request()->routeIs('organizer.dashboard')" wire:navigate>
                             Organizer Hub
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="calendar-days" :href="route('organizer.events.index')" :current="request()->routeIs('organizer.events.*')" wire:navigate>
+                            Events
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="arrow-path" :href="route('organizer.refunds')" :current="request()->routeIs('organizer.refunds')" wire:navigate>
                             Refund Requests

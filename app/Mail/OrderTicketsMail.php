@@ -26,8 +26,10 @@ class OrderTicketsMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $eventTitle = $this->order->event?->title ?? 'Your Event';
+        
         return new Envelope(
-            subject: 'Your Tickets for ' . $this->order->event->title,
+            subject: 'Your Tickets for ' . $eventTitle,
         );
     }
 
