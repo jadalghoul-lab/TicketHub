@@ -74,10 +74,14 @@ test('order system fulfills order and creates all required records', function ()
         ]
     ];
 
+    \Illuminate\Support\Facades\Bus::fake();
+
     $service = new \App\Services\CheckoutService();
     $service->fulfillOrder($session);
 
     // 3. Assertions
+    \Illuminate\Support\Facades\Bus::assertDispatched(\App\Jobs\SendOrderTicketsJob::class);
+    
     $order->refresh();
     expect($order->status)->toBe('paid');
 

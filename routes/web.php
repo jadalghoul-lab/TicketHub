@@ -20,6 +20,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/checkout/success/{order_number}', [App\Http\Controllers\Public\EventController::class, 'checkoutSuccess'])->name('public.checkout.success');
     Route::get('/checkout/cancel/{order_number}', [App\Http\Controllers\Public\EventController::class, 'checkoutCancel'])->name('public.checkout.cancel');
 
+    // Temporary Mail Preview
+    Route::get('/mail-preview', function () {
+        $order = \App\Models\Order::with(['user', 'event', 'tickets.ticketType'])->first();
+        if (!$order) return 'No orders found in database to preview.';
+        return new \App\Mail\OrderTicketsMail($order);
+    });
+
     Route::view('dashboard', 'dashboard')->name('dashboard');
 
     Route::middleware('role:admin')->group(function () {
