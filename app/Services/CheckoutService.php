@@ -58,6 +58,9 @@ class CheckoutService
 
             // 4. Update Stock
             $ticketType->decrement('quantity', $quantity);
+
+            // 5. Send Email (via Queue)
+            \App\Jobs\SendOrderTicketsJob::dispatch($order);
         });
 
         Log::info("Order #{$order->id} fulfilled successfully via CheckoutService.");

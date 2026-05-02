@@ -23,4 +23,13 @@ class TicketService
         
         return $writer->writeString($ticket->uuid);
     }
+
+    /**
+     * Generate a QR code as a base64 encoded SVG.
+     */
+    public function generateQrCodeBase64(Ticket $ticket): string
+    {
+        $svg = $this->generateQrCode($ticket);
+        return 'data:image/svg+xml;base64,' . base64_encode($svg);
+    }
 }

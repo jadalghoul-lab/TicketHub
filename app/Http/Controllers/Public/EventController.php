@@ -91,11 +91,29 @@ class EventController extends Controller
     /**
      * Handle successful checkout redirect.
      */
-    public function checkoutSuccess(string $orderNumber)
+    public function checkoutSuccess(string $orderNumber, \App\Services\CheckoutService $checkoutService)
     {
         $order = \App\Models\Order::where('order_number', $orderNumber)
             ->where('user_id', \Illuminate\Support\Facades\Auth::id())
             ->firstOrFail();
+
+        // DEV SHORTCUT: If local and pending, fulfill automatically for easy testing without webhooks
+        if (config('app.env') === 'local' && $order->status === 'pending') {
+            // Mock a session object that fulfillOrder expects
+            $session = (object)[
+                'metadata' => (object)[
+                    'order_id' => $order->id,
+                    'ticket_type_id' => $order->items->first()->ticket_type_id,
+                    'quantity' => $order->items->first()->quantity,
+                ],
+                'amount_total' => $order->total_amount * 100,
+                'currency' => 'eur',
+                'payment_intent' => 'pi_mock_' . strtolower(\Illuminate\Support\Str::random(10)),
+            ];
+
+            $checkoutService->fulfillOrder($session);
+            $order->refresh();
+        }
 
         return view('public.checkout.success', compact('order'));
     }
