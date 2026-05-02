@@ -22,6 +22,7 @@ class CouponManager extends Component
     public $event_id = null;
     public $expires_at;
     public $max_usages;
+    public $once_per_customer = false;
 
     protected function rules()
     {
@@ -32,13 +33,14 @@ class CouponManager extends Component
             'event_id' => 'nullable|exists:events,id',
             'expires_at' => 'nullable|date|after:today',
             'max_usages' => 'nullable|integer|min:1',
+            'once_per_customer' => 'boolean',
         ];
     }
 
     public function createCoupon()
     {
         $this->resetValidation();
-        $this->reset(['couponId', 'code', 'type', 'value', 'event_id', 'expires_at', 'max_usages']);
+        $this->reset(['couponId', 'code', 'type', 'value', 'event_id', 'expires_at', 'max_usages', 'once_per_customer']);
         $this->isEditing = false;
         $this->showModal = true;
     }
@@ -55,6 +57,7 @@ class CouponManager extends Component
         $this->event_id = $coupon->event_id;
         $this->expires_at = $coupon->expires_at ? $coupon->expires_at->format('Y-m-d') : null;
         $this->max_usages = $coupon->max_usages;
+        $this->once_per_customer = $coupon->once_per_customer;
         
         $this->isEditing = true;
         $this->showModal = true;
@@ -72,6 +75,7 @@ class CouponManager extends Component
             'event_id' => $this->event_id ?: null,
             'expires_at' => $this->expires_at ?: null,
             'max_usages' => $this->max_usages ?: null,
+            'once_per_customer' => $this->once_per_customer,
         ];
 
         if ($this->isEditing) {
