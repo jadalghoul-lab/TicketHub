@@ -11,10 +11,30 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')" class="grid">
-                    <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
-                    </flux:sidebar.item>
+                <flux:sidebar.group :heading="__('Management')" class="grid">
+                    @if(auth()->user()->isAdmin())
+                        <flux:sidebar.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>
+                            Admin Dashboard
+                        </flux:sidebar.item>
+                    @endif
+
+                    @if(auth()->user()->isOrganizer())
+                        <flux:sidebar.item icon="home" :href="route('organizer.dashboard')" :current="request()->routeIs('organizer.dashboard')" wire:navigate>
+                            Organizer Hub
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="arrow-path" :href="route('organizer.refunds')" :current="request()->routeIs('organizer.refunds')" wire:navigate>
+                            Refund Requests
+                        </flux:sidebar.item>
+                    @endif
+
+                    @if(auth()->user()->isCustomer())
+                        <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                            Dashboard
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="ticket" :href="route('public.tickets.index')" :current="request()->routeIs('public.tickets.index')" wire:navigate>
+                            My Tickets
+                        </flux:sidebar.item>
+                    @endif
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

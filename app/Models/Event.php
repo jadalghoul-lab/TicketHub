@@ -27,6 +27,7 @@ class Event extends Model
         'country',
         'capacity',
         'status',
+        'refund_deadline',
     ];
 
     public function venue()
@@ -44,12 +45,18 @@ class Event extends Model
         return $this->hasMany(TicketType::class);
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     protected function casts(): array
     {
         return [
             'start_date' => 'date',
             'end_date' => 'date',
             'time' => 'datetime',
+            'refund_deadline' => 'datetime',
             'status' => EventStatus::class,
         ];
     }
@@ -57,5 +64,15 @@ class Event extends Model
     public function scopePublished($query)
     {
         return $query->where('status', EventStatus::PUBLISHED->value);
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

@@ -27,14 +27,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return new \App\Mail\OrderTicketsMail($order);
     });
 
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', [\App\Http\Controllers\Public\CustomerDashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware('role:admin')->group(function () {
         Route::view('admin/dashboard', 'dashboard')->name('admin.dashboard');
     });
 
     Route::middleware('role:organizer')->group(function () {
-        Route::view('organizer/dashboard', 'dashboard')->name('organizer.dashboard');
+        Route::get('organizer/dashboard', [\App\Http\Controllers\Organizer\DashboardController::class, 'index'])->name('organizer.dashboard');
+        Route::get('organizer/events/{event}/scanner', \App\Livewire\Organizer\Scanner::class)->name('organizer.scanner');
+        Route::get('organizer/refunds', \App\Livewire\Organizer\RefundManager::class)->name('organizer.refunds');
     });
 });
 

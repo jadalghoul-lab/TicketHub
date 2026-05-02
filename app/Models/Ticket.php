@@ -18,6 +18,11 @@ class Ticket extends Model
         'ticket_number',
         'status',
         'scanned_at',
+        'scanned_by',
+    ];
+
+    protected $casts = [
+        'scanned_at' => 'datetime',
     ];
 
     public function event()
