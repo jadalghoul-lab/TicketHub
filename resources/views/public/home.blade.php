@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative min-h-[600px] flex items-center justify-center overflow-hidden">
+<section class="relative min-h-[600px] flex items-center justify-center">
     <div class="absolute inset-0 z-0">
         <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuR1gsqHmbw75dRDn3DqpT4j01I6Pv8JR_4Y7yFWvWfa9-Suri6idFE1QlXDVoVu2Pr6txujET1kfI21XN6jjSxGUnW6EO5YCrhI_vHNmU9y09-H-fupzN77Ta3FCzWyBKqS1rnMTRgoF97pdUxkKx2lZl-ZLsVIl-9coK5NIFMYNo30MrrYewadFrXIApPOVBv4Y4k9G6HhHpkeXlX2iO2muyeRG3_bIljPenm5H7Z3WONGRiMnRHcWDLN9KvbOreTfE-QbvigxAH" alt="Hero background" />
         <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
@@ -11,27 +11,8 @@
         <h1 class="text-white text-5xl md:text-6xl mb-6 drop-shadow-lg font-bold">Experience more than just a seat.</h1>
         <p class="text-white/90 mb-10 max-w-2xl mx-auto drop-shadow-md text-lg">Unlock access to the world's most sought-after concerts, sporting events, and theater performances with guaranteed security and seamless delivery.</p>
 
-        <!-- Search Form -->
-        <form action="{{ route('public.events.index') }}" method="GET"
-              class="bg-white/95 backdrop-blur shadow-2xl p-2 rounded-2xl flex flex-col md:flex-row gap-2 max-w-3xl mx-auto border border-white/20">
-            <div class="flex-grow flex items-center px-4 py-3 gap-3">
-                <span class="material-symbols-outlined text-[#777587]">search</span>
-                <input name="search" value="{{ request('search') }}"
-                       class="w-full bg-transparent border-none focus:ring-0 text-[#191c1e]"
-                       placeholder="Find your next event..." type="text"/>
-            </div>
-            <div class="w-px bg-slate-200 hidden md:block my-2"></div>
-            <div class="flex items-center px-4 py-3 gap-3">
-                <span class="material-symbols-outlined text-[#777587]">location_on</span>
-                <input name="city" value="{{ request('city') }}"
-                       class="w-32 bg-transparent border-none focus:ring-0 text-[#191c1e] text-sm"
-                       placeholder="City..." type="text"/>
-            </div>
-            <button type="submit"
-                    class="bg-[#3525cd] text-white px-8 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#3525cd]/90 transition-all active:scale-95 font-semibold">
-                Search
-            </button>
-        </form>
+        <!-- Search Form (Realtime Livewire) -->
+        <livewire:public.global-search />
     </div>
 </section>
 
