@@ -14,6 +14,13 @@ class EventManager extends Component
 
     public $showModal = false;
     public $isEditing = false;
+
+    public function mount()
+    {
+        if (request()->query('create')) {
+            $this->createEvent();
+        }
+    }
     
     // Form fields
     public $eventId;
