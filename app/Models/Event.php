@@ -29,6 +29,16 @@ class Event extends Model
         'status',
     ];
 
+    public function venue()
+    {
+        return $this->belongsTo(Venue::class);
+    }
+
+    public function ticketTypes()
+    {
+        return $this->hasMany(TicketType::class);
+    }
+
     protected function casts(): array
     {
         return [
