@@ -38,4 +38,9 @@ class Event extends Model
             'status' => EventStatus::class,
         ];
     }
+
+    public function venue()
+    {
+        return $this->belongsTo(Venue::class);
+    }
 }
