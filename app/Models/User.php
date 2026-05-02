@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->role === \App\Enums\Role::CUSTOMER;
     }
+
+    public function organizer()
+    {
+        return $this->hasOne(Organizer::class);
+    }
 }
