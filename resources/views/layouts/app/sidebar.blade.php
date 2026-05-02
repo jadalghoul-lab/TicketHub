@@ -6,7 +6,12 @@
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <flux:sidebar sticky collapsible="mobile" class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.header>
-                <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
+                @php
+                    $logoName = 'TicketHub';
+                    if (auth()->user()->isAdmin()) $logoName = 'Admin Panel';
+                    if (auth()->user()->isOrganizer()) $logoName = 'Organizer Dashboard';
+                @endphp
+                <x-app-logo :sidebar="true" :name="$logoName" href="{{ route('dashboard') }}" wire:navigate />
                 <flux:sidebar.collapse class="lg:hidden" />
             </flux:sidebar.header>
 
@@ -24,6 +29,9 @@
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="calendar-days" :href="route('organizer.events.index')" :current="request()->routeIs('organizer.events.*')" wire:navigate>
                             Events
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="viewfinder-circle" :href="route('organizer.global-scanner')" :current="request()->routeIs('organizer.global-scanner')" wire:navigate>
+                            Global Scanner
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="arrow-path" :href="route('organizer.refunds')" :current="request()->routeIs('organizer.refunds')" wire:navigate>
                             Refund Requests

@@ -66,9 +66,17 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
+        // Recent Scans
+        $recentScans = Ticket::whereIn('event_id', $eventIds)
+            ->where('status', 'used')
+            ->with(['event', 'user'])
+            ->orderBy('scanned_at', 'desc')
+            ->take(5)
+            ->get();
+
         return view('organizer.dashboard', compact(
             'organizer', 'events', 'totalRevenue', 'totalTickets', 
-            'attendanceRate', 'recentOrders', 'upcomingEvents', 'topEvents', 'period'
+            'attendanceRate', 'recentOrders', 'upcomingEvents', 'topEvents', 'period', 'recentScans'
         ));
     }
 }

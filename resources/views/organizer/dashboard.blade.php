@@ -208,6 +208,87 @@
                         @endforeach
                     </div>
                 </div>
+
+        </div>
+
+        </div>
+
+        <!-- Premium Live Entry Feed -->
+        <div class="bg-white dark:bg-zinc-800 rounded-[2.5rem] border border-slate-50 dark:border-zinc-700 shadow-xl shadow-slate-100/50 dark:shadow-none overflow-hidden mt-8">
+            <div class="p-8 border-b border-slate-50 dark:border-zinc-700 flex items-center justify-between bg-slate-50/50 dark:bg-zinc-800/50">
+                <div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-green-600">sensors</span>
+                        Real-time Entry Monitor
+                    </h3>
+                    <p class="text-xs text-slate-400 dark:text-zinc-500 font-bold uppercase tracking-widest mt-1">Live tracking across all active events</p>
+                </div>
+                <div class="flex items-center gap-2 px-4 py-2 bg-green-50 dark:bg-green-900/20 rounded-full">
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span class="text-[10px] font-black text-green-600 dark:text-green-400 uppercase tracking-widest">System Live</span>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-[0.2em] border-b border-slate-50 dark:border-zinc-700">
+                            <th class="px-8 py-6">Attendee</th>
+                            <th class="px-8 py-6">Event Details</th>
+                            <th class="px-8 py-6">Ticket Reference</th>
+                            <th class="px-8 py-6">Check-in Time</th>
+                            <th class="px-8 py-6 text-right">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50 dark:divide-zinc-700">
+                        @forelse($recentScans as $scan)
+                        <tr class="group hover:bg-slate-50/50 dark:hover:bg-zinc-700/50 transition-all">
+                            <td class="px-8 py-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-black text-xs group-hover:scale-110 transition-transform">
+                                        {{ substr($scan->user?->name ?? 'G', 0, 1) }}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-black text-slate-900 dark:text-white">{{ $scan->user?->name ?? 'Guest' }}</p>
+                                        <p class="text-[10px] text-slate-400 dark:text-zinc-500 font-bold">{{ $scan->user?->email ?? 'No email associated' }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-8 py-6">
+                                <p class="text-sm font-bold text-slate-900 dark:text-white truncate max-w-[200px]">{{ $scan->event->title }}</p>
+                                <p class="text-[10px] text-indigo-600 dark:text-indigo-400 font-black uppercase tracking-tighter">{{ $scan->ticketType->name }}</p>
+                            </td>
+                            <td class="px-8 py-6">
+                                <span class="font-mono text-xs font-bold text-slate-500 dark:text-zinc-400">#{{ $scan->ticket_number }}</span>
+                            </td>
+                            <td class="px-8 py-6">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-black text-slate-900 dark:text-white">{{ $scan->scanned_at?->format('H:i:s') ?? '--:--:--' }}</span>
+                                    <span class="text-[10px] text-slate-400 dark:text-zinc-500 font-bold">{{ $scan->scanned_at?->diffForHumans() ?? 'N/A' }}</span>
+                                </div>
+                            </td>
+                            <td class="px-8 py-6 text-right">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-[10px] font-black rounded-full uppercase">
+                                    <span class="w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
+                                    Verified
+                                </span>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="px-8 py-20 text-center">
+                                <div class="flex flex-col items-center justify-center">
+                                    <span class="material-symbols-outlined text-6xl text-slate-100 dark:text-zinc-800 mb-4">qr_code_scanner</span>
+                                    <p class="text-slate-300 dark:text-zinc-700 font-black uppercase tracking-widest text-xs">Waiting for your first entry...</p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

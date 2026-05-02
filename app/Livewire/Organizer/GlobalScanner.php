@@ -2,37 +2,39 @@
 
 namespace App\Livewire\Organizer;
 
-use App\Models\Event;
 use App\Models\Ticket;
 use App\Services\TicketService;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
-class Scanner extends Component
+class GlobalScanner extends Component
 {
-    public Event $event;
     public string $manualCode = '';
     public ?array $scanResult = null;
     public ?Ticket $lastTicket = null;
-    public int $totalTickets = 0;
-    public int $checkedInCount = 0;
+    public int $totalTicketsToday = 0;
+    public int $checkedInToday = 0;
 
-    public function mount(Event $event)
+    public function mount()
     {
-        $this->event = $event;
-
-        // Check if user is the organizer
-        if (auth()->user()->organizer?->id !== $event->organizer_id) {
-            abort(403);
-        }
-
         $this->refreshStats();
     }
 
     public function refreshStats()
     {
-        $this->totalTickets = Ticket::where('event_id', $this->event->id)->count();
-        $this->checkedInCount = Ticket::where('event_id', $this->event->id)->where('status', 'used')->count();
+        $organizerId = auth()->user()->organizer->id;
+        
+        $this->totalTicketsToday = Ticket::whereHas('event', function($q) use ($organizerId) {
+            $q->where('organizer_id', $organizerId)
+              ->whereDate('start_date', '<=', now())
+              ->whereDate('start_date', '>=', now()->subDays(1));
+        })->count();
+
+        $this->checkedInToday = Ticket::whereHas('event', function($q) use ($organizerId) {
+            $q->where('organizer_id', $organizerId);
+        })->where('status', 'used')
+          ->whereDate('scanned_at', now())
+          ->count();
     }
 
     public function scan(string $code = null)
@@ -42,9 +44,9 @@ class Scanner extends Component
         if (!$code) return;
 
         $ticketService = app(TicketService::class);
-        $result = $ticketService->validateAndCheckIn(
+        $result = $ticketService->validateAndCheckInGlobal(
             $code,
-            $this->event->id,
+            auth()->user()->organizer->id,
             auth()->id()
         );
 
@@ -65,6 +67,6 @@ class Scanner extends Component
     #[Layout('layouts.app')]
     public function render()
     {
-        return view('livewire.organizer.scanner');
+        return view('livewire.organizer.global-scanner');
     }
 }
