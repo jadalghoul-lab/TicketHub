@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('company_name');
             $table->string('slug')->unique();
+            $table->string('website')->nullable();
+            $table->string('logo')->nullable();
             $table->string('contact_email')->nullable();
             $table->string('payout_email')->nullable();
             $table->string('status')->default('active'); // active, inactive

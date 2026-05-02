@@ -64,4 +64,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Organizer::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

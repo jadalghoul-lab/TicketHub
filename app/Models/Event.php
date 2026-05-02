@@ -34,6 +34,11 @@ class Event extends Model
         return $this->belongsTo(Venue::class);
     }
 
+    public function organizer()
+    {
+        return $this->belongsTo(Organizer::class);
+    }
+
     public function ticketTypes()
     {
         return $this->hasMany(TicketType::class);
@@ -49,8 +54,8 @@ class Event extends Model
         ];
     }
 
-    public function venue()
+    public function scopePublished($query)
     {
-        return $this->belongsTo(Venue::class);
+        return $query->where('status', EventStatus::PUBLISHED->value);
     }
 }

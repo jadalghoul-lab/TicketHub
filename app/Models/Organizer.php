@@ -15,6 +15,7 @@ class Organizer extends Model
         'user_id',
         'company_name',
         'logo',
+        'website',
         'slug',
         'contact_email',
         'payout_email',
