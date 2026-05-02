@@ -1,14 +1,26 @@
 <div>
     @php
         $canRequest = !$order->event->start_date->isPast() && $order->status === 'paid';
-        $hasRequested = \App\Models\RefundRequest::where('order_id', $order->id)->exists();
+        $refundRequest = \App\Models\RefundRequest::where('order_id', $order->id)->first();
     @endphp
 
-    @if($hasRequested)
-        <div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl flex items-center gap-3">
-            <span class="material-symbols-outlined text-amber-600">hourglass_empty</span>
-            <p class="text-xs font-bold text-amber-800">Refund request is pending approval.</p>
-        </div>
+    @if($refundRequest)
+        @if($refundRequest->status === 'pending')
+            <div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl flex items-center gap-3">
+                <span class="material-symbols-outlined text-amber-600">hourglass_empty</span>
+                <p class="text-xs font-bold text-amber-800">Refund request is pending approval.</p>
+            </div>
+        @elseif($refundRequest->status === 'approved')
+            <div class="bg-green-50 border border-green-100 p-4 rounded-2xl flex items-center gap-3">
+                <span class="material-symbols-outlined text-green-600">check_circle</span>
+                <p class="text-xs font-bold text-green-800">Refund request was approved.</p>
+            </div>
+        @elseif($refundRequest->status === 'rejected')
+            <div class="bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3">
+                <span class="material-symbols-outlined text-red-600">cancel</span>
+                <p class="text-xs font-bold text-red-800">Refund request was rejected.</p>
+            </div>
+        @endif
     @elseif($canRequest)
         <button wire:click="$set('showModal', true)" class="w-full bg-red-50 text-red-600 px-6 py-4 rounded-2xl font-bold hover:bg-red-600 hover:text-white transition-all flex items-center justify-center gap-3 shadow-sm active:scale-95">
             <span class="material-symbols-outlined">undo</span>

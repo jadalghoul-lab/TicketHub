@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('role:organizer')->group(function () {
         Route::get('organizer/dashboard', [\App\Http\Controllers\Organizer\DashboardController::class, 'index'])->name('organizer.dashboard');
+        Route::get('organizer/events', \App\Livewire\Organizer\EventManager::class)->name('organizer.events.index');
+        Route::get('organizer/events/{event}/tickets', \App\Livewire\Organizer\TicketManager::class)->name('organizer.events.tickets');
         Route::get('organizer/events/{event}/scanner', \App\Livewire\Organizer\Scanner::class)->name('organizer.scanner');
         Route::get('organizer/refunds', \App\Livewire\Organizer\RefundManager::class)->name('organizer.refunds');
     });

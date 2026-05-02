@@ -42,7 +42,14 @@ class CheckoutService
             // 3. Create Tickets
             $ticketTypeId = $session->metadata->ticket_type_id;
             $quantity = $session->metadata->quantity;
-            $ticketType = TicketType::find($ticketTypeId);
+            
+            // USE lockForUpdate to prevent race conditions (overselling)
+            $ticketType = TicketType::where('id', $ticketTypeId)->lockForUpdate()->first();
+
+            if (!$ticketType || $ticketType->quantity < $quantity) {
+                Log::error("Overselling prevented for Order #{$order->id}. Required: {$quantity}, Available: {$ticketType->quantity}");
+                throw new \Exception("Not enough tickets available to fulfill order.");
+            }
 
             for ($i = 0; $i < $quantity; $i++) {
                 Ticket::create([
