@@ -59,7 +59,16 @@ class CheckoutService
             // 4. Update Stock
             $ticketType->decrement('quantity', $quantity);
 
-            // 5. Send Email (via Queue)
+            // 5. Record Coupon Usage if applicable
+            if ($order->coupon_id) {
+                app(\App\Services\CouponService::class)->recordUsage(
+                    $order->coupon_id,
+                    $order->user_id,
+                    $order->id
+                );
+            }
+
+            // 6. Send Email (via Queue)
             \App\Jobs\SendOrderTicketsJob::dispatch($order);
         });
 

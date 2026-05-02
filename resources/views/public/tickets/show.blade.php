@@ -78,11 +78,13 @@
             </div>
 
             <!-- Print Actions -->
-            <div class="px-10 py-8 bg-slate-50 border-t border-slate-100 flex justify-center gap-4 no-print">
-                <button onclick="window.print()" class="flex-grow max-w-[200px] bg-white text-slate-900 border border-slate-200 px-6 py-4 rounded-2xl font-bold hover:bg-slate-100 transition-all flex items-center justify-center gap-3 shadow-sm active:scale-95">
+            <div class="px-10 py-8 bg-slate-50 border-t border-slate-100 flex flex-col gap-4 no-print">
+                <button onclick="window.print()" class="w-full bg-white text-slate-900 border border-slate-200 px-6 py-4 rounded-2xl font-bold hover:bg-slate-100 transition-all flex items-center justify-center gap-3 shadow-sm active:scale-95">
                     <span class="material-symbols-outlined">print</span>
                     Print Ticket
                 </button>
+                
+                @livewire('public.refund-request-form', ['order' => $ticket->order])
             </div>
         </div>
 

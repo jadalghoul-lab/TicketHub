@@ -229,8 +229,8 @@
 
                             @if($discount > 0)
                             <div class="flex justify-between items-center text-green-600">
-                                <span class="text-sm font-medium">Discount ({{ round($discount) }}%)</span>
-                                <span class="font-bold">- €{{ number_format($this->subtotal * ($discount/100), 2) }}</span>
+                                <span class="text-sm font-medium">Discount</span>
+                                <span class="font-bold">- €{{ number_format($discount, 2) }}</span>
                             </div>
                             @endif
 

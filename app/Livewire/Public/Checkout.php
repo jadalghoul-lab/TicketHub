@@ -97,34 +97,24 @@ class Checkout extends Component
         $this->step--;
     }
 
-    public function applyCoupon()
+    public function applyCoupon(\App\Services\CouponService $couponService)
     {
         $this->validate(['couponCode' => 'required']);
 
-        $coupon = Coupon::where('code', $this->couponCode)
-            ->where(function ($q) {
-                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
-            })
-            ->where(function ($q) {
-                $q->whereNull('max_usages')->orWhereColumn('usages_count', '<', 'max_usages');
-            })
-            ->first();
+        $result = $couponService->validate(
+            $this->couponCode, 
+            $this->event->id, 
+            auth()->id() ?: 0
+        );
 
-        if (!$coupon) {
-            $this->addError('couponCode', 'Invalid or expired coupon.');
+        if (!$result['valid']) {
+            $this->addError('couponCode', $result['message']);
             return;
         }
 
-        $this->appliedCoupon = $coupon;
+        $this->appliedCoupon = $result['coupon'];
+        $this->discount = $couponService->calculateDiscount($this->appliedCoupon, $this->subtotal);
         
-        if ($coupon->type === 'percentage') {
-            $this->discount = $coupon->value;
-        } else {
-            // Convert fixed to percentage for the simplified logic I wrote
-            // Or just calculate fixed discount
-            $this->discount = ($coupon->value / $this->subtotal) * 100;
-        }
-
         session()->flash('coupon_applied', 'Coupon applied successfully!');
     }
 
@@ -141,11 +131,7 @@ class Checkout extends Component
 
     public function getTotalProperty()
     {
-        $total = $this->subtotal;
-        if ($this->discount > 0) {
-            $total = $total - ($total * ($this->discount / 100));
-        }
-        return $total;
+        return max(0, $this->subtotal - $this->discount);
     }
 
     public function pay()
@@ -155,11 +141,11 @@ class Checkout extends Component
         \Illuminate\Support\Facades\DB::transaction(function () {
             Stripe::setApiKey(config('services.stripe.secret'));
 
-            // 1. Create Pending Order
             $this->currentOrder = Order::create([
                 'organizer_id' => $this->event->organizer_id,
                 'event_id' => $this->event->id,
                 'user_id' => auth()->id(),
+                'coupon_id' => $this->appliedCoupon?->id,
                 'order_number' => 'ORD-' . strtoupper(\Illuminate\Support\Str::random(8)),
                 'total_amount' => $this->total,
                 'status' => 'pending',
