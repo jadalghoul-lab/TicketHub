@@ -10,12 +10,25 @@ class Order extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'organizer_id',
+        'event_id',
         'user_id',
+        'coupon_id',
         'order_number',
         'total_amount',
         'status',
         'payment_intent_id',
     ];
+
+    public function organizer()
+    {
+        return $this->belongsTo(Organizer::class);
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
 
     public function user()
     {
@@ -30,5 +43,10 @@ class Order extends Model
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

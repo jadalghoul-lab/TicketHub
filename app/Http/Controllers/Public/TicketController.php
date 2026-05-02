@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
+use App\Services\TicketService;
 
 class TicketController extends Controller
 {
@@ -14,8 +15,6 @@ class TicketController extends Controller
      */
     public function index()
     {
-        // For now, we fetch empty since we don't have checkout logic yet.
-        // But we want to show the UI, so we can mock some data or just pass the variable.
         $tickets = Ticket::where('user_id', Auth::id())
             ->with(['order', 'ticketType.event.venue'])
             ->latest()
@@ -27,13 +26,15 @@ class TicketController extends Controller
     /**
      * Show a specific ticket/QR code.
      */
-    public function show(string $uuid)
+    public function show(string $uuid, TicketService $ticketService)
     {
         $ticket = Ticket::where('uuid', $uuid)
             ->where('user_id', Auth::id())
             ->with(['order', 'ticketType.event.venue'])
             ->firstOrFail();
 
-        return view('public.tickets.show', compact('ticket'));
+        $qrCode = $ticketService->generateQrCode($ticket);
+
+        return view('public.tickets.show', compact('ticket', 'qrCode'));
     }
 }

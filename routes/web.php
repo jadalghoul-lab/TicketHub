@@ -9,11 +9,17 @@ use App\Http\Controllers\Public\TicketController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/events', [EventController::class, 'index'])->name('public.events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('public.events.show');
+Route::post('/webhook/stripe', [App\Http\Controllers\Webhook\StripeWebhookController::class, 'handle']);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/my-tickets', [TicketController::class, 'index'])->name('public.tickets.index');
     Route::get('/my-tickets/{uuid}', [TicketController::class, 'show'])->name('public.tickets.show');
     
+    // Checkout Flow
+    Route::get('/checkout/{slug}', \App\Livewire\Public\Checkout::class)->name('public.checkout');
+    Route::get('/checkout/success/{order_number}', [App\Http\Controllers\Public\EventController::class, 'checkoutSuccess'])->name('public.checkout.success');
+    Route::get('/checkout/cancel/{order_number}', [App\Http\Controllers\Public\EventController::class, 'checkoutCancel'])->name('public.checkout.cancel');
+
     Route::view('dashboard', 'dashboard')->name('dashboard');
 
     Route::middleware('role:admin')->group(function () {

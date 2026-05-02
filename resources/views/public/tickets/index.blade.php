@@ -1,129 +1,113 @@
 @extends('layouts.public')
 
 @section('content')
-<main class="flex-grow max-w-screen-xl mx-auto w-full px-6 py-12">
-    <div class="mb-10">
-        <h1 class="text-4xl font-bold text-slate-900 mb-2">My Tickets</h1>
-        <p class="text-slate-500">Manage and view all your event admissions</p>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-        <!-- Main Ticket List -->
-        <div class="lg:col-span-8 space-y-6">
-            @if($tickets->count() > 0)
-                @foreach($tickets as $ticket)
-                <div class="bg-white rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row">
-                    <!-- Event Image (Left) -->
-                    <div class="w-full sm:w-48 h-48 sm:h-auto overflow-hidden flex-shrink-0 relative">
-                        <img class="w-full h-full object-cover" 
-                             src="{{ $ticket->ticketType->event->image ? Storage::url($ticket->ticketType->event->image) : 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=800' }}" 
-                             alt="{{ $ticket->ticketType->event->title }}" />
-                        <div class="absolute top-0 left-0 w-1.5 h-full bg-primary"></div>
-                    </div>
-
-                    <!-- Ticket Content -->
-                    <div class="p-6 flex-grow flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xl font-bold text-slate-900">{{ $ticket->ticketType->event->title }}</h3>
-                                <span class="bg-indigo-50 text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
-                                    {{ $ticket->ticketType->name }}
-                                </span>
-                            </div>
-                            
-                            <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-on-surface-variant">
-                                <p class="flex items-center gap-1.5">
-                                    <span class="material-symbols-outlined text-sm">calendar_today</span>
-                                    {{ $ticket->ticketType->event->start_date->format('M d, Y') }}
-                                </p>
-                                <p class="flex items-center gap-1.5">
-                                    <span class="material-symbols-outlined text-sm">location_on</span>
-                                    {{ $ticket->ticketType->event->venue?->name ?? $ticket->ticketType->event->city }}
-                                </p>
-                                <p class="flex items-center gap-1.5 font-semibold text-primary">
-                                    <span class="material-symbols-outlined text-sm">confirmation_number</span>
-                                    #{{ $ticket->uuid ?? 'ORD-'.$ticket->id }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-100">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-green-600">verified</span>
-                                <span class="text-xs font-semibold text-green-600 uppercase">Valid Admission</span>
-                            </div>
-                            <div class="flex gap-3">
-                                <a href="{{ route('public.tickets.show', $ticket->uuid ?? $ticket->id) }}" 
-                                   class="bg-surface-container-low text-on-surface px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-sm">qr_code_2</span>
-                                    View Ticket
-                                </a>
-                                <button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 active:scale-95 transition-all flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-sm">download</span>
-                                    PDF
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+<div class="min-h-screen bg-[#f8fafc] py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+                <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-2">My Collection</h1>
+                <p class="text-slate-500 font-medium text-lg">Your entry passes for upcoming and past experiences.</p>
+            </div>
+            <div class="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                <div class="px-4 py-2 text-center border-r border-slate-100">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Tickets</p>
+                    <p class="text-xl font-black text-slate-900">{{ $tickets->total() }}</p>
                 </div>
-                @endforeach
-
-                <div class="mt-8">
-                    {{ $tickets->links('vendor.pagination.simple-custom') }}
+                <div class="px-4 py-2 text-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Passes</p>
+                    <p class="text-xl font-black text-indigo-600">{{ $tickets->where('status', 'valid')->count() }}</p>
                 </div>
-            @else
-                <!-- Empty State based on the design's clean aesthetic -->
-                <div class="bg-white rounded-xl border border-outline-variant p-16 text-center shadow-sm">
-                    <div class="w-20 h-20 bg-surface-container-low rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="material-symbols-outlined text-slate-300 text-4xl">confirmation_number</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-slate-900 mb-2">No tickets found</h2>
-                    <p class="text-slate-500 mb-8 max-w-md mx-auto">You haven't purchased any tickets yet. Explore our marketplace to find your next favorite event.</p>
-                    <a href="{{ route('public.events.index') }}" 
-                       class="bg-primary text-white px-8 py-3 rounded-xl font-semibold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 inline-flex items-center gap-2">
-                        Browse Events
-                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                    </a>
-                </div>
-            @endif
+            </div>
         </div>
 
-        <!-- Sidebar (Stats/Quick Links) -->
-        <aside class="lg:col-span-4 space-y-6">
-            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 shadow-sm">
-                <h3 class="text-lg font-bold text-slate-900 mb-6">Account Overview</h3>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center p-3 bg-surface-container-low rounded-lg">
-                        <span class="text-sm text-on-surface-variant font-medium">Total Orders</span>
-                        <span class="font-bold text-slate-900">{{ Auth::user()->orders()->count() ?? 0 }}</span>
-                    </div>
-                    <div class="flex justify-between items-center p-3 bg-surface-container-low rounded-lg">
-                        <span class="text-sm text-on-surface-variant font-medium">Upcoming Events</span>
-                        <span class="font-bold text-primary">0</span>
-                    </div>
+        @if($tickets->isEmpty())
+            <div class="bg-white rounded-[2.5rem] p-16 text-center shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div class="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="material-symbols-outlined text-4xl text-indigo-600">confirmation_number</span>
                 </div>
-                <hr class="my-6 border-slate-100" />
-                <div class="space-y-3">
-                    <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 text-sm text-slate-600 hover:text-primary transition-colors py-1">
-                        <span class="material-symbols-outlined text-[20px]">person</span>
-                        Edit Profile
-                    </a>
-                    <a href="#" class="flex items-center gap-3 text-sm text-slate-600 hover:text-primary transition-colors py-1">
-                        <span class="material-symbols-outlined text-[20px]">help_outline</span>
-                        Help Center
-                    </a>
-                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">No tickets found yet</h2>
+                <p class="text-slate-500 max-w-sm mx-auto mb-8 text-lg">It looks like you haven't booked any experiences. Explore our marketplace to find your next adventure!</p>
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 hover:-translate-y-1">
+                    Browse Events
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                </a>
+            </div>
+        @else
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                @foreach($tickets as $ticket)
+                    <div class="group bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-slate-200/40 border border-slate-100 hover:shadow-2xl hover:shadow-indigo-100/50 transition-all duration-500 hover:-translate-y-1">
+                        <div class="flex flex-col sm:flex-row h-full">
+                            <!-- Event Image -->
+                            <div class="sm:w-48 h-48 sm:h-auto relative overflow-hidden">
+                                <img src="{{ $ticket->ticketType->event->image ? Storage::url($ticket->ticketType->event->image) : 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400' }}" 
+                                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                     alt="{{ $ticket->ticketType->event->title }}">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-lg border border-white/30 uppercase tracking-widest">
+                                        {{ $ticket->ticketType->name }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex-grow p-8 flex flex-col">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-black text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors mb-1">
+                                            {{ $ticket->ticketType->event->title }}
+                                        </h3>
+                                        <p class="text-slate-500 font-medium text-sm flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[16px]">location_on</span>
+                                            {{ $ticket->ticketType->event->city }}
+                                        </p>
+                                    </div>
+                                    <div @class([
+                                        'px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm',
+                                        'bg-green-50 text-green-600 border border-green-100' => $ticket->status === 'valid',
+                                        'bg-slate-50 text-slate-400 border border-slate-100' => $ticket->status !== 'valid',
+                                    ])>
+                                        {{ $ticket->status }}
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4 mb-8">
+                                    <div>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</p>
+                                        <p class="text-sm font-bold text-slate-800">{{ $ticket->ticketType->event->start_date->format('M d, Y') }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Pass Code</p>
+                                        <p class="text-sm font-mono font-bold text-slate-800 tracking-tight">#{{ substr($ticket->uuid, 0, 8) }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
+                                            <span class="material-symbols-outlined text-slate-400 text-[20px]">confirmation_number</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Order Ref</p>
+                                            <p class="text-xs font-bold text-slate-800">#{{ $ticket->order->order_number }}</p>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('public.tickets.show', $ticket->uuid) }}" 
+                                       class="bg-indigo-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 group-hover:scale-105">
+                                        <span class="material-symbols-outlined">arrow_forward</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
 
-            <!-- Trust Badge (from design) -->
-            <div class="bg-secondary-container/10 border border-secondary-container/30 rounded-xl p-6 flex items-start gap-4">
-                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
-                <div>
-                    <h4 class="text-sm font-bold text-slate-900 mb-1">Buyer Guarantee</h4>
-                    <p class="text-xs text-on-secondary-container leading-relaxed">Your admission is 100% guaranteed. We ensure your tickets are valid and delivered on time.</p>
-                </div>
+            <div class="mt-12">
+                {{ $tickets->links() }}
             </div>
-        </aside>
+        @endif
     </div>
-</main>
+</div>
 @endsection

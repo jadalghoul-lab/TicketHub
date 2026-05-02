@@ -87,4 +87,30 @@ class EventController extends Controller
 
         return view('public.events.show', compact('event'));
     }
+
+    /**
+     * Handle successful checkout redirect.
+     */
+    public function checkoutSuccess(string $orderNumber)
+    {
+        $order = \App\Models\Order::where('order_number', $orderNumber)
+            ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+            ->firstOrFail();
+
+        return view('public.checkout.success', compact('order'));
+    }
+
+    /**
+     * Handle cancelled checkout.
+     */
+    public function checkoutCancel(string $orderNumber)
+    {
+        $order = \App\Models\Order::where('order_number', $orderNumber)
+            ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+            ->firstOrFail();
+
+        // Redirect back to event page with info
+        return redirect()->route('public.events.show', $order->items->first()->ticketType->event->slug)
+            ->with('info', 'Your payment was cancelled. No charges were made.');
+    }
 }

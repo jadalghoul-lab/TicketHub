@@ -10,7 +10,7 @@
     @endif
     <div class="absolute inset-0 bg-slate-900/50"></div>
     <div class="absolute bottom-0 left-0 right-0 p-10 max-w-screen-2xl mx-auto">
-        <span class="bg-[#3525cd] text-white text-xs font-semibold uppercase px-3 py-1 rounded-full">{{ $event->category }}</span>
+        <span class="bg-[#4f46e5] text-white text-xs font-semibold uppercase px-3 py-1 rounded-full">{{ $event->category }}</span>
         <h1 class="text-white text-4xl md:text-5xl font-bold mt-4 mb-2 drop-shadow-lg">{{ $event->title }}</h1>
         <p class="text-white/80 flex items-center gap-2">
             <span class="material-symbols-outlined text-sm">location_on</span>
@@ -30,22 +30,22 @@
 
                 <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-slate-100">
                     <div class="flex flex-col gap-1">
-                        <span class="material-symbols-outlined text-[#3525cd]">calendar_today</span>
+                        <span class="material-symbols-outlined text-[#4f46e5]">calendar_today</span>
                         <span class="text-xs text-[#777587] font-medium uppercase">Date</span>
                         <span class="text-sm font-semibold">{{ $event->start_date->format('d M Y') }}</span>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <span class="material-symbols-outlined text-[#3525cd]">schedule</span>
+                        <span class="material-symbols-outlined text-[#4f46e5]">schedule</span>
                         <span class="text-xs text-[#777587] font-medium uppercase">Time</span>
                         <span class="text-sm font-semibold">{{ $event->time ? \Carbon\Carbon::parse($event->time)->format('H:i') : 'TBA' }}</span>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <span class="material-symbols-outlined text-[#3525cd]">location_on</span>
+                        <span class="material-symbols-outlined text-[#4f46e5]">location_on</span>
                         <span class="text-xs text-[#777587] font-medium uppercase">Venue</span>
                         <span class="text-sm font-semibold">{{ $event->venue?->name ?? 'TBA' }}</span>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <span class="material-symbols-outlined text-[#3525cd]">confirmation_number</span>
+                        <span class="material-symbols-outlined text-[#4f46e5]">confirmation_number</span>
                         <span class="text-xs text-[#777587] font-medium uppercase">Capacity</span>
                         <span class="text-sm font-semibold">{{ $event->capacity ? number_format($event->capacity) . ' seats' : 'Unlimited' }}</span>
                     </div>
@@ -61,13 +61,13 @@
                         <img src="{{ Storage::url($event->organizer->logo) }}" alt="{{ $event->organizer->company_name }}" class="w-16 h-16 rounded-2xl object-cover" />
                     @else
                         <div class="w-16 h-16 rounded-2xl bg-[#e2dfff] flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[#3525cd] text-3xl">business</span>
+                            <span class="material-symbols-outlined text-[#4f46e5] text-3xl">business</span>
                         </div>
                     @endif
                     <div>
                         <h3 class="font-semibold text-lg">{{ $event->organizer->company_name }}</h3>
                         @if($event->organizer->website)
-                            <a href="{{ $event->organizer->website }}" target="_blank" class="text-[#3525cd] text-sm hover:underline flex items-center gap-1">
+                            <a href="{{ $event->organizer->website }}" target="_blank" class="text-[#4f46e5] text-sm hover:underline flex items-center gap-1">
                                 <span class="material-symbols-outlined text-xs">open_in_new</span> Visit website
                             </a>
                         @endif
@@ -85,10 +85,10 @@
                 @if($event->ticketTypes->count())
                     <div class="space-y-4 mb-6">
                         @foreach($event->ticketTypes as $ticketType)
-                        <div class="border border-slate-200 rounded-xl p-4 hover:border-[#3525cd] transition-colors">
+                        <div class="border border-slate-200 rounded-xl p-4 hover:border-[#4f46e5] transition-colors">
                             <div class="flex justify-between items-start mb-1">
                                 <span class="font-semibold">{{ $ticketType->name }}</span>
-                                <span class="text-[#3525cd] font-bold text-lg">
+                                <span class="text-[#4f46e5] font-bold text-lg">
                                     {{ $ticketType->price > 0 ? '€'.number_format($ticketType->price, 2) : 'Free' }}
                                 </span>
                             </div>
@@ -105,7 +105,7 @@
                         @endforeach
                     </div>
 
-                    <a href="#" class="block w-full bg-[#3525cd] text-white text-center py-4 rounded-xl font-semibold hover:bg-[#3525cd]/90 transition-all active:scale-95">
+                    <a href="{{ route('public.checkout', $event->slug) }}" wire:navigate class="block w-full bg-[#4f46e5] text-white text-center py-4 rounded-xl font-semibold hover:bg-[#4f46e5]/90 transition-all active:scale-95">
                         Buy Now
                     </a>
                 @else

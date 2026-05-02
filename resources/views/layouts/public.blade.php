@@ -21,6 +21,7 @@
     </style>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="bg-[#f7f9fb] text-[#191c1e] antialiased">
     <!-- TopNavBar -->
@@ -59,6 +60,7 @@
     </header>
 
     <main>
+        {{ $slot ?? '' }}
         @yield('content')
     </main>
 
@@ -87,5 +89,6 @@
             </div>
         </div>
     </footer>
+    @livewireScripts
 </body>
 </html>
