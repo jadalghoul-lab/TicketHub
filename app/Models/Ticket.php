@@ -12,11 +12,18 @@ class Ticket extends Model
     protected $fillable = [
         'order_id',
         'user_id',
+        'event_id',
         'ticket_type_id',
         'uuid',
+        'ticket_number',
         'status',
         'scanned_at',
     ];
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
 
     public function order()
     {

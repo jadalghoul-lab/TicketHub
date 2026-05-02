@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->decimal('total_amount', 10, 2);
             $table->string('status')->default('pending'); // pending, paid, failed, refunded, cancelled
+            $table->string('payment_intent_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
