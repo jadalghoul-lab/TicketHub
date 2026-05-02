@@ -30,7 +30,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [\App\Http\Controllers\Public\CustomerDashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware('role:admin')->group(function () {
-        Route::view('admin/dashboard', 'dashboard')->name('admin.dashboard');
+        Route::get('admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('admin/export-report', [\App\Http\Controllers\Admin\DashboardController::class, 'export'])->name('admin.export');
+        Route::get('admin/organizers', \App\Livewire\Admin\OrganizerManager::class)->name('admin.organizers.index');
+        Route::get('admin/events', \App\Livewire\Admin\EventManager::class)->name('admin.events.index');
     });
 
     Route::middleware('role:organizer')->group(function () {
