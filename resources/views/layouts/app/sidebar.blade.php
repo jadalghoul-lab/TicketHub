@@ -28,6 +28,9 @@
                         <flux:sidebar.item icon="arrow-path" :href="route('organizer.refunds')" :current="request()->routeIs('organizer.refunds')" wire:navigate>
                             Refund Requests
                         </flux:sidebar.item>
+                        <flux:sidebar.item icon="ticket" :href="route('organizer.coupons')" :current="request()->routeIs('organizer.coupons')" wire:navigate>
+                            Coupons
+                        </flux:sidebar.item>
                     @endif
 
                     @if(auth()->user()->isCustomer())

@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('organizer/events/{event}/tickets', \App\Livewire\Organizer\TicketManager::class)->name('organizer.events.tickets');
         Route::get('organizer/events/{event}/scanner', \App\Livewire\Organizer\Scanner::class)->name('organizer.scanner');
         Route::get('organizer/refunds', \App\Livewire\Organizer\RefundManager::class)->name('organizer.refunds');
+        Route::get('organizer/coupons', \App\Livewire\Organizer\CouponManager::class)->name('organizer.coupons');
     });
 });
 
