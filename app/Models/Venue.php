@@ -24,4 +24,9 @@ class Venue extends Model
     {
         return $this->hasMany(Event::class);
     }
+
+    public function zones()
+    {
+        return $this->hasMany(Zone::class);
+    }
 }

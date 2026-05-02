@@ -27,6 +27,7 @@ class StoreTicketTypeRequest extends FormRequest
     {
         return [
             'event_id' => 'required|exists:events,id',
+            'zone_id' => 'nullable|exists:zones,id',
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:1',
