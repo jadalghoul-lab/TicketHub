@@ -17,6 +17,13 @@
         </div>
     @endif
 
+    @if (session()->has('error'))
+        <div class="bg-red-50 border border-red-100 text-red-700 px-6 py-4 rounded-2xl font-bold flex items-center gap-3">
+            <span class="material-symbols-outlined">error</span>
+            {{ session('error') }}
+        </div>
+    @endif
+
     @if (session()->has('info'))
         <div class="bg-blue-50 border border-blue-100 text-blue-700 px-6 py-4 rounded-2xl font-bold flex items-center gap-3">
             <span class="material-symbols-outlined">info</span>
