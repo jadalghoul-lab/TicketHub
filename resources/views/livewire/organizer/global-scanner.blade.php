@@ -1,5 +1,6 @@
 <div class="max-w-screen-xl mx-auto py-8 px-4" x-data="{ 
     scanner: null,
+    showModal: false,
     init() {
         this.startScanner();
     },
@@ -15,6 +16,7 @@
             if (this.isCooldown) return;
             this.isCooldown = true;
             $wire.scan(decodedText).then(() => {
+                this.showModal = true;
                 setTimeout(() => this.isCooldown = false, 1500);
             });
         });
@@ -22,13 +24,15 @@
     playSuccess() {
         let audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
         audio.play();
+        if (navigator.vibrate) navigator.vibrate(100);
     },
     playError() {
         let audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
         audio.play();
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
     },
     isCooldown: false
-}" @reset-result.window="setTimeout(() => $wire.scanResult = null, 4000)"
+}" @reset-result.window="setTimeout(() => { $wire.scanResult = null; showModal = false; }, 4000)"
    @scan-success.window="playSuccess()"
    @scan-error.window="playError()">
     
@@ -199,6 +203,64 @@
         </div>
     </div>
 
+    <!-- Mobile Result Modal/Drawer -->
+    <div x-show="showModal" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="translate-y-full opacity-0"
+         x-transition:enter-end="translate-y-0 opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="translate-y-0 opacity-100"
+         x-transition:leave-end="translate-y-full opacity-0"
+         class="fixed inset-0 z-[100] lg:hidden flex flex-col"
+         style="display: none;">
+        
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showModal = false"></div>
+        
+        <div class="mt-auto relative bg-white dark:bg-zinc-900 rounded-t-[3rem] p-8 shadow-2xl flex flex-col gap-6">
+            <div class="w-12 h-1.5 bg-slate-200 dark:bg-zinc-800 rounded-full mx-auto mb-2"></div>
+            
+            @if($scanResult)
+                @if($scanResult['success'])
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-amber-100">
+                            <span class="material-symbols-outlined text-white text-5xl">check_circle</span>
+                        </div>
+                        <h2 class="text-3xl font-black text-slate-900 dark:text-white mb-1 uppercase tracking-tight">Verified</h2>
+                        <p class="text-slate-500 font-bold mb-8">{{ $lastTicket->event->title }}</p>
+                        
+                        <div class="bg-slate-50 dark:bg-zinc-800 rounded-3xl p-6 text-left border border-slate-100 dark:border-zinc-700">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Attendee</p>
+                            <p class="text-xl font-black text-slate-900 dark:text-white mb-4">{{ $lastTicket->user?->name ?? 'Guest' }}</p>
+                            
+                            <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-zinc-700">
+                                <div>
+                                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Type</p>
+                                    <p class="font-bold text-slate-900 dark:text-white">{{ $lastTicket->ticketType->name }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Ref</p>
+                                    <p class="font-bold text-slate-900 dark:text-white">#{{ substr($lastTicket->ticket_number, -6) }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-red-100">
+                            <span class="material-symbols-outlined text-white text-5xl">block</span>
+                        </div>
+                        <h2 class="text-3xl font-black text-red-600 mb-2 uppercase tracking-tight tracking-tight">Entry Denied</h2>
+                        <p class="text-slate-900 dark:text-white text-xl font-bold px-4 mb-8">{{ $scanResult['message'] }}</p>
+                    </div>
+                @endif
+            @endif
+
+            <button @click="showModal = false" class="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-5 rounded-2xl font-black text-lg shadow-xl active:scale-95 transition-all">
+                Next Scan
+            </button>
+        </div>
+    </div>
+
     <!-- Scanner Custom Styles -->
     <style>
         #reader { border: none !important; }
@@ -215,6 +277,7 @@
             letter-spacing: 0.05em !important;
             margin: 1rem !important;
             cursor: pointer !important;
+            width: 100%;
         }
         @keyframes scan-line {
             0% { top: 0; }

@@ -1,22 +1,24 @@
-<x-layouts::auth :title="__('Register')">
-    <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+<x-layouts::auth.split :title="__('Create account')">
+    <div class="flex flex-col gap-8">
+        <div class="text-left">
+            <h1 class="text-3xl font-black tracking-tight text-slate-900 mb-2">{{ __('Join TicketHub') }}</h1>
+            <p class="text-slate-500 font-medium">{{ __('Start experiencing the best events today.') }}</p>
+        </div>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
-
-        <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
+        <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-5">
             @csrf
+
             <!-- Name -->
             <flux:input
                 name="name"
-                :label="__('Name')"
+                :label="__('Full name')"
                 :value="old('name')"
                 type="text"
                 required
                 autofocus
                 autocomplete="name"
-                :placeholder="__('Full name')"
+                placeholder="John Doe"
+                class="rounded-xl border-slate-200 focus:ring-indigo-600"
             />
 
             <!-- Email Address -->
@@ -26,8 +28,9 @@
                 :value="old('email')"
                 type="email"
                 required
-                autocomplete="email"
-                placeholder="email@example.com"
+                autocomplete="username"
+                placeholder="name@company.com"
+                class="rounded-xl border-slate-200 focus:ring-indigo-600"
             />
 
             <!-- Password -->
@@ -37,8 +40,9 @@
                 type="password"
                 required
                 autocomplete="new-password"
-                :placeholder="__('Password')"
+                :placeholder="__('••••••••')"
                 viewable
+                class="rounded-xl border-slate-200 focus:ring-indigo-600"
             />
 
             <!-- Confirm Password -->
@@ -48,20 +52,34 @@
                 type="password"
                 required
                 autocomplete="new-password"
-                :placeholder="__('Confirm password')"
+                :placeholder="__('••••••••')"
                 viewable
+                class="rounded-xl border-slate-200 focus:ring-indigo-600"
             />
 
-            <div class="flex items-center justify-end">
-                <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
+            <div class="pt-2">
+                <flux:button variant="primary" type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-100 transition-all active:scale-[0.98]">
                     {{ __('Create account') }}
                 </flux:button>
             </div>
-        </form>
 
-        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
-            <span>{{ __('Already have an account?') }}</span>
-            <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
-        </div>
+            <div class="relative py-2">
+                <div class="absolute inset-0 flex items-center">
+                    <span class="w-full border-t border-slate-100"></span>
+                </div>
+                <div class="relative flex justify-center text-xs uppercase">
+                    <span class="bg-white px-2 text-slate-400 font-bold tracking-widest">{{ __('Or') }}</span>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <p class="text-sm font-medium text-slate-500">
+                    {{ __('Already have an account?') }}
+                    <flux:link :href="route('login')" wire:navigate class="text-indigo-600 font-black hover:underline underline-offset-4 ml-1">
+                        {{ __('Sign in instead') }}
+                    </flux:link>
+                </p>
+            </div>
+        </form>
     </div>
-</x-layouts::auth>
+</x-layouts::auth.split>
