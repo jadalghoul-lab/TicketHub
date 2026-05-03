@@ -2,14 +2,14 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative min-h-[600px] flex items-center justify-center">
+<section class="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center py-20">
     <div class="absolute inset-0 z-0">
         <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuR1gsqHmbw75dRDn3DqpT4j01I6Pv8JR_4Y7yFWvWfa9-Suri6idFE1QlXDVoVu2Pr6txujET1kfI21XN6jjSxGUnW6EO5YCrhI_vHNmU9y09-H-fupzN77Ta3FCzWyBKqS1rnMTRgoF97pdUxkKx2lZl-ZLsVIl-9coK5NIFMYNo30MrrYewadFrXIApPOVBv4Y4k9G6HhHpkeXlX2iO2muyeRG3_bIljPenm5H7Z3WONGRiMnRHcWDLN9KvbOreTfE-QbvigxAH" alt="Hero background" />
         <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
     </div>
     <div class="relative z-10 w-full max-w-4xl px-6 text-center">
-        <h1 class="text-white text-5xl md:text-6xl mb-6 drop-shadow-lg font-bold">Experience more than just a seat.</h1>
-        <p class="text-white/90 mb-10 max-w-2xl mx-auto drop-shadow-md text-lg">Unlock access to the world's most sought-after concerts, sporting events, and theater performances with guaranteed security and seamless delivery.</p>
+        <h1 class="text-white text-4xl sm:text-5xl md:text-6xl mb-6 drop-shadow-lg font-black leading-tight">Experience more than <br class="hidden md:block"> just a seat.</h1>
+        <p class="text-white/90 mb-10 max-w-2xl mx-auto drop-shadow-md text-base md:text-lg font-medium">Unlock access to the world's most sought-after concerts, sporting events, and theater performances with guaranteed security.</p>
 
         <!-- Search Form (Realtime Livewire) -->
         <livewire:public.global-search />
@@ -17,45 +17,45 @@
 </section>
 
 <!-- Categories Bento Grid -->
-<section class="py-20 px-6 max-w-screen-2xl mx-auto">
-    <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+<section class="py-12 md:py-20 px-4 md:px-6 max-w-screen-2xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-10 gap-4">
         <div>
-            <span class="text-[#3525cd] text-sm font-medium tracking-widest uppercase">Categories</span>
-            <h2 class="text-[#191c1e] text-3xl font-semibold mt-2">Explore Your Passions</h2>
+            <span class="text-[#3525cd] text-xs md:text-sm font-black tracking-[0.2em] uppercase">Categories</span>
+            <h2 class="text-[#191c1e] text-2xl md:text-3xl font-black mt-2">Explore Your Passions</h2>
         </div>
-        <a href="{{ route('public.events.index') }}" class="text-[#3525cd] text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all">
+        <a href="{{ route('public.events.index') }}" class="text-[#3525cd] text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
             View All Events <span class="material-symbols-outlined text-sm">arrow_forward</span>
         </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-[600px]">
-        <a href="{{ route('public.events.index', ['category' => 'music']) }}" class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30">
+    <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[600px]">
+        <a href="{{ route('public.events.index', ['category' => 'music']) }}" class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 min-h-[300px]">
             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCktb3_b-lkBwOA69AfR0Hq9UFOy0W8fyDrZajblcCPceegpnXHX4B5nT5Ql5gd8Dzb3BOeWoDUaCwnXGwR-apojf4qzVQ9FioyaHzcBUVCwAajjtkKS6AAIeitLxqdIDOsZfL_u9LwElHRnXJhnKuIPRsnfZUx9nQ3B9BXvu-ULDnpdP5RY3G1AVzoYrXyOC9MgMVujM32obCJnhWEy2YcTIjAoUMXGQtREoQdh82Yk8P8hWldKg_DJ1PVVvVfhT-rJJdxgHOjq6O8" />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
-            <div class="absolute bottom-8 left-8">
-                <h3 class="text-white text-3xl font-semibold mb-2">Concerts & Live Music</h3>
-                <p class="text-white/80 text-sm">From stadiums to intimate clubs.</p>
+            <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8">
+                <h3 class="text-white text-2xl md:text-3xl font-black mb-1 md:mb-2">Concerts & Live Music</h3>
+                <p class="text-white/80 text-xs md:text-sm font-medium">From stadiums to intimate clubs.</p>
             </div>
         </a>
-        <a href="{{ route('public.events.index', ['category' => 'sports']) }}" class="md:col-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30">
+        <a href="{{ route('public.events.index', ['category' => 'sports']) }}" class="md:col-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 min-h-[200px]">
             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7jKwMzxKLdIfO29ptdOXB1nLMa9bL-V0KkvANzpWzfLQupIAsDpTfMdmp5KV8tLCWD87n5QdCjLiMT_J39SvxRUDsezT_izUTImsFgCSutTprSTh-mgPEWQTefW7KQUEYTDXFDIUYyvBq5YKqXobZN9G7kPA7uCFyDsDSZPaZiijR2Tvwo0YTez_qgWHRxbksCXCvxF9lC-lWDyl3Dnr_Zfq_cjykZZ20xMqpR_OL-HVXq2J1GIW8bdjPlJ00YGkc77U05XJ5jgeU" />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
             <div class="absolute bottom-6 left-6">
-                <h3 class="text-white text-2xl font-semibold">Sports & Athletics</h3>
+                <h3 class="text-white text-xl md:text-2xl font-black">Sports & Athletics</h3>
             </div>
         </a>
-        <a href="{{ route('public.events.index', ['category' => 'theater']) }}" class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30">
+        <a href="{{ route('public.events.index', ['category' => 'theater']) }}" class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 min-h-[200px]">
             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsVIij4Kz8cLw9rYfmulKBaOvoGnkfYpPdI9coVQclBgEYbuC6IF7mMqtPfbbumAibKrBhANstuq3omYDZPwWoTkOTYMcIFvQCwT0OzqLIumyag0T4bYq2vP3rcNm5NXLRzsrg4NPk7JyEo4yQ6a0okUJDeC7jT-5f740aCsiUm_E3gFj3RXJtN4GKn_f7YlU3K7Nx1lh7cGkCaMzPZ9XtC2Ct5Bap9Lks4fGng4DQuE853fEharsMVM28eiKwFTqYCMsY7GDYoNII" />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
             <div class="absolute bottom-6 left-6">
-                <h3 class="text-white text-2xl font-semibold">Theater</h3>
+                <h3 class="text-white text-xl md:text-2xl font-black">Theater</h3>
             </div>
         </a>
-        <a href="{{ route('public.events.index', ['category' => 'festival']) }}" class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30">
+        <a href="{{ route('public.events.index', ['category' => 'festival']) }}" class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 min-h-[200px]">
             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT6gQUdeiKktjUlA73E13q6-Q048baorFE_vjVJe-AxUkzoan7Rngk__y9vDaj90KhdvbZde7GbY5ABZvGbFUKudUzwOkNmlYSEK1rJMArPJO3YCxY2GureACBI0222BDt-LwPP91iUyfghPN2am3weBJXFerO8IMhx5iVY9mPMkIkmMx8s-RccMT5YScjglIopASgO8989lriwMwEPcWALlkUTPp7OSlcTl3S32OAyK6o7xpPHKBhaXPrURqjxnp3HQQAnYZ-9HvZ" />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
             <div class="absolute bottom-6 left-6">
-                <h3 class="text-white text-2xl font-semibold">Festivals</h3>
+                <h3 class="text-white text-xl md:text-2xl font-black">Festivals</h3>
             </div>
         </a>
     </div>
