@@ -24,6 +24,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        // Dynamic Ngrok URL Detection
+        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+            $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
+            \Illuminate\Support\Facades\URL::forceRootUrl("https://{$host}");
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        } elseif (str_starts_with(config('app.url'), 'https://')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 
     /**
