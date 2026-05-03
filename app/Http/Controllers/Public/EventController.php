@@ -122,22 +122,19 @@ class EventController extends Controller
             ->where('user_id', \Illuminate\Support\Facades\Auth::id())
             ->firstOrFail();
 
-        // DEV SHORTCUT: If local and pending, fulfill automatically for easy testing without webhooks
-        if (config('app.env') === 'local' && $order->status === 'pending') {
-            // Mock a session object that fulfillOrder expects
-            $session = (object)[
-                'metadata' => (object)[
-                    'order_id' => $order->id,
-                    'ticket_type_id' => $order->items->first()->ticket_type_id,
-                    'quantity' => $order->items->first()->quantity,
-                ],
-                'amount_total' => $order->total_amount * 100,
-                'currency' => 'eur',
-                'payment_intent' => 'pi_mock_' . strtolower(\Illuminate\Support\Str::random(10)),
-            ];
-
-            $checkoutService->fulfillOrder($session);
-            $order->refresh();
+        // Real-time Verification for Test Mode (Retrieves actual Stripe session)
+        if ($order->status === 'pending' && $order->payment_intent_id && !str_starts_with($order->payment_intent_id, 'pi_mock_')) {
+            try {
+                \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+                $session = \Stripe\Checkout\Session::retrieve($order->payment_intent_id);
+                
+                if ($session->payment_status === 'paid') {
+                    $checkoutService->fulfillOrder($session);
+                    $order->refresh();
+                }
+            } catch (\Exception $e) {
+                \Log::error("Stripe Verification Error: " . $e->getMessage());
+            }
         }
 
         return view('public.checkout.success', compact('order'));

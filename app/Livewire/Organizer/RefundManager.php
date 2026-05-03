@@ -20,6 +20,22 @@ class RefundManager extends Component
             return;
         }
 
+        $order = $request->order;
+
+        // Trigger Stripe Refund
+        if ($order->payment_intent_id) {
+            $stripeService = app(\App\Services\StripeService::class);
+            // Stripe amounts are in cents
+            $amountInCents = (int) ($order->total_amount * 100);
+            
+            $refundResult = $stripeService->refund($order->payment_intent_id, $amountInCents, 'requested_by_customer');
+
+            if (!$refundResult['success']) {
+                session()->flash('error', 'Stripe Refund Failed: ' . $refundResult['message']);
+                return;
+            }
+        }
+
         DB::transaction(function () use ($request) {
             // 1. Mark request as approved
             $request->update(['status' => 'approved']);
@@ -31,7 +47,7 @@ class RefundManager extends Component
             Ticket::where('order_id', $request->order_id)->update(['status' => 'refunded']);
         });
 
-        session()->flash('success', 'Refund request approved. Order has been marked as refunded and tickets voided.');
+        session()->flash('success', 'Refund approved and processed via Stripe. Tickets have been voided.');
     }
 
     public function reject($requestId, $reason = 'Refund criteria not met.')

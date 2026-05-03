@@ -27,7 +27,10 @@ class CheckoutService
 
         DB::transaction(function () use ($order, $session) {
             // 1. Update Order
-            $order->update(['status' => 'paid']);
+            $order->update([
+                'status' => 'paid',
+                'payment_intent_id' => $session->payment_intent ?? $order->payment_intent_id
+            ]);
 
             // 2. Create Payment Record
             $amount = isset($session->amount_total) ? $session->amount_total : $session->amount;
