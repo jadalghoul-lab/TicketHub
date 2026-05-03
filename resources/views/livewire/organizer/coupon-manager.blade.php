@@ -1,12 +1,12 @@
 <div class="py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-        <div class="flex justify-between items-center mb-12">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12 gap-6">
             <div>
-                <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Coupons & Discounts</h1>
+                <h1 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">Coupons & Discounts</h1>
                 <p class="text-slate-500 dark:text-zinc-500 font-medium mt-2">Boost your sales with promotional codes.</p>
             </div>
             <button wire:click="createCoupon" 
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl font-bold transition-all active:scale-95 shadow-xl shadow-indigo-100 dark:shadow-none flex items-center gap-2">
+                    class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl font-bold transition-all active:scale-95 shadow-xl shadow-indigo-100 dark:shadow-none flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined">add</span>
                 New Coupon
             </button>
@@ -19,97 +19,132 @@
             </div>
         @endif
 
-        <!-- Coupons Table -->
+        <!-- Coupons List -->
         <div class="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-100 dark:border-zinc-800 shadow-2xl shadow-slate-100/50 dark:shadow-none overflow-hidden">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50 dark:bg-zinc-800/50">
-                        <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Code</th>
-                        <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Discount</th>
-                        <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Restrictions</th>
-                        <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Usage</th>
-                        <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Expiry</th>
-                        <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-50 dark:divide-zinc-800">
-                    @forelse($coupons as $coupon)
-                        <tr class="hover:bg-slate-50/50 dark:hover:bg-zinc-800/30 transition-colors group">
-                            <td class="px-8 py-6">
-                                <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 px-3 py-1.5 rounded-lg font-mono font-black text-sm uppercase tracking-wider border border-indigo-100 dark:border-indigo-800">
-                                    {{ $coupon->code }}
-                                </span>
-                            </td>
-                            <td class="px-8 py-6">
-                                <div class="flex items-center gap-2">
+            <!-- Desktop Table -->
+            <div class="hidden md:block">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-zinc-800/50">
+                            <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Code</th>
+                            <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Discount</th>
+                            <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Restrictions</th>
+                            <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Usage</th>
+                            <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest">Expiry</th>
+                            <th class="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50 dark:divide-zinc-800">
+                        @forelse($coupons as $coupon)
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-zinc-800/30 transition-colors group">
+                                <td class="px-8 py-6">
+                                    <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 px-3 py-1.5 rounded-lg font-mono font-black text-sm uppercase tracking-wider border border-indigo-100 dark:border-indigo-800">
+                                        {{ $coupon->code }}
+                                    </span>
+                                </td>
+                                <td class="px-8 py-6">
                                     <span class="text-lg font-black text-slate-900 dark:text-white">
                                         {{ $coupon->type === 'percentage' ? $coupon->value . '%' : '€' . $coupon->value }}
                                     </span>
-                                </div>
-                            </td>
-                            <td class="px-8 py-6">
-                                @if($coupon->event)
-                                    <div class="flex items-center gap-2 text-slate-600 dark:text-zinc-400 text-xs font-bold">
-                                        <span class="material-symbols-outlined text-sm">event</span>
-                                        {{ $coupon->event->title }}
+                                </td>
+                                <td class="px-8 py-6">
+                                    @if($coupon->event)
+                                        <div class="flex items-center gap-2 text-slate-600 dark:text-zinc-400 text-xs font-bold">
+                                            <span class="material-symbols-outlined text-sm">event</span>
+                                            {{ $coupon->event->title }}
+                                        </div>
+                                    @else
+                                        <span class="text-slate-400 dark:text-zinc-600 text-xs font-bold uppercase tracking-widest">Global</span>
+                                    @endif
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-1 h-2 w-24 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                                            @php 
+                                                $percent = $coupon->max_usages ? ($coupon->usages_count / $coupon->max_usages) * 100 : 0;
+                                                $color = $percent > 90 ? 'bg-red-500' : ($percent > 50 ? 'bg-orange-500' : 'bg-green-500');
+                                            @endphp
+                                            <div class="h-full {{ $color }} transition-all" style="width: {{ $percent }}%"></div>
+                                        </div>
+                                        <span class="text-xs font-black text-slate-900 dark:text-white">
+                                            {{ $coupon->usages_count }} / {{ $coupon->max_usages ?? '∞' }}
+                                        </span>
                                     </div>
-                                @else
-                                    <span class="text-slate-400 dark:text-zinc-600 text-xs font-bold uppercase tracking-widest">Global</span>
-                                @endif
-                            </td>
-                            <td class="px-8 py-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 h-2 w-24 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
-                                        @php 
-                                            $percent = $coupon->max_usages ? ($coupon->usages_count / $coupon->max_usages) * 100 : 0;
-                                            $color = $percent > 90 ? 'bg-red-500' : ($percent > 50 ? 'bg-orange-500' : 'bg-green-500');
-                                        @endphp
-                                        <div class="h-full {{ $color }} transition-all" style="width: {{ $percent }}%"></div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    @if($coupon->expires_at)
+                                        <div class="text-xs font-bold {{ $coupon->expires_at->isPast() ? 'text-red-500' : 'text-slate-600 dark:text-zinc-400' }}">
+                                            {{ $coupon->expires_at->format('M d, Y') }}
+                                        </div>
+                                    @else
+                                        <span class="text-slate-400 dark:text-zinc-600 text-xs font-bold">No Expiry</span>
+                                    @endif
+                                </td>
+                                <td class="px-8 py-6 text-right">
+                                    <div class="flex justify-end gap-2">
+                                        <button wire:click="editCoupon({{ $coupon->id }})" class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 rounded-xl transition-all">
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                        <button wire:confirm="Are you sure?" wire:click="deleteCoupon({{ $coupon->id }})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </button>
                                     </div>
-                                    <span class="text-xs font-black text-slate-900 dark:text-white">
-                                        {{ $coupon->usages_count }} / {{ $coupon->max_usages ?? '∞' }}
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="px-8 py-6">
-                                @if($coupon->expires_at)
-                                    <div class="text-xs font-bold {{ $coupon->expires_at->isPast() ? 'text-red-500' : 'text-slate-600 dark:text-zinc-400' }}">
-                                        {{ $coupon->expires_at->format('M d, Y') }}
-                                        @if($coupon->expires_at->isPast())
-                                            <span class="block text-[10px] uppercase font-black tracking-tighter">Expired</span>
-                                        @endif
-                                    </div>
-                                @else
-                                    <span class="text-slate-400 dark:text-zinc-600 text-xs font-bold">No Expiry</span>
-                                @endif
-                            </td>
-                            <td class="px-8 py-6 text-right">
-                                <div class="flex justify-end gap-2">
-                                    <button wire:click="editCoupon({{ $coupon->id }})" 
-                                            class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-xl transition-all">
-                                        <span class="material-symbols-outlined">edit</span>
-                                    </button>
-                                    <button wire:confirm="Are you sure you want to delete this coupon?" 
-                                            wire:click="deleteCoupon({{ $coupon->id }})" 
-                                            class="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all">
-                                        <span class="material-symbols-outlined">delete</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-8 py-24 text-center">
-                                <div class="flex flex-col items-center">
-                                    <span class="material-symbols-outlined text-7xl text-slate-200 dark:text-zinc-800 mb-4">confirmation_number</span>
-                                    <h3 class="text-xl font-black text-slate-900 dark:text-white">No coupons yet</h3>
-                                    <p class="text-slate-500 dark:text-zinc-500 mt-2 font-medium">Create your first coupon to attract more customers.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="6" class="px-8 py-24 text-center text-slate-400">No coupons yet.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Cards -->
+            <div class="md:hidden divide-y divide-slate-100 dark:divide-zinc-800">
+                @forelse($coupons as $coupon)
+                    <div class="p-6 space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 px-3 py-1.5 rounded-lg font-mono font-black text-sm uppercase tracking-wider border border-indigo-100 dark:border-indigo-800">
+                                {{ $coupon->code }}
+                            </span>
+                            <div class="flex gap-2">
+                                <button wire:click="editCoupon({{ $coupon->id }})" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl">
+                                    <span class="material-symbols-outlined">edit</span>
+                                </button>
+                                <button wire:confirm="Are you sure?" wire:click="deleteCoupon({{ $coupon->id }})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Discount</p>
+                                <p class="text-xl font-black text-slate-900 dark:text-white">
+                                    {{ $coupon->type === 'percentage' ? $coupon->value . '%' : '€' . $coupon->value }}
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Usage</p>
+                                <p class="text-sm font-black text-slate-900 dark:text-white">
+                                    {{ $coupon->usages_count }} <span class="text-slate-300">/</span> {{ $coupon->max_usages ?? '∞' }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 text-slate-600 dark:text-zinc-400 text-xs font-bold">
+                            @if($coupon->event)
+                                <span class="material-symbols-outlined text-sm">event</span>
+                                {{ $coupon->event->title }}
+                            @else
+                                <span class="material-symbols-outlined text-sm">public</span>
+                                Global Coupon
+                            @endif
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-12 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">No coupons yet.</div>
+                @endforelse
+            </div>
             <div class="px-8 py-6 bg-slate-50 dark:bg-zinc-800/30 border-t border-slate-100 dark:border-zinc-800">
                 {{ $coupons->links() }}
             </div>
