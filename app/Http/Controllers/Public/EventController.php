@@ -110,7 +110,27 @@ class EventController extends Controller
             abort(404);
         }
 
-        return view('public.events.show', compact('event'));
+        // Compute live availability per ticket type (accounts for active holds)
+        $reservationService = app(\App\Services\TicketReservationService::class);
+        $ticketAvailability = [];
+
+        foreach ($event->ticketTypes as $ticketType) {
+            $available = $reservationService->getAvailableQuantity($ticketType, auth()->id());
+            $rawStock  = $ticketType->quantity;
+            $heldCount = $rawStock - $available;
+
+            $ticketAvailability[$ticketType->id] = [
+                'available'   => $available,
+                'raw_stock'   => $rawStock,
+                'held_count'  => $heldCount,
+                'is_held'     => $heldCount > 0 && $available === 0,
+                'is_low'      => $available > 0 && $available <= 5,
+                'is_sold_out' => $rawStock === 0,
+            ];
+        }
+
+        return view('public.events.show', compact('event', 'ticketAvailability'));
+
     }
 
     /**

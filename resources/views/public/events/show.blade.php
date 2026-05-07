@@ -80,44 +80,139 @@
         <!-- Ticket Sidebar -->
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-24">
-                <h2 class="text-xl font-semibold mb-6">Get your tickets</h2>
+                <h2 class="text-xl font-semibold mb-1">Get your tickets</h2>
+                <p class="text-xs text-slate-400 mb-6">Prices include all fees. Secure checkout via Stripe.</p>
 
                 @if($event->ticketTypes->count())
-                    <div class="space-y-4 mb-6">
+
+                    @php
+                        // Determine overall event state
+                        $anyAvailable = collect($ticketAvailability)->contains(fn($t) => $t['available'] > 0);
+                        $allSoldOut   = collect($ticketAvailability)->every(fn($t) => $t['is_sold_out']);
+                        $anyHeld      = collect($ticketAvailability)->contains(fn($t) => $t['is_held']);
+                        $canBuy       = $anyAvailable;
+                    @endphp
+
+                    {{-- ── Global "Being purchased now" notice ── --}}
+                    @if($anyHeld && !$anyAvailable && !$allSoldOut)
+                    <div class="mb-5 flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                        <span class="material-symbols-outlined text-amber-500 text-xl mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
+                        <div>
+                            <p class="text-sm font-bold text-amber-800">Being purchased right now</p>
+                            <p class="text-xs text-amber-600 mt-0.5">Someone is completing their checkout. Tickets may become available shortly if they don't complete the purchase.</p>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="space-y-3 mb-6">
                         @foreach($event->ticketTypes as $ticketType)
-                        <div class="border border-slate-200 rounded-xl p-4 hover:border-[#4f46e5] transition-colors">
-                            <div class="flex justify-between items-start mb-1">
-                                <span class="font-semibold">{{ $ticketType->name }}</span>
-                                <span class="text-[#4f46e5] font-bold text-lg">
+                        @php $avail = $ticketAvailability[$ticketType->id]; @endphp
+
+                        <div @class([
+                            'border rounded-xl p-4 transition-all',
+                            'border-slate-200 hover:border-[#4f46e5]/50' => $avail['available'] > 0,
+                            'border-amber-200 bg-amber-50/50'            => $avail['is_held'] && !$avail['is_sold_out'],
+                            'border-slate-100 bg-slate-50 opacity-60'    => $avail['is_sold_out'],
+                        ])>
+                            {{-- Name + Price --}}
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="font-semibold text-slate-900">{{ $ticketType->name }}</span>
+                                <span class="font-bold text-lg {{ $avail['is_sold_out'] ? 'text-slate-400' : 'text-[#4f46e5]' }}">
                                     {{ $ticketType->price > 0 ? '€'.number_format($ticketType->price, 2) : 'Free' }}
                                 </span>
                             </div>
+
                             @if($ticketType->description)
-                                <p class="text-xs text-[#464555] mb-3">{{ $ticketType->description }}</p>
+                                <p class="text-xs text-slate-500 mb-3">{{ $ticketType->description }}</p>
                             @endif
-                            <div class="flex items-center justify-between text-xs text-[#777587]">
-                                <span>{{ $ticketType->quantity }} available</span>
-                                @if($ticketType->max_per_order)
-                                    <span>Max {{ $ticketType->max_per_order }} per order</span>
+
+                            {{-- Status Badge --}}
+                            <div class="flex items-center justify-between gap-2 flex-wrap">
+                                @if($avail['is_sold_out'])
+                                    {{-- SOLD OUT --}}
+                                    <span class="inline-flex items-center gap-1 text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
+                                        <span class="material-symbols-outlined text-xs">block</span> Sold Out
+                                    </span>
+
+                                @elseif($avail['is_held'] && $avail['available'] === 0)
+                                    {{-- TEMPORARILY HELD --}}
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full animate-pulse">
+                                        <span class="w-1.5 h-1.5 bg-amber-500 rounded-full inline-block"></span>
+                                        Temporarily Held
+                                    </span>
+                                    <span class="text-[11px] text-amber-600">Check back soon</span>
+
+                                @elseif($avail['is_low'])
+                                    {{-- LOW STOCK --}}
+                                    <span class="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-full">
+                                        <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1">local_fire_department</span>
+                                        Only {{ $avail['available'] }} left!
+                                    </span>
+                                    @if($ticketType->max_per_order)
+                                        <span class="text-[11px] text-slate-400">Max {{ $ticketType->max_per_order }} per order</span>
+                                    @endif
+
+                                @else
+                                    {{-- AVAILABLE --}}
+                                    <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
+                                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block"></span>
+                                        {{ $avail['available'] }} available
+                                    </span>
+                                    @if($ticketType->max_per_order)
+                                        <span class="text-[11px] text-slate-400">Max {{ $ticketType->max_per_order }} per order</span>
+                                    @endif
                                 @endif
                             </div>
+
+                            {{-- Progress bar (stock fill) --}}
+                            @if($avail['raw_stock'] > 0)
+                            @php
+                                $pct = min(100, round(($avail['available'] / max(1, $avail['raw_stock'])) * 100));
+                                $barColor = $avail['is_sold_out'] ? 'bg-slate-300'
+                                    : ($avail['is_held'] && $avail['available'] === 0 ? 'bg-amber-400'
+                                    : ($avail['is_low'] ? 'bg-red-400' : 'bg-emerald-400'));
+                            @endphp
+                            <div class="mt-3 h-1 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="{{ $barColor }} h-full rounded-full transition-all duration-500" style="width: {{ $pct }}%"></div>
+                            </div>
+                            @endif
                         </div>
                         @endforeach
                     </div>
 
-                    <a href="{{ route('public.checkout', $event->slug) }}" wire:navigate class="block w-full bg-[#4f46e5] text-white text-center py-4 rounded-xl font-semibold hover:bg-[#4f46e5]/90 transition-all active:scale-95">
-                        Buy Now
-                    </a>
+                    {{-- ── CTA Button ── --}}
+                    @if($canBuy)
+                        <a href="{{ route('public.checkout', $event->slug) }}"
+                           wire:navigate
+                           class="block w-full bg-[#4f46e5] text-white text-center py-4 rounded-xl font-semibold hover:bg-[#4f46e5]/90 transition-all active:scale-95 shadow-lg shadow-indigo-100">
+                            Buy Now
+                        </a>
+                    @elseif($anyHeld)
+                        <button disabled
+                                class="block w-full bg-amber-400/60 text-amber-900 text-center py-4 rounded-xl font-semibold cursor-not-allowed">
+                            <span class="flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-sm">hourglass_top</span>
+                                In Checkout — Check Back Soon
+                            </span>
+                        </button>
+                    @elseif($allSoldOut)
+                        <button disabled
+                                class="block w-full bg-slate-100 text-slate-400 text-center py-4 rounded-xl font-semibold cursor-not-allowed">
+                            Sold Out
+                        </button>
+                    @endif
+
                 @else
-                    <div class="text-center py-8 text-[#464555]">
-                        <span class="material-symbols-outlined text-4xl text-[#c7c4d8] block mb-3">confirmation_number</span>
+                    <div class="text-center py-8 text-slate-400">
+                        <span class="material-symbols-outlined text-4xl block mb-3">confirmation_number</span>
                         <p class="text-sm">Tickets coming soon</p>
                     </div>
                 @endif
 
-                <p class="text-[10px] text-center text-[#777587] mt-4">100% Buyer Guarantee. Secure checkout powered by Stripe.</p>
+                <p class="text-[10px] text-center text-slate-400 mt-4">🔒 100% Buyer Guarantee. Secure checkout powered by Stripe.</p>
             </div>
         </div>
+
     </div>
 </div>
 @endsection

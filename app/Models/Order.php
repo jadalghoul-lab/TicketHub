@@ -16,6 +16,7 @@ class Order extends Model
         'event_id',
         'user_id',
         'coupon_id',
+        'reservation_id',
         'order_number',
         'total_amount',
         'status',
