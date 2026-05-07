@@ -19,34 +19,35 @@ class CheckoutService
     public function fulfillOrder($session)
     {
         $orderId = $session->metadata->order_id ?? null;
-        $order = Order::find($orderId);
+        $order   = Order::find($orderId);
 
         if (!$order || $order->status === 'paid') {
             return;
         }
 
         DB::transaction(function () use ($order, $session) {
-            // 1. Update Order
+
+            // 1. Update Order status
             $order->update([
-                'status' => 'paid',
-                'payment_intent_id' => $session->payment_intent ?? $order->payment_intent_id
+                'status'             => 'paid',
+                'payment_intent_id'  => $session->payment_intent ?? $order->payment_intent_id,
             ]);
 
             // 2. Create Payment Record
             $amount = isset($session->amount_total) ? $session->amount_total : $session->amount;
             Payment::create([
-                'order_id' => $order->id,
+                'order_id'          => $order->id,
                 'stripe_payment_id' => $session->payment_intent ?? $session->id,
-                'amount' => $amount / 100,
-                'currency' => strtoupper($session->currency),
-                'status' => 'succeeded',
+                'amount'            => $amount / 100,
+                'currency'          => strtoupper($session->currency),
+                'status'            => 'succeeded',
             ]);
 
-            // 3. Create Tickets
+            // 3. Deduct stock & create tickets
             $ticketTypeId = $session->metadata->ticket_type_id;
-            $quantity = $session->metadata->quantity;
-            
-            // USE lockForUpdate to prevent race conditions (overselling)
+            $quantity     = $session->metadata->quantity;
+
+            // lockForUpdate prevents race conditions (last line of defence)
             $ticketType = TicketType::where('id', $ticketTypeId)->lockForUpdate()->first();
 
             if (!$ticketType || $ticketType->quantity < $quantity) {
@@ -56,20 +57,26 @@ class CheckoutService
 
             for ($i = 0; $i < $quantity; $i++) {
                 Ticket::create([
-                    'order_id' => $order->id,
-                    'event_id' => $order->event_id,
+                    'order_id'       => $order->id,
+                    'event_id'       => $order->event_id,
                     'ticket_type_id' => $ticketTypeId,
-                    'user_id' => $order->user_id,
-                    'uuid' => (string) Str::uuid(),
-                    'ticket_number' => 'TKT-' . strtoupper(Str::random(10)),
-                    'status' => 'valid',
+                    'user_id'        => $order->user_id,
+                    'uuid'           => (string) Str::uuid(),
+                    'ticket_number'  => 'TKT-' . strtoupper(Str::random(10)),
+                    'status'         => 'valid',
                 ]);
             }
 
-            // 4. Update Stock
+            // 4. Permanently reduce stock
             $ticketType->decrement('quantity', $quantity);
 
-            // 5. Record Coupon Usage if applicable
+            // 5. Confirm the temporary reservation (marks it as fulfilled, not temporary anymore)
+            $reservationId = $session->metadata->reservation_id ?? null;
+            if ($reservationId) {
+                app(TicketReservationService::class)->confirmReservation((int) $reservationId, $order);
+            }
+
+            // 6. Record Coupon Usage if applicable
             if ($order->coupon_id) {
                 app(\App\Services\CouponService::class)->recordUsage(
                     $order->coupon_id,
@@ -78,10 +85,10 @@ class CheckoutService
                 );
             }
 
-            // 6. Send Email (via Queue)
+            // 7. Send Email (via Queue)
             \App\Jobs\SendOrderTicketsJob::dispatch($order);
 
-            // 7. Send In-App Notification
+            // 8. Send In-App Notification
             $order->user->notify(new \App\Notifications\OrderConfirmed($order));
         });
 
@@ -106,7 +113,7 @@ class CheckoutService
     public function handleRefund($charge)
     {
         $intentId = $charge->payment_intent;
-        $order = Order::where('payment_intent_id', $intentId)->first();
+        $order    = Order::where('payment_intent_id', $intentId)->first();
         if ($order) {
             $order->update(['status' => 'refunded']);
             Ticket::where('order_id', $order->id)->update(['status' => 'refunded']);

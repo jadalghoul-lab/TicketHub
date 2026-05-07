@@ -1,4 +1,35 @@
-<div>
+<div
+    x-data="{
+        secondsLeft: {{ $reservationSecondsRemaining ?? 0 }},
+        timerInterval: null,
+        hasExpiredDuringSession: false,
+        init() {
+            if (this.secondsLeft > 0) {
+                this.timerInterval = setInterval(() => {
+                    if (this.secondsLeft > 0) {
+                        this.secondsLeft--;
+                        if (this.secondsLeft === 0) {
+                            this.hasExpiredDuringSession = true;
+                            clearInterval(this.timerInterval);
+                        }
+                    }
+                }, 1000);
+            }
+        },
+        get minutes() { return String(Math.floor(this.secondsLeft / 60)).padStart(2, '0'); },
+        get seconds() { return String(this.secondsLeft % 60).padStart(2, '0'); },
+        get isUrgent() { return this.secondsLeft <= 120 && this.secondsLeft > 0; },
+        get isExpired() { return this.hasExpiredDuringSession && this.secondsLeft === 0; }
+    }">
+
+    {{-- ── Session expiry flash ── --}}
+    @if(session('error'))
+    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 mb-6 rounded-xl flex items-center gap-3">
+        <span class="material-symbols-outlined">error</span>
+        <p class="font-medium">{{ session('error') }}</p>
+    </div>
+    @endif
+
     <div class="max-w-screen-xl mx-auto w-full px-6 py-12">
         <!-- Progress Stepper (Inspired by my_tickets.zip design) -->
         <div class="mb-12 max-w-3xl mx-auto">
@@ -41,6 +72,33 @@
             </div>
         </div>
 
+        {{-- ── Reservation Countdown Banner ── --}}
+        @if($reservationId && $step > 1)
+        <div x-show="secondsLeft > 0"
+             :class="isUrgent ? 'bg-amber-50 border-amber-400 text-amber-800' : 'bg-emerald-50 border-emerald-400 text-emerald-800'"
+             class="mb-8 border-2 rounded-2xl px-6 py-4 flex items-center justify-between gap-4 transition-all duration-500">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-2xl" :class="isUrgent ? 'text-amber-500' : 'text-emerald-500'" style="font-variation-settings: 'FILL' 1;">timer</span>
+                <div>
+                    <p class="font-bold text-sm">🎟️ Your tickets are reserved!</p>
+                    <p class="text-xs opacity-75">Complete your purchase before the timer runs out.</p>
+                </div>
+            </div>
+            <div class="font-mono text-2xl font-black tracking-widest"
+                 :class="isUrgent ? 'text-amber-600 animate-pulse' : 'text-emerald-700'">
+                <span x-text="minutes"></span>:<span x-text="seconds"></span>
+            </div>
+        </div>
+        <div x-show="isExpired"
+             class="mb-8 bg-red-50 border-2 border-red-400 text-red-800 rounded-2xl px-6 py-4 flex items-center gap-3">
+            <span class="material-symbols-outlined text-red-500 text-2xl">timer_off</span>
+            <div>
+                <p class="font-bold">Your reservation has expired.</p>
+                <p class="text-sm opacity-75">Please go back to Step 1 and select your tickets again.</p>
+            </div>
+        </div>
+        @endif
+
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <!-- Left Column: Step Content -->
             <div class="lg:col-span-7 space-y-8">
@@ -57,7 +115,13 @@
                                     <input type="radio" name="ticket_type" value="{{ $ticketType->id }}" wire:model.live="selectedTicketTypeId" class="text-[#4f46e5] focus:ring-[#4f46e5]" />
                                     <div>
                                         <p class="font-bold text-slate-900">{{ $ticketType->name }}</p>
-                                        <p class="text-xs text-slate-500">{{ $ticketType->quantity }} left • Max {{ $ticketType->max_per_order ?? 10 }} per order</p>
+                                        @php
+                                            $availableQty = app(\App\Services\TicketReservationService::class)->getAvailableQuantity($ticketType, auth()->id());
+                                        @endphp
+                                        <p class="text-xs text-slate-500">{{ $availableQty }} available • Max {{ $ticketType->max_per_order ?? 10 }} per order</p>
+                                        @if($availableQty === 0)
+                                            <span class="inline-block mt-1 text-[10px] font-bold uppercase text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">Temporarily Held</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <span class="text-lg font-bold text-[#4f46e5]">€{{ number_format($ticketType->price, 2) }}</span>
