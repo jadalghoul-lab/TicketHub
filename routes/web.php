@@ -9,6 +9,7 @@ use App\Http\Controllers\Public\TicketController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/events', [EventController::class, 'index'])->name('public.events.index');
 Route::get('/events/{slug}', [EventController::class, 'show'])->name('public.events.show');
+Route::get('/support', [\App\Http\Controllers\Public\SupportController::class, 'index'])->name('public.support');
 Route::post('/webhook/stripe', [App\Http\Controllers\Webhook\StripeWebhookController::class, 'handle']);
 
 Route::middleware(['auth', 'verified'])->group(function () {
