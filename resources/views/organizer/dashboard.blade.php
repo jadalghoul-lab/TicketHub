@@ -103,7 +103,7 @@
                                 <h4 class="font-bold text-slate-900 dark:text-white truncate w-40">{{ $topEvent->title }}</h4>
                                 <p class="text-xs text-slate-400 dark:text-zinc-400 font-bold">{{ $topEvent->tickets_count }} tickets sold</p>
                             </div>
-                            <a href="{{ route('organizer.scanner', $topEvent->slug) }}" class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                            <a href="{{ route('organizer.scanner', $topEvent->slug) }}" wire:navigate class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                 <span class="material-symbols-outlined text-sm">qr_code_scanner</span>
                             </a>
                         </div>
@@ -118,7 +118,10 @@
                             <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400">history</span>
                             Recent Sales
                         </h2>
-                        <button class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest hover:underline">View All</button>
+                        <a href="{{ route('organizer.events.index') }}" wire:navigate class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest hover:underline flex items-center gap-1">
+                            View All
+                            <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                        </a>
                     </div>
                     
                     <div class="overflow-x-auto">
@@ -133,7 +136,7 @@
                             </thead>
                             <tbody class="divide-y divide-slate-50 dark:divide-zinc-700">
                                 @foreach($recentOrders as $order)
-                                <tr class="group hover:bg-slate-50/50 dark:hover:bg-zinc-700/50 transition-all">
+                                <tr class="group hover:bg-slate-50/50 dark:hover:bg-zinc-700/50 transition-all cursor-pointer" onclick="window.location='{{ route('organizer.events.tickets', $order->event->slug) }}'">
                                     <td class="py-4">
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-[10px]">
@@ -150,7 +153,16 @@
                                         <span class="text-sm font-black text-slate-900 dark:text-white">€{{ number_format($order->total_amount, 2) }}</span>
                                     </td>
                                     <td class="py-4">
-                                        <span class="bg-green-50 text-green-600 text-[10px] font-black px-3 py-1 rounded-full uppercase">Paid</span>
+                                        @php
+                                            $statusColors = [
+                                                'paid'      => 'bg-green-50 text-green-600',
+                                                'pending'   => 'bg-amber-50 text-amber-600',
+                                                'failed'    => 'bg-red-50 text-red-600',
+                                                'refunded'  => 'bg-slate-100 text-slate-500',
+                                            ];
+                                            $color = $statusColors[$order->status] ?? 'bg-slate-100 text-slate-500';
+                                        @endphp
+                                        <span class="{{ $color }} text-[10px] font-black px-3 py-1 rounded-full uppercase">{{ ucfirst($order->status) }}</span>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -170,22 +182,23 @@
                     </h3>
                     <div class="space-y-6">
                         @forelse($upcomingEvents as $upcoming)
-                        <div class="flex gap-4 items-start border-l-2 border-white/20 pl-4 py-1">
-                            <div class="text-center">
+                        <a href="{{ route('organizer.events.tickets', $upcoming->slug) }}" wire:navigate class="flex gap-4 items-start border-l-2 border-white/20 pl-4 py-1 hover:border-white/60 transition-all group">
+                            <div class="text-center min-w-[2.5rem]">
                                 <p class="text-xs font-black uppercase opacity-70">{{ $upcoming->start_date->format('M') }}</p>
                                 <p class="text-xl font-black">{{ $upcoming->start_date->format('d') }}</p>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-sm leading-tight">{{ $upcoming->title }}</h4>
+                            <div class="flex-grow">
+                                <h4 class="font-bold text-sm leading-tight group-hover:underline">{{ $upcoming->title }}</h4>
                                 <p class="text-[10px] font-medium opacity-70">{{ $upcoming->city }} • {{ $upcoming->start_date->diffForHumans() }}</p>
                             </div>
-                        </div>
+                            <span class="material-symbols-outlined text-white/40 group-hover:text-white text-sm transition-colors">arrow_forward_ios</span>
+                        </a>
                         @empty
                         <p class="text-sm opacity-70">No upcoming events scheduled.</p>
                         @endforelse
                     </div>
                     
-                    <a href="{{ route('organizer.events.index', ['create' => 1]) }}" wire:navigate class="w-full bg-white/10 hover:bg-white/20 transition-all text-white rounded-2xl py-3 font-bold mt-8 flex items-center justify-center gap-2 text-sm">
+                    <a href="{{ route('organizer.events.index') }}" wire:navigate class="w-full bg-white/10 hover:bg-white/20 transition-all text-white rounded-2xl py-3 font-bold mt-8 flex items-center justify-center gap-2 text-sm">
                         <span class="material-symbols-outlined text-sm">add</span>
                         Create New Event
                     </a>
@@ -200,12 +213,14 @@
                     <p class="text-xs text-slate-500 mb-6">Select an event to launch the scanning interface for guest check-in.</p>
                     
                     <div class="space-y-3">
-                        @foreach($events->take(3) as $event)
-                        <a href="{{ route('organizer.scanner', $event->slug) }}" class="flex items-center justify-between p-4 bg-slate-50 dark:bg-zinc-700/50 rounded-2xl group hover:bg-indigo-600 dark:hover:bg-indigo-600 transition-all">
+                        @forelse($events->take(3) as $event)
+                        <a href="{{ route('organizer.scanner', $event->slug) }}" wire:navigate class="flex items-center justify-between p-4 bg-slate-50 dark:bg-zinc-700/50 rounded-2xl group hover:bg-indigo-600 dark:hover:bg-indigo-600 transition-all">
                             <span class="text-xs font-bold text-slate-700 dark:text-zinc-300 group-hover:text-white transition-colors truncate w-40">{{ $event->title }}</span>
                             <span class="material-symbols-outlined text-slate-400 dark:text-zinc-500 group-hover:text-white text-sm">arrow_forward_ios</span>
                         </a>
-                        @endforeach
+                        @empty
+                        <p class="text-xs text-slate-400 dark:text-zinc-500 text-center py-4">No events yet. <a href="{{ route('organizer.events.index') }}" wire:navigate class="text-indigo-600 hover:underline font-bold">Create one</a></p>
+                        @endforelse
                     </div>
                 </div>
 
