@@ -42,7 +42,7 @@
                     <a class="{{ request()->routeIs('home') ? 'text-indigo-600 border-b-2 border-indigo-600 pb-1' : 'text-slate-600 hover:text-slate-900 transition-colors duration-200' }}" href="{{ route('home') }}">Marketplace</a>
                     <a class="{{ request()->routeIs('public.events.*') ? 'text-indigo-600 border-b-2 border-indigo-600 pb-1' : 'text-slate-600 hover:text-slate-900 transition-colors duration-200' }}" href="{{ route('public.events.index') }}">Events</a>
                     <a class="{{ request()->routeIs('public.tickets.*') ? 'text-indigo-600 border-b-2 border-indigo-600 pb-1' : 'text-slate-600 hover:text-slate-900 transition-colors duration-200' }}" href="{{ route('public.tickets.index') }}">My Tickets</a>
-                    <a class="text-slate-600 hover:text-slate-900 transition-colors duration-200" href="#">Support</a>
+                    <a class="{{ request()->routeIs('public.support') ? 'text-indigo-600 border-b-2 border-indigo-600 pb-1' : 'text-slate-600 hover:text-slate-900 transition-colors duration-200' }}" href="{{ route('public.support') }}">Support</a>
                 </nav>
             </div>
 
@@ -106,7 +106,7 @@
                 <a href="{{ route('public.tickets.index') }}" class="flex items-center gap-3 p-4 rounded-2xl {{ request()->routeIs('public.tickets.*') ? 'bg-indigo-50 text-indigo-600 font-bold' : 'text-slate-600 hover:bg-slate-50' }}">
                     <span class="material-symbols-outlined">local_activity</span> My Tickets
                 </a>
-                <a href="#" class="flex items-center gap-3 p-4 rounded-2xl text-slate-600 hover:bg-slate-50">
+                <a href="{{ route('public.support') }}" class="flex items-center gap-3 p-4 rounded-2xl {{ request()->routeIs('public.support') ? 'bg-indigo-50 text-indigo-600 font-bold' : 'text-slate-600 hover:bg-slate-50' }}">
                     <span class="material-symbols-outlined">help</span> Help & Support
                 </a>
             </nav>
@@ -181,7 +181,7 @@
                 <a class="text-slate-500 hover:text-indigo-500 hover:underline transition-all" href="#">About</a>
                 <a class="text-slate-500 hover:text-indigo-500 hover:underline transition-all" href="#">Privacy</a>
                 <a class="text-slate-500 hover:text-indigo-500 hover:underline transition-all" href="#">Terms</a>
-                <a class="text-slate-500 hover:text-indigo-500 hover:underline transition-all" href="#">Contact</a>
+                <a class="text-slate-500 hover:text-indigo-500 hover:underline transition-all" href="{{ route('public.support') }}">Contact</a>
             </nav>
             <div class="flex gap-4">
                 <button class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 transition-colors">
