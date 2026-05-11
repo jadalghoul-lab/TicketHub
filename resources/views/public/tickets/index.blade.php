@@ -40,13 +40,16 @@
                         <div class="flex flex-col sm:flex-row h-full">
                             <!-- Event Image -->
                             <div class="sm:w-48 h-48 sm:h-auto relative overflow-hidden">
-                                <img src="{{ $ticket->ticketType->event->image ? Storage::url($ticket->ticketType->event->image) : 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400' }}" 
+                                @php
+                                    $event = $ticket->event ?? $ticket->ticketType?->event;
+                                @endphp
+                                <img src="{{ $event?->image ? Storage::url($event->image) : 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400' }}" 
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                                     alt="{{ $ticket->ticketType->event->title }}">
+                                     alt="{{ $event?->title ?? 'Event' }}">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                                 <div class="absolute bottom-4 left-4">
                                     <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-lg border border-white/30 uppercase tracking-widest">
-                                        {{ $ticket->ticketType->name }}
+                                        {{ $ticket->ticketType?->name ?? 'Standard' }}
                                     </span>
                                 </div>
                             </div>
@@ -56,11 +59,11 @@
                                 <div class="flex justify-between items-start mb-4">
                                     <div>
                                         <h3 class="text-xl font-black text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors mb-1">
-                                            {{ $ticket->ticketType->event->title }}
+                                            {{ $event?->title ?? 'Unknown Event' }}
                                         </h3>
                                         <p class="text-slate-500 font-medium text-sm flex items-center gap-1">
                                             <span class="material-symbols-outlined text-[16px]">location_on</span>
-                                            {{ $ticket->ticketType->event->city }}
+                                            {{ $event?->city ?? 'Unknown Location' }}
                                         </p>
                                     </div>
                                     <div @class([
@@ -75,7 +78,7 @@
                                 <div class="grid grid-cols-2 gap-4 mb-8">
                                     <div>
                                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</p>
-                                        <p class="text-sm font-bold text-slate-800">{{ $ticket->ticketType->event->start_date->format('M d, Y') }}</p>
+                                        <p class="text-sm font-bold text-slate-800">{{ $event?->start_date ? $event->start_date->format('M d, Y') : 'TBA' }}</p>
                                     </div>
                                     <div>
                                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Pass Code</p>
