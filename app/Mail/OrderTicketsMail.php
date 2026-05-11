@@ -66,6 +66,17 @@ class OrderTicketsMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+
+        foreach ($this->order->tickets as $ticket) {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.ticket', compact('ticket'));
+            
+            $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromData(
+                fn () => $pdf->output(), 
+                "Ticket-{$ticket->ticket_number}.pdf"
+            )->withMime('application/pdf');
+        }
+
+        return $attachments;
     }
 }

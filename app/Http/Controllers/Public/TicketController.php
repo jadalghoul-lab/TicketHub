@@ -37,4 +37,21 @@ class TicketController extends Controller
 
         return view('public.tickets.show', compact('ticket', 'qrCode'));
     }
+
+    /**
+     * Download the specified ticket as a PDF.
+     */
+    public function downloadPdf(Ticket $ticket)
+    {
+        // Ensure the ticket belongs to the authenticated user
+        if ($ticket->order->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Generate the PDF
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.ticket', compact('ticket'));
+
+        // Output the generated PDF to Browser
+        return $pdf->download("ticket-{$ticket->ticket_number}.pdf");
+    }
 }

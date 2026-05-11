@@ -93,10 +93,16 @@
                                             <p class="text-xs font-bold text-slate-800">#{{ $ticket->order->order_number }}</p>
                                         </div>
                                     </div>
-                                    <a href="{{ route('public.tickets.show', $ticket->uuid) }}" 
-                                       class="bg-indigo-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 group-hover:scale-105">
-                                        <span class="material-symbols-outlined">arrow_forward</span>
-                                    </a>
+                                    <div class="flex gap-2">
+                                        <a href="{{ route('public.tickets.pdf', $ticket->id) }}" 
+                                           class="bg-white text-indigo-600 border border-indigo-100 w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-indigo-50 transition-all shadow-sm group-hover:scale-105" title="Download PDF">
+                                            <span class="material-symbols-outlined">picture_as_pdf</span>
+                                        </a>
+                                        <a href="{{ route('public.tickets.show', $ticket->uuid) }}" 
+                                           class="bg-indigo-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 group-hover:scale-105" title="View Ticket">
+                                            <span class="material-symbols-outlined">arrow_forward</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

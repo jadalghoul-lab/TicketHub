@@ -15,6 +15,7 @@ Route::post('/webhook/stripe', [App\Http\Controllers\Webhook\StripeWebhookContro
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/my-tickets', [TicketController::class, 'index'])->name('public.tickets.index');
     Route::get('/my-tickets/{uuid}', [TicketController::class, 'show'])->name('public.tickets.show');
+    Route::get('/my-tickets/{ticket}/pdf', [TicketController::class, 'downloadPdf'])->name('public.tickets.pdf');
     
     // Checkout Flow
     Route::get('/checkout/{slug}', \App\Livewire\Public\Checkout::class)->name('public.checkout');
