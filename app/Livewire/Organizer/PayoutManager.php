@@ -64,6 +64,6 @@ class PayoutManager extends Component
         return view('livewire.organizer.payout-manager', [
             'availableBalance' => $availableBalance,
             'payouts' => $payouts,
-        ])->layout('layouts.app');
+        ]);
     }
 }

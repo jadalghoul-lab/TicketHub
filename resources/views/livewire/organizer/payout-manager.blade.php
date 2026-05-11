@@ -1,30 +1,17 @@
 <div>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Payouts') }}
-            </h2>
-            <button wire:click="createRequest" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded shadow">
-                Request Payout
-            </button>
-        </div>
-    </x-slot>
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Payouts') }}
+        </h2>
+        
+        <flux:modal.trigger name="request-payout">
+            <flux:button variant="primary" icon="plus">Request Payout</flux:button>
+        </flux:modal.trigger>
+    </div>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             
-            @if (session()->has('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if (session()->has('error'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                    {{ session('error') }}
-                </div>
-            @endif
-
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium text-gray-900">Available Balance</h3>
@@ -90,49 +77,28 @@
         </div>
     </div>
 
-    <!-- Payout Request Modal -->
-    @if($showModal)
-    <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" wire:click="$set('showModal', false)"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <form wire:submit.prevent="submitRequest">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                    Request Payout
-                                </h3>
-                                <div class="mt-4 space-y-4">
-                                    <div>
-                                        <label for="amount" class="block text-sm font-medium text-gray-700">Amount (€)</label>
-                                        <input type="number" step="0.01" max="{{ $availableBalance }}" wire:model="amount" id="amount" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                        @error('amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label for="bank_details" class="block text-sm font-medium text-gray-700">Bank Details (IBAN / Account Number)</label>
-                                        <textarea wire:model="bank_details" id="bank_details" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Provide your full IBAN, Bank Name, and Account Holder Name"></textarea>
-                                        @error('bank_details') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded text-sm">
-                                        <p><strong>Note:</strong> Payout requests may take 2-5 business days to process after approval.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
-                            Submit Request
-                        </button>
-                        <button type="button" wire:click="$set('showModal', false)" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
+    <!-- Payout Request Modal using Flux -->
+    <flux:modal name="request-payout" class="md:w-96">
+        <form wire:submit.prevent="submitRequest">
+            <flux:heading size="lg" class="mb-4">Request Payout</flux:heading>
+            
+            <div class="space-y-4">
+                <flux:input wire:model="amount" type="number" step="0.01" max="{{ $availableBalance }}" label="Amount (€)" />
+                
+                <flux:textarea wire:model="bank_details" label="Bank Details (IBAN / Account Number)" placeholder="Provide your full IBAN, Bank Name, and Account Holder Name" rows="3" />
+                
+                <div class="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded text-sm mt-4">
+                    <p><strong>Note:</strong> Payout requests may take 2-5 business days to process after approval.</p>
+                </div>
             </div>
-        </div>
-    </div>
-    @endif
+
+            <div class="flex mt-6 space-x-2">
+                <flux:spacer />
+                <flux:modal.close>
+                    <flux:button variant="ghost">Cancel</flux:button>
+                </flux:modal.close>
+                <flux:button type="submit" variant="primary">Submit Request</flux:button>
+            </div>
+        </form>
+    </flux:modal>
 </div>
