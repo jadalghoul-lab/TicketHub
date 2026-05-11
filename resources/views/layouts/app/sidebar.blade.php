@@ -21,6 +21,9 @@
                         <flux:sidebar.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>
                             Admin Dashboard
                         </flux:sidebar.item>
+                        <flux:sidebar.item icon="banknotes" :href="route('admin.payouts')" :current="request()->routeIs('admin.payouts')" wire:navigate>
+                            Payout Requests
+                        </flux:sidebar.item>
                     @endif
 
                     @if(auth()->user()->isOrganizer())
@@ -38,6 +41,9 @@
                         </flux:sidebar.item>
                         <flux:sidebar.item icon="ticket" :href="route('organizer.coupons')" :current="request()->routeIs('organizer.coupons')" wire:navigate>
                             Coupons
+                        </flux:sidebar.item>
+                        <flux:sidebar.item icon="banknotes" :href="route('organizer.payouts')" :current="request()->routeIs('organizer.payouts')" wire:navigate>
+                            Payouts
                         </flux:sidebar.item>
                     @endif
 
