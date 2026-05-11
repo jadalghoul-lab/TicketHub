@@ -112,11 +112,9 @@
             <div class="qr-code">
                 @php
                     $qrCodeService = app(\App\Services\TicketService::class);
-                    // generateQrCode returns SVG, we can convert it to base64 or just output
-                    $svg = $qrCodeService->generateQrCode($ticket);
-                    // DomPDF handles basic SVG
+                    $base64 = $qrCodeService->generateQrCodeBase64($ticket);
                 @endphp
-                {!! $svg !!}
+                <img src="{{ $base64 }}" width="150" height="150">
             </div>
         </div>
 
