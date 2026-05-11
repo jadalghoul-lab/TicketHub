@@ -46,6 +46,7 @@ class EventList extends Component
     {
         $query = Event::published()
             ->with(['venue', 'organizer', 'ticketTypes'])
+            ->whereDate('start_date', '>=', now()->toDateString())
             ->withoutGlobalScopes();
 
         if ($this->search) {
