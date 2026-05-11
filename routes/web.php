@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('admin/export-report', [\App\Http\Controllers\Admin\DashboardController::class, 'export'])->name('admin.export');
         Route::get('admin/organizers', \App\Livewire\Admin\OrganizerManager::class)->name('admin.organizers.index');
         Route::get('admin/events', \App\Livewire\Admin\EventManager::class)->name('admin.events.index');
+        Route::get('admin/payouts', \App\Livewire\Admin\PayoutManager::class)->name('admin.payouts');
     });
 
     Route::middleware('role:organizer')->group(function () {
@@ -45,6 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('organizer/global-scanner', \App\Livewire\Organizer\GlobalScanner::class)->name('organizer.global-scanner');
         Route::get('organizer/refunds', \App\Livewire\Organizer\RefundManager::class)->name('organizer.refunds');
         Route::get('organizer/coupons', \App\Livewire\Organizer\CouponManager::class)->name('organizer.coupons');
+        Route::get('organizer/payouts', \App\Livewire\Organizer\PayoutManager::class)->name('organizer.payouts');
     });
 });
 

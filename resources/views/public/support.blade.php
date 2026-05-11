@@ -4,7 +4,7 @@
 <div class="bg-indigo-600 text-white pt-40 md:pt-56 pb-20 relative overflow-hidden">
     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
     <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
-        <h1 class="text-4xl md:text-5xl font-black mb-6 tracking-tight mt-16">How can we help?</h1>
+        <h1 class="text-4xl md:text-5xl font-black mb-6 tracking-tight ">How can we help?</h1>
         <p class="text-indigo-100 text-lg md:text-xl max-w-2xl mx-auto font-medium">
             Our support team is here to assist you with any questions about tickets, events, or your account.
         </p>
