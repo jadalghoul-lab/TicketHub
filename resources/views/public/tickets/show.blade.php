@@ -154,10 +154,16 @@
 
             <!-- Print Actions (Screen Only) -->
             <div class="px-10 py-8 bg-slate-50 border-t border-slate-100 flex flex-col gap-4 no-print">
-                <button onclick="window.print()" class="w-full bg-white text-slate-900 border border-slate-200 px-6 py-4 rounded-2xl font-bold hover:bg-slate-100 transition-all flex items-center justify-center gap-3 shadow-sm active:scale-95">
-                    <span class="material-symbols-outlined">print</span>
-                    Print Official Ticket
-                </button>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="window.print()" class="flex-1 bg-white text-slate-900 border border-slate-200 px-6 py-4 rounded-2xl font-bold hover:bg-slate-100 transition-all flex items-center justify-center gap-3 shadow-sm active:scale-95">
+                        <span class="material-symbols-outlined">print</span>
+                        Print Ticket
+                    </button>
+                    <a href="{{ route('public.tickets.pdf', $ticket->id) }}" class="flex-1 bg-indigo-600 text-white px-6 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 shadow-sm shadow-indigo-200 active:scale-95">
+                        <span class="material-symbols-outlined">picture_as_pdf</span>
+                        Download PDF
+                    </a>
+                </div>
                 
                 @livewire('public.refund-request-form', ['order' => $ticket->order])
             </div>

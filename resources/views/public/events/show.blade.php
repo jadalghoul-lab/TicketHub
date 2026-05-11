@@ -4,7 +4,7 @@
 <!-- Hero Image -->
 <div class="relative h-96 overflow-hidden">
     @if($event->image)
-        <img class="w-full h-full object-cover" src="{{ Storage::url($event->image) }}" alt="{{ $event->title }}" />
+        <img class="w-full h-full object-cover" src="{{ $event->image_url }}" alt="{{ $event->title }}" />
     @else
         <div class="w-full h-full bg-gradient-to-br from-indigo-600 to-purple-700"></div>
     @endif
