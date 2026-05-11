@@ -43,7 +43,7 @@
                                 @php
                                     $event = $ticket->event ?? $ticket->ticketType?->event;
                                 @endphp
-                                <img src="{{ $event?->image ? Storage::url($event->image) : 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400' }}" 
+                                <img src="{{ $event?->image_url }}" 
                                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                                      alt="{{ $event?->title ?? 'Event' }}">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>

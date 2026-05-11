@@ -72,6 +72,19 @@ class Event extends Model
      *
      * @return string
      */
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400';
+        }
+
+        if (str_starts_with($this->image, 'http')) {
+            return $this->image;
+        }
+
+        return \Illuminate\Support\Facades\Storage::url($this->image);
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';
