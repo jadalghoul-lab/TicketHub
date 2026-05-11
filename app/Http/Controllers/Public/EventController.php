@@ -15,6 +15,7 @@ class EventController extends Controller
     {
         $query = Event::published()
             ->with(['venue', 'organizer', 'ticketTypes'])
+            ->whereDate('start_date', '>=', now()->toDateString())
             ->withoutGlobalScopes();
 
         // Search filter
