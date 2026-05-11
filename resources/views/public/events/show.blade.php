@@ -87,14 +87,15 @@
 
                     @php
                         // Determine overall event state
+                        $isPast       = $event->start_date->endOfDay()->isPast();
                         $anyAvailable = collect($ticketAvailability)->contains(fn($t) => $t['available'] > 0);
                         $allSoldOut   = collect($ticketAvailability)->every(fn($t) => $t['is_sold_out']);
                         $anyHeld      = collect($ticketAvailability)->contains(fn($t) => $t['is_held']);
-                        $canBuy       = $anyAvailable;
+                        $canBuy       = $anyAvailable && !$isPast;
                     @endphp
 
                     {{-- ── Global "Being purchased now" notice ── --}}
-                    @if($anyHeld && !$anyAvailable && !$allSoldOut)
+                    @if($anyHeld && !$anyAvailable && !$allSoldOut && !$isPast)
                     <div class="mb-5 flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
                         <span class="material-symbols-outlined text-amber-500 text-xl mt-0.5" style="font-variation-settings:'FILL' 1">schedule</span>
                         <div>
@@ -110,14 +111,14 @@
 
                         <div @class([
                             'border rounded-xl p-4 transition-all',
-                            'border-slate-200 hover:border-[#4f46e5]/50' => $avail['available'] > 0,
-                            'border-amber-200 bg-amber-50/50'            => $avail['is_held'] && !$avail['is_sold_out'],
-                            'border-slate-100 bg-slate-50 opacity-60'    => $avail['is_sold_out'],
+                            'border-slate-200 hover:border-[#4f46e5]/50' => $avail['available'] > 0 && !$isPast,
+                            'border-amber-200 bg-amber-50/50'            => $avail['is_held'] && !$avail['is_sold_out'] && !$isPast,
+                            'border-slate-100 bg-slate-50 opacity-60'    => $avail['is_sold_out'] || $isPast,
                         ])>
                             {{-- Name + Price --}}
                             <div class="flex justify-between items-start mb-2">
                                 <span class="font-semibold text-slate-900">{{ $ticketType->name }}</span>
-                                <span class="font-bold text-lg {{ $avail['is_sold_out'] ? 'text-slate-400' : 'text-[#4f46e5]' }}">
+                                <span class="font-bold text-lg {{ $avail['is_sold_out'] || $isPast ? 'text-slate-400' : 'text-[#4f46e5]' }}">
                                     {{ $ticketType->price > 0 ? '€'.number_format($ticketType->price, 2) : 'Free' }}
                                 </span>
                             </div>
@@ -128,7 +129,11 @@
 
                             {{-- Status Badge --}}
                             <div class="flex items-center justify-between gap-2 flex-wrap">
-                                @if($avail['is_sold_out'])
+                                @if($isPast)
+                                    <span class="inline-flex items-center gap-1 text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
+                                        <span class="material-symbols-outlined text-xs">history</span> Event Ended
+                                    </span>
+                                @elseif($avail['is_sold_out'])
                                     {{-- SOLD OUT --}}
                                     <span class="inline-flex items-center gap-1 text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
                                         <span class="material-symbols-outlined text-xs">block</span> Sold Out
@@ -165,7 +170,7 @@
                             </div>
 
                             {{-- Progress bar (stock fill) --}}
-                            @if($avail['raw_stock'] > 0)
+                            @if($avail['raw_stock'] > 0 && !$isPast)
                             @php
                                 $pct = min(100, round(($avail['available'] / max(1, $avail['raw_stock'])) * 100));
                                 $barColor = $avail['is_sold_out'] ? 'bg-slate-300'
@@ -181,7 +186,15 @@
                     </div>
 
                     {{-- ── CTA Button ── --}}
-                    @if($canBuy)
+                    @if($isPast)
+                        <button disabled
+                                class="block w-full bg-slate-100 text-slate-400 text-center py-4 rounded-xl font-semibold cursor-not-allowed">
+                            <span class="flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-sm">history</span>
+                                Event Ended
+                            </span>
+                        </button>
+                    @elseif($canBuy)
                         <a href="{{ route('public.checkout', $event->slug) }}"
                            wire:navigate
                            class="block w-full bg-[#4f46e5] text-white text-center py-4 rounded-xl font-semibold hover:bg-[#4f46e5]/90 transition-all active:scale-95 shadow-lg shadow-indigo-100">

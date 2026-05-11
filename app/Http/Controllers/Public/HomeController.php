@@ -12,6 +12,7 @@ class HomeController extends Controller
         $trendingEvents = Event::published()
             ->with(['venue', 'organizer', 'ticketTypes'])
             ->withoutGlobalScopes() // public page — no tenant scope
+            ->whereDate('start_date', '>=', now()->toDateString())
             ->orderBy('start_date')
             ->limit(8)
             ->get();
@@ -19,7 +20,7 @@ class HomeController extends Controller
         $upcomingEvents = Event::published()
             ->with(['venue', 'organizer', 'ticketTypes'])
             ->withoutGlobalScopes()
-            ->where('start_date', '>=', now())
+            ->whereDate('start_date', '>=', now()->toDateString())
             ->orderBy('start_date')
             ->limit(4)
             ->get();

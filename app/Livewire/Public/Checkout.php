@@ -70,6 +70,10 @@ class Checkout extends Component
             ->where('slug', $slug)
             ->firstOrFail();
 
+        if ($this->event->start_date->endOfDay()->isPast()) {
+            abort(403, 'This event has already ended. Tickets can no longer be purchased.');
+        }
+
         // Pre-select first ticket type if available
         if ($this->event->ticketTypes->count() > 0) {
             $this->selectedTicketTypeId = $this->event->ticketTypes->first()->id;
