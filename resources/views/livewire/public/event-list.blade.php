@@ -11,7 +11,7 @@
             <div class="mb-8">
                 <label class="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3 ml-1">Search Events</label>
                 <div class="relative group">
-                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors">search</span>
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">search</span>
                     <input type="text" wire:model.live.debounce.300ms="search" 
                            placeholder="What are you looking for?"
                            class="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-4 focus:ring-indigo-500/20 dark:text-white text-sm font-bold placeholder:font-medium placeholder:text-slate-400 transition-all shadow-inner">
@@ -61,7 +61,7 @@
             <div class="space-y-4">
                 <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Location</p>
                 <div class="relative group">
-                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors">location_on</span>
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors">location_on</span>
                     <input type="text" wire:model.live.debounce.300ms="city"
                            placeholder="Search City..."
                            class="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none focus:ring-4 focus:ring-indigo-500/20 dark:text-white text-sm font-bold placeholder:font-medium placeholder:text-slate-400 transition-all shadow-inner" />

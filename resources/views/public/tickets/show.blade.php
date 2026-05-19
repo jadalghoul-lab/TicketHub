@@ -123,8 +123,8 @@
             <div class="p-12 qr-container flex flex-col items-center text-center">
                 <div class="relative mb-10">
                     <div class="absolute -inset-8 bg-indigo-50 dark:bg-indigo-900/20 rounded-[3rem] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 no-print"></div>
-                    <div class="relative bg-white p-8 rounded-[2.5rem] border-2 border-slate-50 dark:border-transparent shadow-xl shadow-indigo-100/50 dark:shadow-none qr-box">
-                        <div class="w-64 h-64 flex items-center justify-center">
+                    <div class="relative bg-white dark:bg-slate-800/50 p-6 md:p-8 rounded-[2.5rem] border-2 border-slate-50 dark:border-slate-700/50 shadow-xl shadow-indigo-100/50 dark:shadow-none qr-box backdrop-blur-sm">
+                        <div class="w-64 h-64 flex items-center justify-center bg-white rounded-2xl p-2 shadow-sm">
                             {!! $qrCode !!}
                         </div>
                     </div>
