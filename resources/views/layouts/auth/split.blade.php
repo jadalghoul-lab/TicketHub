@@ -7,30 +7,47 @@
                 font-family: 'Inter', sans-serif;
             }
         </style>
+        <script>
+            function updateTheme() {
+                const appearance = localStorage.getItem('flux.appearance');
+                if (appearance === 'dark' || (appearance !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+            
+            // Initial setup
+            updateTheme();
+            
+            // Re-apply theme on Livewire SPA navigation
+            document.addEventListener('livewire:navigated', updateTheme);
+            
+            // Sync across tabs
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'flux.appearance') updateTheme();
+            });
+        </script>
     </head>
-    <body class="min-h-screen bg-white antialiased">
+    <body class="min-h-screen bg-white dark:bg-slate-900 antialiased transition-colors duration-200">
         <div class="relative grid h-dvh flex-col items-center justify-center px-0 lg:max-w-none lg:grid-cols-2 lg:px-0 overflow-hidden">
             <!-- Brand Logo for mobile (absolute top) -->
             <div class="lg:hidden absolute top-8 left-0 right-0 z-50 flex justify-center">
                  <a href="{{ route('home') }}" class="flex items-center gap-2 group" wire:navigate>
-                    <div class="w-10 h-10 bg-white rounded-xl shadow-lg border border-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-indigo-600 text-2xl">confirmation_number</span>
-                    </div>
-                    <span class="text-xl font-black tracking-tighter text-slate-900">{{ config('app.name', 'TicketHub') }}</span>
+                    <span class="w-2 h-6 bg-indigo-600 dark:bg-indigo-500 rounded-full"></span>
+                    <span class="text-xl font-black tracking-tighter text-slate-900 dark:text-white">{{ config('app.name', 'TicketHub') }}</span>
                 </a>
             </div>
 
             <!-- Left Side: Visual -->
-            <div class="relative hidden h-full flex-col p-10 text-white lg:flex border-r border-slate-100">
+            <div class="relative hidden h-full flex-col p-10 text-white lg:flex border-r border-slate-100 dark:border-slate-800">
                 <div class="absolute inset-0 bg-slate-900">
                     <img src="{{ asset('assets/img/login_bg.png') }}" class="w-full h-full object-cover opacity-60 mix-blend-overlay" alt="Login Background">
                     <div class="absolute inset-0 bg-gradient-to-tr from-indigo-950/80 via-slate-900/40 to-transparent"></div>
                 </div>
                 
-                <a href="{{ route('home') }}" class="relative z-20 flex items-center gap-3 group" wire:navigate>
-                    <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center group-hover:scale-110 transition-all duration-300">
-                        <span class="material-symbols-outlined text-white text-3xl">confirmation_number</span>
-                    </div>
+                <a href="{{ route('home') }}" class="relative z-20 flex items-center gap-2 group" wire:navigate>
+                    <span class="w-2 h-6 bg-indigo-500 rounded-full"></span>
                     <span class="text-2xl font-black tracking-tighter text-white">{{ config('app.name', 'TicketHub') }}</span>
                 </a>
 
@@ -59,8 +76,8 @@
             <div class="w-full flex items-center justify-center h-full relative">
                 <!-- Subtle background patterns for mobile -->
                 <div class="lg:hidden absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-                    <div class="absolute -top-20 -right-20 w-80 h-80 bg-indigo-50 rounded-full blur-3xl opacity-50"></div>
-                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-purple-50 rounded-full blur-3xl opacity-50"></div>
+                    <div class="absolute -top-20 -right-20 w-80 h-80 bg-indigo-50 dark:bg-indigo-900/20 rounded-full blur-3xl opacity-50"></div>
+                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-purple-50 dark:bg-purple-900/20 rounded-full blur-3xl opacity-50"></div>
                 </div>
 
                 <div class="w-full max-w-sm px-6 py-12">
