@@ -24,12 +24,25 @@
     </style>
 
     <script>
-        // Check local storage or system preference for dark mode
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
+        function updateTheme() {
+            const appearance = localStorage.getItem('flux.appearance');
+            if (appearance === 'dark' || (appearance !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         }
+        
+        // Initial setup
+        updateTheme();
+        
+        // Re-apply theme on Livewire SPA navigation
+        document.addEventListener('livewire:navigated', updateTheme);
+        
+        // Sync across tabs (e.g. if user changes theme in dashboard settings)
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'flux.appearance') updateTheme();
+        });
     </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -62,17 +75,26 @@
                 <livewire:public.cart-icon />
                 <livewire:public.notification-bell />
                 
-                <div class="hidden lg:flex items-center gap-2">
-                    <!-- Dark Mode Toggle Button -->
-                    <button x-data="{ isDark: document.documentElement.classList.contains('dark') }" 
-                            @click="isDark = !isDark; 
-                                    document.documentElement.classList.toggle('dark'); 
-                                    localStorage.theme = isDark ? 'dark' : 'light'"
-                            class="p-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md active:scale-95 text-slate-600 dark:text-slate-400" 
-                            title="Toggle Dark Mode">
-                        <span class="material-symbols-outlined" x-text="isDark ? 'light_mode' : 'dark_mode'"></span>
-                    </button>
+                <!-- Dark Mode Toggle Button (Visible on all screens) -->
+                <button x-data="{ 
+                            isDark: localStorage.getItem('flux.appearance') === 'dark' || (localStorage.getItem('flux.appearance') !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                            toggle() {
+                                this.isDark = !this.isDark;
+                                localStorage.setItem('flux.appearance', this.isDark ? 'dark' : 'light');
+                                if (this.isDark) {
+                                    document.documentElement.classList.add('dark');
+                                } else {
+                                    document.documentElement.classList.remove('dark');
+                                }
+                            }
+                        }" 
+                        @click="toggle"
+                        class="p-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md active:scale-95 text-slate-600 dark:text-slate-400" 
+                        title="Toggle Dark Mode">
+                    <span class="material-symbols-outlined" x-text="isDark ? 'light_mode' : 'dark_mode'"></span>
+                </button>
 
+                <div class="hidden lg:flex items-center gap-2">
                     @auth
                         <a href="{{ route('dashboard') }}" class="p-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md active:scale-95 text-slate-600 dark:text-slate-400" title="Dashboard">
                             <span class="material-symbols-outlined">account_circle</span>
