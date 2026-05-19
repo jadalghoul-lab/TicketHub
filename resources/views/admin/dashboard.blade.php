@@ -5,10 +5,10 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-                    <span class="w-2 h-8 bg-emerald-500 rounded-full"></span>
+                    <span class="w-2 h-8 bg-indigo-500 rounded-full"></span>
                     Platform Overview
                 </h1>
-                <p class="text-slate-500 dark:text-zinc-400 font-medium ml-5">Global metrics and platform health</p>
+                <p class="text-slate-500 dark:text-slate-400 font-medium ml-5">Global metrics and platform health</p>
             </div>
             <div class="flex gap-3">
                 <a href="{{ route('admin.events.index') }}" class="bg-purple-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-purple-100 dark:shadow-none hover:bg-purple-700 transition-all active:scale-95 flex items-center gap-2">
@@ -19,7 +19,7 @@
                     <span class="material-symbols-outlined text-sm">group_add</span>
                     Manage Organizers
                 </a>
-                <a href="{{ route('admin.export') }}" class="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-zinc-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-zinc-700 transition-all active:scale-95">
+                <a href="{{ route('admin.export') }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95">
                     <span class="material-symbols-outlined text-sm">download</span>
                     Export Report
                 </a>
@@ -28,11 +28,11 @@
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-zinc-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
                 <div class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
                     <span class="material-symbols-outlined">payments</span>
                 </div>
-                <p class="text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-1">Total Revenue</p>
+                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Total Revenue</p>
                 <h3 class="text-3xl font-black text-slate-900 dark:text-white">€{{ number_format($totalSales, 2) }}</h3>
                 <p class="text-xs text-emerald-600 dark:text-emerald-400 font-bold mt-2 flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">trending_up</span>
@@ -40,11 +40,11 @@
                 </p>
             </div>
 
-            <div class="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-zinc-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
                 <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
                     <span class="material-symbols-outlined">confirmation_number</span>
                 </div>
-                <p class="text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-1">Tickets Issued</p>
+                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Tickets Issued</p>
                 <h3 class="text-3xl font-black text-slate-900 dark:text-white">{{ number_format($totalTicketsSold) }}</h3>
                 <p class="text-xs text-blue-600 dark:text-blue-400 font-bold mt-2 flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">check_circle</span>
@@ -52,11 +52,11 @@
                 </p>
             </div>
 
-            <div class="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-zinc-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
                 <div class="w-12 h-12 bg-purple-50 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
                     <span class="material-symbols-outlined">event_available</span>
                 </div>
-                <p class="text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-1">Live Events</p>
+                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Live Events</p>
                 <h3 class="text-3xl font-black text-slate-900 dark:text-white">{{ $activeEventsCount }}</h3>
                 <p class="text-xs text-purple-600 dark:text-purple-400 font-bold mt-2 flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">visibility</span>
@@ -64,11 +64,11 @@
                 </p>
             </div>
 
-            <div class="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-zinc-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
                 <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center text-amber-600 dark:text-amber-400 mb-6">
                     <span class="material-symbols-outlined">corporate_fare</span>
                 </div>
-                <p class="text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-1">Organizers</p>
+                <p class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Organizers</p>
                 <h3 class="text-3xl font-black text-slate-900 dark:text-white">{{ $totalOrganizersCount }}</h3>
                 <p class="text-xs text-amber-600 dark:text-amber-400 font-bold mt-2 flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">verified</span>
@@ -79,7 +79,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Recent Sales -->
-            <div class="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-50 dark:border-zinc-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-8">
+            <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-8">
                 <div class="flex justify-between items-center mb-8">
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <span class="material-symbols-outlined text-emerald-500">history</span>
@@ -90,18 +90,18 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="text-[10px] font-black text-slate-400 dark:text-zinc-500 uppercase tracking-[0.2em] border-b border-slate-50 dark:border-zinc-800">
+                            <tr class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] border-b border-slate-50 dark:border-slate-800">
                                 <th class="pb-4">Order ID</th>
                                 <th class="pb-4">Customer</th>
                                 <th class="pb-4">Event</th>
                                 <th class="pb-4 text-right">Amount</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50 dark:divide-zinc-800">
+                        <tbody class="divide-y divide-slate-50 dark:divide-slate-800">
                             @forelse($recentOrders as $order)
-                            <tr class="group hover:bg-slate-50/50 dark:hover:bg-zinc-800/50 transition-all">
-                                <td class="py-4 text-sm font-bold text-slate-700 dark:text-zinc-300">#{{ $order->order_number }}</td>
-                                <td class="py-4 text-sm font-medium text-slate-600 dark:text-zinc-400">{{ $order->user->name }}</td>
+                            <tr class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-all">
+                                <td class="py-4 text-sm font-bold text-slate-700 dark:text-slate-300">#{{ $order->order_number }}</td>
+                                <td class="py-4 text-sm font-medium text-slate-600 dark:text-slate-400">{{ $order->user->name }}</td>
                                 <td class="py-4 text-sm font-bold text-slate-900 dark:text-white">{{ $order->event?->title ?? 'N/A' }}</td>
                                 <td class="py-4 text-right">
                                     <span class="text-sm font-black text-slate-900 dark:text-white">€{{ number_format($order->total_amount, 2) }}</span>
@@ -116,7 +116,7 @@
             </div>
 
             <!-- New Organizers -->
-            <div class="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-slate-50 dark:border-zinc-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-8">
+            <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-8">
                 <h3 class="text-lg font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2">
                     <span class="material-symbols-outlined text-amber-500">person_add</span>
                     New Organizers
@@ -124,7 +124,7 @@
                 <div class="space-y-6">
                     @forelse($newOrganizers as $organizer)
                     <div class="flex items-center gap-4 group">
-                        <div class="w-12 h-12 bg-slate-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center font-bold text-indigo-600">
+                        <div class="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center font-bold text-indigo-600 dark:text-indigo-400">
                             {{ substr($organizer->company_name, 0, 1) }}
                         </div>
                         <div class="flex-grow">
@@ -141,7 +141,7 @@
         </div>
 
         <!-- Upcoming Events -->
-        <div class="bg-zinc-900 dark:bg-black rounded-[2.5rem] p-10 text-white shadow-2xl overflow-hidden relative">
+        <div class="bg-slate-900 dark:bg-slate-950 rounded-[2.5rem] p-10 text-white shadow-2xl overflow-hidden relative">
             <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full"></div>
             <div class="relative z-10">
                 <div class="flex justify-between items-center mb-8">
