@@ -18,7 +18,7 @@ export default defineConfig({
         cors: true,
 
         hmr: {
-            host: 'licorice-smashup-skilled.ngrok-free.dev',
+            host: 'academics-helmet-jews-courtesy.trycloudflare.com',
             protocol: 'wss',
             port: 443,
         }
