@@ -20,38 +20,38 @@
 <section class="py-12 md:py-20 px-4 md:px-6 max-w-screen-2xl mx-auto">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-10 gap-4">
         <div>
-            <span class="text-[#3525cd] text-xs md:text-sm font-black tracking-[0.2em] uppercase">Categories</span>
-            <h2 class="text-[#191c1e] text-2xl md:text-3xl font-black mt-2">Explore Your Passions</h2>
+            <span class="text-[#3525cd] dark:text-indigo-400 text-xs md:text-sm font-black tracking-[0.2em] uppercase">Categories</span>
+            <h2 class="text-[#191c1e] dark:text-white text-2xl md:text-3xl font-black mt-2">Explore Your Passions</h2>
         </div>
-        <a href="{{ route('public.events.index') }}" class="text-[#3525cd] text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+        <a href="{{ route('public.events.index') }}" class="text-[#3525cd] dark:text-indigo-400 text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
             View All Events <span class="material-symbols-outlined text-sm">arrow_forward</span>
         </a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[600px]">
-        <a href="{{ route('public.events.index', ['category' => 'music']) }}" class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 min-h-[300px]">
+        <a href="{{ route('public.events.index', ['category' => 'music']) }}" class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 dark:border-slate-800 min-h-[300px]">
             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCktb3_b-lkBwOA69AfR0Hq9UFOy0W8fyDrZajblcCPceegpnXHX4B5nT5Ql5gd8Dzb3BOeWoDUaCwnXGwR-apojf4qzVQ9FioyaHzcBUVCwAajjtkKS6AAIeitLxqdIDOsZfL_u9LwElHRnXJhnKuIPRsnfZUx9nQ3B9BXvu-ULDnpdP5RY3G1AVzoYrXyOC9MgMVujM32obCJnhWEy2YcTIjAoUMXGQtREoQdh82Yk8P8hWldKg_DJ1PVVvVfhT-rJJdxgHOjq6O8" />
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 dark:from-slate-950/90 via-transparent to-transparent"></div>
             <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8">
                 <h3 class="text-white text-2xl md:text-3xl font-black mb-1 md:mb-2">Concerts & Live Music</h3>
-                <p class="text-white/80 text-xs md:text-sm font-medium">From stadiums to intimate clubs.</p>
+                <p class="text-white/80 dark:text-slate-300 text-xs md:text-sm font-medium">From stadiums to intimate clubs.</p>
             </div>
         </a>
-        <a href="{{ route('public.events.index', ['category' => 'sports']) }}" class="md:col-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 min-h-[200px]">
+        <a href="{{ route('public.events.index', ['category' => 'sports']) }}" class="md:col-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 dark:border-slate-800 min-h-[200px]">
             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7jKwMzxKLdIfO29ptdOXB1nLMa9bL-V0KkvANzpWzfLQupIAsDpTfMdmp5KV8tLCWD87n5QdCjLiMT_J39SvxRUDsezT_izUTImsFgCSutTprSTh-mgPEWQTefW7KQUEYTDXFDIUYyvBq5YKqXobZN9G7kPA7uCFyDsDSZPaZiijR2Tvwo0YTez_qgWHRxbksCXCvxF9lC-lWDyl3Dnr_Zfq_cjykZZ20xMqpR_OL-HVXq2J1GIW8bdjPlJ00YGkc77U05XJ5jgeU" />
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 dark:from-slate-950/90 via-transparent to-transparent"></div>
             <div class="absolute bottom-6 left-6">
                 <h3 class="text-white text-xl md:text-2xl font-black">Sports & Athletics</h3>
             </div>
         </a>
-        <a href="{{ route('public.events.index', ['category' => 'theater']) }}" class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 min-h-[200px]">
+        <a href="{{ route('public.events.index', ['category' => 'theater']) }}" class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 dark:border-slate-800 min-h-[200px]">
             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsVIij4Kz8cLw9rYfmulKBaOvoGnkfYpPdI9coVQclBgEYbuC6IF7mMqtPfbbumAibKrBhANstuq3omYDZPwWoTkOTYMcIFvQCwT0OzqLIumyag0T4bYq2vP3rcNm5NXLRzsrg4NPk7JyEo4yQ6a0okUJDeC7jT-5f740aCsiUm_E3gFj3RXJtN4GKn_f7YlU3K7Nx1lh7cGkCaMzPZ9XtC2Ct5Bap9Lks4fGng4DQuE853fEharsMVM28eiKwFTqYCMsY7GDYoNII" />
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 dark:from-slate-950/90 via-transparent to-transparent"></div>
             <div class="absolute bottom-6 left-6">
                 <h3 class="text-white text-xl md:text-2xl font-black">Theater</h3>
             </div>
         </a>
-        <a href="{{ route('public.events.index', ['category' => 'festival']) }}" class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 min-h-[200px]">
+        <a href="{{ route('public.events.index', ['category' => 'festival']) }}" class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-[#c7c4d8]/30 dark:border-slate-800 min-h-[200px]">
             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT6gQUdeiKktjUlA73E13q6-Q048baorFE_vjVJe-AxUkzoan7Rngk__y9vDaj90KhdvbZde7GbY5ABZvGbFUKudUzwOkNmlYSEK1rJMArPJO3YCxY2GureACBI0222BDt-LwPP91iUyfghPN2am3weBJXFerO8IMhx5iVY9mPMkIkmMx8s-RccMT5YScjglIopASgO8989lriwMwEPcWALlkUTPp7OSlcTl3S32OAyK6o7xpPHKBhaXPrURqjxnp3HQQAnYZ-9HvZ" />
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
             <div class="absolute bottom-6 left-6">
@@ -62,11 +62,11 @@
 </section>
 
 <!-- Trending Now - Real Events from DB -->
-<section class="bg-[#f2f4f6] py-20">
+<section class="bg-[#f2f4f6] dark:bg-slate-900 py-20">
     <div class="max-w-screen-2xl mx-auto px-6">
         <div class="flex items-center justify-between mb-12">
-            <h2 class="text-[#191c1e] text-3xl font-semibold">Trending Now</h2>
-            <a href="{{ route('public.events.index') }}" class="text-[#3525cd] text-sm font-medium flex items-center gap-2 hover:underline">
+            <h2 class="text-[#191c1e] dark:text-white text-3xl font-semibold">Trending Now</h2>
+            <a href="{{ route('public.events.index') }}" class="text-[#3525cd] dark:text-indigo-400 text-sm font-medium flex items-center gap-2 hover:underline">
                 View all <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </a>
         </div>
@@ -75,7 +75,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @foreach($trendingEvents as $event)
             <a href="{{ route('public.events.show', $event->slug) }}"
-               class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 group hover:shadow-lg transition-all flex flex-col">
+               class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700 group hover:shadow-lg transition-all flex flex-col">
                 <div class="relative h-48 overflow-hidden">
                     @if($event->image)
                         <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -89,28 +89,28 @@
                         <div class="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase">Free</div>
                     @endif
                 </div>
-                <div class="p-5 flex-grow border-l-4 border-indigo-600">
+                <div class="p-5 flex-grow border-l-4 border-indigo-600 dark:border-indigo-500">
                     <div class="flex justify-between items-start mb-2">
-                        <span class="text-xs font-semibold text-[#3525cd] uppercase">{{ $event->category }}</span>
-                        <span class="flex items-center gap-1 text-xs text-[#464555]">
+                        <span class="text-xs font-semibold text-[#3525cd] dark:text-indigo-400 uppercase">{{ $event->category }}</span>
+                        <span class="flex items-center gap-1 text-xs text-[#464555] dark:text-slate-400">
                             <span class="material-symbols-outlined text-sm">calendar_today</span>
                             {{ $event->start_date->format('d M') }}
                         </span>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2 line-clamp-1">{{ $event->title }}</h3>
-                    <div class="flex items-center gap-2 text-[#464555] mb-4 text-sm">
+                    <h3 class="text-lg font-semibold mb-2 line-clamp-1 dark:text-white">{{ $event->title }}</h3>
+                    <div class="flex items-center gap-2 text-[#464555] dark:text-slate-400 mb-4 text-sm">
                         <span class="material-symbols-outlined text-sm">location_on</span>
                         {{ $event->venue?->name ?? $event->city }}
                     </div>
-                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
                         <div>
-                            <span class="text-xs text-[#777587] block">Starting from</span>
+                            <span class="text-xs text-[#777587] dark:text-slate-500 block">Starting from</span>
                             @php $minPrice = $event->ticketTypes->min('price'); @endphp
-                            <span class="text-[#3525cd] font-semibold text-xl">
+                            <span class="text-[#3525cd] dark:text-indigo-400 font-semibold text-xl">
                                 {{ $minPrice > 0 ? '€' . number_format($minPrice, 2) : 'Free' }}
                             </span>
                         </div>
-                        <span class="bg-[#d5e3fd] text-[#57657b] px-4 py-2 rounded-lg text-sm font-medium group-hover:bg-[#3525cd] group-hover:text-white transition-colors">
+                        <span class="bg-[#d5e3fd] dark:bg-indigo-600 text-[#57657b] dark:text-white px-4 py-2 rounded-lg text-sm font-medium group-hover:bg-[#3525cd] dark:group-hover:bg-indigo-500 group-hover:text-white transition-colors">
                             Book
                         </span>
                     </div>
@@ -132,24 +132,24 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
         <div class="flex flex-col items-center text-center">
             <div class="w-16 h-16 bg-[#4f46e5]/10 rounded-2xl flex items-center justify-center mb-6">
-                <span class="material-symbols-outlined text-[#3525cd] text-3xl">verified_user</span>
+                <span class="material-symbols-outlined text-[#3525cd] dark:text-indigo-400 text-3xl">verified_user</span>
             </div>
-            <h3 class="text-2xl font-semibold mb-4">100% Buyer Guarantee</h3>
-            <p class="text-[#464555] text-sm">Every ticket is valid and will be delivered on time. We guarantee your entry or your money back.</p>
+            <h3 class="text-2xl font-semibold mb-4 dark:text-white">100% Buyer Guarantee</h3>
+            <p class="text-[#464555] dark:text-slate-400 text-sm">Every ticket is valid and will be delivered on time. We guarantee your entry or your money back.</p>
         </div>
         <div class="flex flex-col items-center text-center">
-            <div class="w-16 h-16 bg-[#d5e3fd]/30 rounded-2xl flex items-center justify-center mb-6">
-                <span class="material-symbols-outlined text-[#515f74] text-3xl">bolt</span>
+            <div class="w-16 h-16 bg-[#d5e3fd]/30 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 dark:border dark:border-slate-700">
+                <span class="material-symbols-outlined text-[#515f74] dark:text-slate-300 text-3xl">bolt</span>
             </div>
-            <h3 class="text-2xl font-semibold mb-4">Instant Digital Delivery</h3>
-            <p class="text-[#464555] text-sm">Skip the line and the mail. Most tickets are delivered instantly to your phone for seamless entry.</p>
+            <h3 class="text-2xl font-semibold mb-4 dark:text-white">Instant Digital Delivery</h3>
+            <p class="text-[#464555] dark:text-slate-400 text-sm">Skip the line and the mail. Most tickets are delivered instantly to your phone for seamless entry.</p>
         </div>
         <div class="flex flex-col items-center text-center">
-            <div class="w-16 h-16 bg-[#dae2fd] rounded-2xl flex items-center justify-center mb-6">
-                <span class="material-symbols-outlined text-[#41485e] text-3xl">support_agent</span>
+            <div class="w-16 h-16 bg-[#dae2fd] dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center mb-6 dark:border dark:border-indigo-500/20">
+                <span class="material-symbols-outlined text-[#41485e] dark:text-indigo-300 text-3xl">support_agent</span>
             </div>
-            <h3 class="text-2xl font-semibold mb-4">Dedicated Support</h3>
-            <p class="text-[#464555] text-sm">Our expert team is available 24/7 to ensure your event experience is nothing short of perfect.</p>
+            <h3 class="text-2xl font-semibold mb-4 dark:text-white">Dedicated Support</h3>
+            <p class="text-[#464555] dark:text-slate-400 text-sm">Our expert team is available 24/7 to ensure your event experience is nothing short of perfect.</p>
         </div>
     </div>
 </section>
