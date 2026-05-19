@@ -66,16 +66,16 @@
 .print-header { display: none; }
 </style>
 
-<div class="min-h-screen bg-[#f8fafc] py-12 px-4 flex items-center justify-center">
+<div class="min-h-screen bg-[#f8fafc] dark:bg-transparent py-12 px-4 flex items-center justify-center">
     <div class="max-w-2xl w-full">
         <!-- Back Link -->
-        <a href="{{ route('public.tickets.index') }}" class="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors mb-8 font-bold group no-print">
+        <a href="{{ route('public.tickets.index') }}" class="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mb-8 font-bold group no-print">
             <span class="material-symbols-outlined transition-transform group-hover:-translate-x-1">arrow_back</span>
             Back to Collection
         </a>
 
         <!-- Modern Ticket Card -->
-        <div class="bg-white rounded-[3rem] shadow-2xl shadow-indigo-200/40 border border-slate-100 overflow-hidden relative group ticket-card">
+        <div class="bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl shadow-indigo-200/40 dark:shadow-none border border-slate-100 dark:border-slate-800 overflow-hidden relative group ticket-card">
             
             <!-- Print Only Header -->
             <div class="print-header">
@@ -84,26 +84,26 @@
             </div>
 
             <!-- Decorative Notches (Screen Only) -->
-            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 bg-[#f8fafc] rounded-full border border-slate-100 z-10 no-print"></div>
-            <div class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 bg-[#f8fafc] rounded-full border border-slate-100 z-10 no-print"></div>
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 bg-[#f8fafc] dark:bg-[#0f172a] rounded-full border border-slate-100 dark:border-slate-800 z-10 no-print"></div>
+            <div class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 bg-[#f8fafc] dark:bg-[#0f172a] rounded-full border border-slate-100 dark:border-slate-800 z-10 no-print"></div>
 
             <!-- Ticket Header / Event Info -->
-            <div class="p-10 border-b-2 border-dashed border-slate-100 relative">
+            <div class="p-10 border-b-2 border-dashed border-slate-100 dark:border-slate-800 relative">
                 <div class="flex justify-between items-start mb-6 no-print-essential">
-                    <span class="bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-xl shadow-lg shadow-indigo-100">
+                    <span class="bg-indigo-600 dark:bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-xl shadow-lg shadow-indigo-100 dark:shadow-none">
                         Admission Ticket
                     </span>
                     <div class="text-right">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Ticket ID</p>
-                        <p class="text-xs font-mono font-bold text-slate-900">#{{ substr($ticket->uuid, 0, 8) }}</p>
+                        <p class="text-xs font-mono font-bold text-slate-900 dark:text-white">#{{ substr($ticket->uuid, 0, 8) }}</p>
                     </div>
                 </div>
 
-                <h1 class="text-3xl font-black text-slate-900 leading-tight mb-2 group-hover:text-indigo-600 transition-colors">
+                <h1 class="text-3xl font-black text-slate-900 dark:text-white leading-tight mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                     {{ $ticket->ticketType->event->title }}
                 </h1>
                 
-                <div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-slate-500 font-medium text-sm">
+                <div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-slate-500 dark:text-slate-400 font-medium text-sm">
                     <div class="flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-indigo-500 text-[18px]">calendar_today</span>
                         {{ $ticket->ticketType->event->start_date->format('l, M d, Y') }}
@@ -122,8 +122,8 @@
             <!-- QR Code Section -->
             <div class="p-12 qr-container flex flex-col items-center text-center">
                 <div class="relative mb-10">
-                    <div class="absolute -inset-8 bg-indigo-50 rounded-[3rem] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 no-print"></div>
-                    <div class="relative bg-white p-8 rounded-[2.5rem] border-2 border-slate-50 shadow-xl shadow-indigo-100/50 qr-box">
+                    <div class="absolute -inset-8 bg-indigo-50 dark:bg-indigo-900/20 rounded-[3rem] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 no-print"></div>
+                    <div class="relative bg-white p-8 rounded-[2.5rem] border-2 border-slate-50 dark:border-transparent shadow-xl shadow-indigo-100/50 dark:shadow-none qr-box">
                         <div class="w-64 h-64 flex items-center justify-center">
                             {!! $qrCode !!}
                         </div>
@@ -132,34 +132,34 @@
 
                 <div class="space-y-3 mb-10">
                     <p class="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em]">Unique Entry Code</p>
-                    <h2 class="text-4xl font-black text-slate-900 tracking-tighter">{{ $ticket->ticket_number }}</h2>
+                    <h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">{{ $ticket->ticket_number }}</h2>
                     <div class="flex items-center justify-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse no-print"></span>
-                        <p class="text-[11px] font-black text-green-600 uppercase tracking-widest">Valid & Verified Admission</p>
+                        <p class="text-[11px] font-black text-green-600 dark:text-green-400 uppercase tracking-widest">Valid & Verified Admission</p>
                     </div>
                 </div>
 
                 <!-- Details Grid -->
-                <div class="grid grid-cols-2 gap-8 w-full p-8 bg-slate-50 rounded-[2rem] border border-slate-100/50 details-grid">
-                    <div class="text-left border-r border-slate-200 pr-4">
+                <div class="grid grid-cols-2 gap-8 w-full p-8 bg-slate-50 dark:bg-slate-800 rounded-[2rem] border border-slate-100/50 dark:border-slate-700 details-grid">
+                    <div class="text-left border-r border-slate-200 dark:border-slate-700 pr-4">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Admission Type</p>
-                        <p class="text-sm font-bold text-slate-900">{{ $ticket->ticketType->name }}</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white">{{ $ticket->ticketType->name }}</p>
                     </div>
                     <div class="text-left pl-4">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Ticket Holder</p>
-                        <p class="text-sm font-bold text-slate-900">{{ Auth::user()->name }}</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white">{{ Auth::user()->name }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Print Actions (Screen Only) -->
-            <div class="px-10 py-8 bg-slate-50 border-t border-slate-100 flex flex-col gap-4 no-print">
+            <div class="px-10 py-8 bg-slate-50 dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 flex flex-col gap-4 no-print">
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <button onclick="window.print()" class="flex-1 bg-white text-slate-900 border border-slate-200 px-6 py-4 rounded-2xl font-bold hover:bg-slate-100 transition-all flex items-center justify-center gap-3 shadow-sm active:scale-95">
+                    <button onclick="window.print()" class="flex-1 bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 px-6 py-4 rounded-2xl font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-3 shadow-sm active:scale-95">
                         <span class="material-symbols-outlined">print</span>
                         Print Ticket
                     </button>
-                    <a href="{{ route('public.tickets.pdf', $ticket->id) }}" class="flex-1 bg-indigo-600 text-white px-6 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 shadow-sm shadow-indigo-200 active:scale-95">
+                    <a href="{{ route('public.tickets.pdf', $ticket->id) }}" class="flex-1 bg-indigo-600 dark:bg-indigo-500 text-white px-6 py-4 rounded-2xl font-bold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 shadow-sm shadow-indigo-200 dark:shadow-none active:scale-95">
                         <span class="material-symbols-outlined">picture_as_pdf</span>
                         Download PDF
                     </a>
