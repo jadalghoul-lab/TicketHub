@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="nl"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0f172a;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#0f0069",
+                      "outline-variant": "#334155",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "tertiary-fixed": "#dae2fd",
+                      "primary-fixed": "#e2dfff",
+                      "on-surface": "#f1f5f9",
+                      "on-surface-variant": "#94a3b8",
+                      "surface-tint": "#4d44e3",
+                      "surface-dim": "#1e293b",
+                      "secondary-fixed": "#d5e3fd",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-container-low": "#1e293b",
+                      "tertiary-container": "#586076",
+                      "on-secondary-fixed": "#0d1c2f",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#1e293b",
+                      "on-tertiary-fixed": "#131b2e",
+                      "on-secondary-container": "#cbd5e1",
+                      "on-error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#b9c7e0",
+                      "inverse-primary": "#c3c0ff",
+                      "tertiary": "#94a3b8",
+                      "surface-container-lowest": "#0f172a",
+                      "background": "#0f172a",
+                      "surface-container-highest": "#334155",
+                      "on-background": "#f1f5f9",
+                      "primary": "#4f46e5",
+                      "inverse-surface": "#eff1f3",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#3a485c",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#334155",
+                      "on-primary": "#ffffff",
+                      "surface": "#0f172a",
+                      "on-primary-container": "#dad7ff",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "primary-container": "#4f46e5",
+                      "inverse-on-surface": "#191c1e",
+                      "outline": "#475569",
+                      "secondary": "#94a3b8",
+                      "surface-container-high": "#334155",
+                      "surface-container": "#1e293b",
+                      "error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "surface-variant": "#334155",
+                      "on-tertiary-container": "#d4dbf5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "1.5rem",
+                      "lg": "2rem",
+                      "sm": "1rem",
+                      "margin": "2rem",
+                      "xl": "3rem",
+                      "xs": "0.5rem",
+                      "unit": "4px",
+                      "gutter": "1.5rem"
+              },
+              "fontFamily": {
+                      "h3": ["Inter"],
+                      "h1": ["Inter"],
+                      "h2": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "h3": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "h1": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "h2": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased dark">
+<!-- TopNavBar -->
+<header class="bg-slate-900/90 backdrop-blur-md font-['Inter'] antialiased text-sm font-medium docked full-width top-0 sticky border-b border-slate-800 shadow-sm z-50">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-white">TicketHub</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-indigo-400 border-b-2 border-indigo-400 pb-1" href="#">Marketplace</a>
+<a class="text-slate-400 hover:text-white transition-colors duration-200" href="#">Evenementen</a>
+<a class="text-slate-400 hover:text-white transition-colors duration-200" href="#">Mijn Tickets</a>
+<a class="text-slate-400 hover:text-white transition-colors duration-200" href="#">Ondersteuning</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-2">
+<button class="p-2 text-slate-400 transition-colors duration-200 hover:bg-slate-800 rounded-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="p-2 text-slate-400 transition-colors duration-200 hover:bg-slate-800 rounded-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 transition-colors duration-200 hover:bg-slate-800 rounded-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined">light_mode</span>
+</button>
+<button class="p-2 text-slate-400 transition-colors duration-200 hover:bg-slate-800 rounded-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-semibold active:scale-95 transition-transform">Beginnen</button>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-[600px] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Panoramisch uitzicht op een groot muziekfestival bij zonsondergang" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuR1gsqHmbw75dRDn3DqpT4j01I6Pv8JR_4Y7yFWvWfa9-Suri6idFE1QlXDVoVu2Pr6txujET1kfI21XN6jjSxGUnW6EO5YCrhI_vHNmU9y09-H-fupzN77Ta3FCzWyBKqS1rnMTRgoF97pdUxkKx2lZl-ZLsVIl-9coK5NIFMYNo30MrrYewadFrXIApPOVBv4Y4k9G6HhHpkeXlX2iO2muyeRG3_bIljPenm5H7Z3WONGRiMnRHcWDLN9KvbOreTfE-QbvigxAH"/>
+<div class="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px]"></div>
+</div>
+<div class="relative z-10 w-full max-w-4xl px-6 text-center">
+<h1 class="font-h1 text-white text-5xl md:text-6xl mb-6 drop-shadow-lg">Beleef meer dan alleen een zitplaats.</h1>
+<p class="font-body-lg text-slate-200 mb-10 max-w-2xl mx-auto drop-shadow-md">Krijg toegang tot 's werelds meest gewilde concerten, sportevenementen en theater voorstellingen met gegarandeerde beveiliging en naadloze levering.</p>
+<div class="bg-slate-900/95 backdrop-blur shadow-2xl p-2 rounded-2xl flex flex-col md:flex-row gap-2 max-w-3xl mx-auto border border-slate-700">
+<div class="flex-grow flex items-center px-4 py-3 gap-3">
+<span class="material-symbols-outlined text-slate-400">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-md text-white placeholder:text-slate-500" placeholder="Vind je volgende evenement..." type="text"/>
+</div>
+<div class="w-px bg-slate-700 hidden md:block my-2"></div>
+<div class="flex items-center px-4 py-3 gap-3">
+<span class="material-symbols-outlined text-slate-400">calendar_month</span>
+<span class="font-label-md text-slate-300 whitespace-nowrap">Elke Datum</span>
+</div>
+<button class="bg-primary text-white px-8 py-3 rounded-xl font-h3 text-body-md flex items-center justify-center gap-2 hover:bg-indigo-500 transition-all active:scale-95">
+                        Zoeken
+                    </button>
+</div>
+</div>
+</section>
+<!-- Categories Bento Grid -->
+<section class="py-20 px-6 max-w-screen-2xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+<div>
+<span class="text-indigo-400 font-label-md tracking-widest uppercase">Categorieën</span>
+<h2 class="font-h2 text-white mt-2">Verken je passies</h2>
+</div>
+<button class="text-indigo-400 font-label-md flex items-center gap-1 hover:gap-2 transition-all">
+                    Bekijk alle categorieën <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-[600px]">
+<div class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-slate-800">
+<img alt="Concerten &amp; Live Muziek" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCktb3_b-lkBwOA69AfR0Hq9UFOy0W8fyDrZajblcCPceegpnXHX4B5nT5Ql5gd8Dzb3BOeWoDUaCwnXGwR-apojf4qzVQ9FioyaHzcBUVCwAajjtkKS6AAIeitLxqdIDOsZfL_u9LwElHRnXJhnKuIPRsnfZUx9nQ3B9BXvu-ULDnpdP5RY3G1AVzoYrXyOC9MgMVujM32obCJnhWEy2YcTIjAoUMXGQtREoQdh82Yk8P8hWldKg_DJ1PVVvVfhT-rJJdxgHOjq6O8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-8 left-8">
+<h3 class="font-h2 text-white mb-2">Concerten &amp; Live Muziek</h3>
+<p class="text-slate-300 font-body-sm">Van stadions tot intieme clubs.</p>
+</div>
+</div>
+<div class="md:col-span-2 relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-slate-800">
+<img alt="Sport &amp; Atletiek" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7jKwMzxKLdIfO29ptdOXB1nLMa9bL-V0KkvANzpWzfLQupIAsDpTfMdmp5KV8tLCWD87n5QdCjLiMT_J39SvxRUDsezT_izUTImsFgCSutTprSTh-mgPEWQTefW7KQUEYTDXFDIUYyvBq5YKqXobZN9G7kPA7uCFyDsDSZPaZiijR2Tvwo0YTez_qgWHRxbksCXCvxF9lC-lWDyl3Dnr_Zfq_cjykZZ20xMqpR_OL-HVXq2J1GIW8bdjPlJ00YGkc77U05XJ5jgeU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<h3 class="font-h3 text-white">Sport &amp; Atletiek</h3>
+</div>
+</div>
+<div class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-slate-800">
+<img alt="Theater" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsVIij4Kz8cLw9rYfmulKBaOvoGnkfYpPdI9coVQclBgEYbuC6IF7mMqtPfbbumAibKrBhANstuq3omYDZPwWoTkOTYMcIFvQCwT0OzqLIumyag0T4bYq2vP3rcNm5NXLRzsrg4NPk7JyEo4yQ6a0okUJDeC7jT-5f740aCsiUm_E3gFj3RXJtN4GKn_f7YlU3K7Nx1lh7cGkCaMzPZ9XtC2Ct5Bap9Lks4fGng4DQuE853fEharsMVM28eiKwFTqYCMsY7GDYoNII"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<h3 class="font-h3 text-white">Theater</h3>
+</div>
+</div>
+<div class="relative rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-slate-800">
+<img alt="Festivals" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT6gQUdeiKktjUlA73E13q6-Q048baorFE_vjVJe-AxUkzoan7Rngk__y9vDaj90KhdvbZde7GbY5ABZvGbFUKudUzwOkNmlYSEK1rJMArPJO3YCxY2GureACBI0222BDt-LwPP91iUyfghPN2am3weBJXFerO8IMhx5iVY9mPMkIkmMx8s-RccMT5YScjglIopASgO8989lriwMwEPcWALlkUTPp7OSlcTl3S32OAyK6o7xpPHKBhaXPrURqjxnp3HQQAnYZ-9HvZ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6">
+<h3 class="font-h3 text-white">Festivals</h3>
+</div>
+</div>
+</div>
+</section>
+<!-- Trending Listings -->
+<section class="bg-slate-900 py-20">
+<div class="max-w-screen-2xl mx-auto px-6">
+<div class="flex items-center justify-between mb-12">
+<h2 class="font-h2 text-white">Nu Trending</h2>
+<div class="flex gap-2">
+<button class="p-2 border border-slate-700 rounded-full hover:bg-slate-800 text-white transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 border border-slate-700 rounded-full hover:bg-slate-800 text-white transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Ticket Card 1 -->
+<div class="bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-700 group hover:shadow-lg transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img alt="Optreden van popzanger" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYKCWxaB_E19q22k9tyXCw3LdAUh9PfSfWDXIn_nspPl0Vc0vFkQQesKKjG6DhIRDaRTBg97afRcHDhiHWQyzOt4GqaVMMZ5NXESf4FO6phxT5BU5PzyZsnV10_OyvgoIIKYzWWg1ImI0whwgno-AK4ccYeZpAIhIG8lUBN7IAIcYe2yPGdPdA6IFtAFrZPbLybPUIsCQttMP7ZzFKkBzXA2-XcGPlGHEfEVP6qhLAeUH7cIVgzwMkaohSZCMcVqwKUPXUu1OcYw3J"/>
+<div class="absolute top-4 left-4 bg-indigo-600 px-3 py-1 rounded-full text-xs font-bold text-white uppercase tracking-tighter shadow-sm">Populair</div>
+</div>
+<div class="p-5 flex-grow border-l-4 border-indigo-500">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-indigo-400 uppercase">Muziek • Pop</span>
+<span class="flex items-center gap-1 font-label-sm text-slate-400">
+<span class="material-symbols-outlined text-sm text-yellow-500">star</span> 4.9
+                                </span>
+</div>
+<h3 class="font-h3 text-lg text-white mb-2 line-clamp-1">The Midnight Odyssey Tour</h3>
+<div class="flex items-center gap-2 text-slate-400 mb-4 font-body-sm"><span class="material-symbols-outlined text-sm">location_on</span> Sportpaleis, Antwerpen</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-700">
+<div>
+<span class="text-xs text-slate-500 block">Vanaf</span>
+<span class="font-h3 text-indigo-400 text-xl">€149,00</span>
+</div>
+<button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-label-md hover:bg-indigo-500 transition-colors">
+                                    Boeken
+                                </button>
+</div>
+</div>
+</div>
+<!-- Ticket Card 2 -->
+<div class="bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-700 group hover:shadow-lg transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img alt="Voetbalstadion" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiAJ7Svm3hE41o6LBGRcnggpA9W1TMxcE2tD4PYgA_faN_ro2qqoL_bvGENYSV4UGvztNo5dunAVldPKrCZKSgb2VUkXMCOjPOh7_HaM--MzTKuSxpT0hgaS4D5iCRfv3v3HImN3H11Mfb4ACZZ5N-jVJhDBl_Ndw4KqLvB4SiXM1sKbwTb9MDQ7tjN4VisRqPV4FMdyeGELbnymhcRIgwc71VxIag_WW_b-6MYG0f0bJ4TyFlOwI_tVwGdhXG_2-Zn9O5Ab0HDMe9"/>
+</div>
+<div class="p-5 flex-grow border-l-4 border-slate-400">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-slate-400 uppercase">Sport • Finales</span>
+<span class="flex items-center gap-1 font-label-sm text-slate-400">
+<span class="material-symbols-outlined text-sm text-yellow-500">star</span> 5.0
+                                </span>
+</div>
+<h3 class="font-h3 text-lg text-white mb-2 line-clamp-1">Europees Kampioenschap Finale</h3>
+<div class="flex items-center gap-2 text-slate-400 mb-4 font-body-sm"><span class="material-symbols-outlined text-sm">location_on</span> Koning Boudewijnstadion, Brussel</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-700">
+<div>
+<span class="text-xs text-slate-500 block">Vanaf</span>
+<span class="font-h3 text-indigo-400 text-xl">€850,00</span>
+</div>
+<button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-label-md hover:bg-indigo-500 transition-colors">
+                                    Boeken
+                                </button>
+</div>
+</div>
+</div>
+<!-- Ticket Card 3 -->
+<div class="bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-700 group hover:shadow-lg transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img alt="Theater decor" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrmBb2u2mPve2cHXGnn45yurde_YT3F5tux9-zNtjnX01UNN_TXPLX9ZQmgjlc1DdF7ypgmsMa2dsvgWawOYTKqaBn1y-sdiLnZakjFwDjp1Ydn2bguZb_mW6ZWKOVijR1iWC5AVM9jQCb1gqiFccBacn5iC0QkdeC-3hl2rwETQEZv_5csbRZgUQe_glIvgMiOHJAI4Ape2pUbzru8xCDl3d7MPAL7GO6Z6dO2pdrcq8O6cnuJCypcIe0Qb3j628_t9Bve7J92o9e"/>
+</div>
+<div class="p-5 flex-grow border-l-4 border-rose-500">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-rose-400 uppercase">Theater • Musical</span>
+<span class="flex items-center gap-1 font-label-sm text-slate-400">
+<span class="material-symbols-outlined text-sm text-yellow-500">star</span> 4.8
+                                </span>
+</div>
+<h3 class="font-h3 text-lg text-white mb-2 line-clamp-1">Echoes of the Opera</h3>
+<div class="flex items-center gap-2 text-slate-400 mb-4 font-body-sm"><span class="material-symbols-outlined text-sm">location_on</span> De Munt, Brussel</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-700">
+<div>
+<span class="text-xs text-slate-500 block">Vanaf</span>
+<span class="font-h3 text-indigo-400 text-xl">€120,00</span>
+</div>
+<button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-label-md hover:bg-indigo-500 transition-colors">
+                                    Boeken
+                                </button>
+</div>
+</div>
+</div>
+<!-- Ticket Card 4 -->
+<div class="bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-700 group hover:shadow-lg transition-all flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img alt="Elektronische muziekstudio" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmWQt9DDAFdqyknnD7SitIIjyLe-sBBKifsf2Zi0P2U3NFmCM6LjYLpcMB9ARmjuYqdaaspc6VeLL-4-uqRMOM9gnbSJmZzDih5rrvJAH5-0zvkc1UkXjFJfiOu2hX-osXXgLOqlCA2jhu5y0HbKqgeB0OBIM4DSK0CgADCuconms9QaNGaOPxlEx4Ci13ln07sJo28NRWVGBl9wYuRLoVh9S_NuNrktqAf3IQ7r9txzk5_RHZPfh4DBt8CxI1u3oelL62c-aveU5y"/>
+</div>
+<div class="p-5 flex-grow border-l-4 border-cyan-500">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-cyan-400 uppercase">Evenementen • Tech</span>
+<span class="flex items-center gap-1 font-label-sm text-slate-400">
+<span class="material-symbols-outlined text-sm text-yellow-500">star</span> 4.7
+                                </span>
+</div>
+<h3 class="font-h3 text-lg text-white mb-2 line-clamp-1">Neon Pulse: Future Beats</h3>
+<div class="flex items-center gap-2 text-slate-400 mb-4 font-body-sm"><span class="material-symbols-outlined text-sm">location_on</span> Fuse, Brussel</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-700">
+<div>
+<span class="text-xs text-slate-500 block">Vanaf</span>
+<span class="font-h3 text-indigo-400 text-xl">€65,00</span>
+</div>
+<button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-label-md hover:bg-indigo-500 transition-colors">
+                                    Boeken
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Features -->
+<section class="py-24 max-w-screen-2xl mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-indigo-400 text-3xl">verified_user</span>
+</div>
+<h3 class="font-h3 text-white mb-4">100% Kopersgarantie</h3>
+<p class="text-slate-400 font-body-sm">Elk ticket is geldig en wordt op tijd geleverd. Wij garanderen je toegang of je geld terug.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mb-6 border border-slate-700">
+<span class="material-symbols-outlined text-slate-300 text-3xl">bolt</span>
+</div>
+<h3 class="font-h3 text-white mb-4">Directe Digitale Levering</h3>
+<p class="text-slate-400 font-body-sm">Sla de wachtrij en de post over. De meeste tickets worden direct naar je telefoon gestuurd voor naadloze toegang.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-indigo-900/30 rounded-2xl flex items-center justify-center mb-6 border border-indigo-500/20">
+<span class="material-symbols-outlined text-indigo-300 text-3xl">support_agent</span>
+</div>
+<h3 class="font-h3 text-white mb-4">Toegewijde Ondersteuning</h3>
+<p class="text-slate-400 font-body-sm">Ons deskundige team is 24/7 beschikbaar om ervoor te zorgen dat je evenementervaring perfect verloopt.</p>
+</div>
+</div>
+</section>
+<!-- Newsletter / CTA -->
+<section class="max-w-screen-2xl mx-auto px-6 mb-20">
+<div class="bg-indigo-600 rounded-[2.5rem] p-12 md:p-20 relative overflow-hidden flex flex-col items-center text-center">
+<!-- Abstract pattern overlays -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="absolute -top-20 -right-20 w-80 h-80 bg-white rounded-full blur-3xl"></div>
+<div class="absolute -bottom-20 -left-20 w-80 h-80 bg-white rounded-full blur-3xl"></div>
+</div>
+<h2 class="font-h1 text-white mb-6 relative z-10 max-w-2xl">Mis het volgende grote moment niet.</h2>
+<p class="text-indigo-100 font-body-lg mb-10 relative z-10 max-w-lg">Krijg als eerste toegang tot voorverkoop, exclusieve kortingen en gepersonaliseerde aanbevelingen in je inbox.</p>
+<div class="flex flex-col sm:flex-row gap-3 w-full max-w-md relative z-10">
+<input class="flex-grow px-6 py-4 rounded-xl border-none focus:ring-2 focus:ring-white bg-white/10 text-white placeholder:text-white/60 backdrop-blur-md" placeholder="Voer je e-mailadres in" type="email"/>
+<button class="bg-white text-indigo-600 px-8 py-4 rounded-xl font-h3 text-body-md hover:bg-slate-100 transition-all active:scale-95">Inschrijven</button>
+</div>
+<p class="text-white/50 text-[10px] mt-6 relative z-10">Door je in te schrijven ga je akkoord met onze Gebruiksvoorwaarden en Privacybeleid.</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-900 border-t border-slate-800 font-['Inter'] text-xs leading-relaxed full-width bottom-0">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 w-full max-w-screen-2xl mx-auto gap-4">
+<div class="flex flex-col items-center md:items-start gap-4">
+<span class="text-lg font-bold text-white">TicketHub</span>
+<p class="text-slate-500 max-w-xs text-center md:text-left">
+                    © 2024 TicketHub SaaS. Professionele Ticketing Infrastructuur.
+                </p>
+</div>
+<nav class="flex flex-wrap justify-center gap-8">
+<a class="text-slate-500 hover:text-indigo-400 hover:underline transition-all" href="#">Over ons</a>
+<a class="text-slate-500 hover:text-indigo-400 hover:underline transition-all" href="#">Privacy</a>
+<a class="text-slate-500 hover:text-indigo-400 hover:underline transition-all" href="#">Voorwaarden</a>
+<a class="text-slate-500 hover:text-indigo-400 hover:underline transition-all" href="#">SLA</a>
+<a class="text-slate-500 hover:text-indigo-400 hover:underline transition-all" href="#">Contact</a>
+</nav>
+<div class="flex gap-4">
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-sm">public</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+</button>
+</div>
+</div>
+</footer>
+</body></html>

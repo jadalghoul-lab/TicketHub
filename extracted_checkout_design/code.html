@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout - TicketHub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#0f0069",
+                        "outline-variant": "#c7c4d8",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "tertiary-fixed": "#dae2fd",
+                        "primary-fixed": "#e2dfff",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#464555",
+                        "surface-tint": "#4d44e3",
+                        "surface-dim": "#d8dadc",
+                        "secondary-fixed": "#d5e3fd",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-low": "#f2f4f6",
+                        "tertiary-container": "#586076",
+                        "on-secondary-fixed": "#0d1c2f",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f7f9fb",
+                        "on-tertiary-fixed": "#131b2e",
+                        "on-secondary-container": "#57657b",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#b9c7e0",
+                        "inverse-primary": "#c3c0ff",
+                        "tertiary": "#41485e",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-background": "#191c1e",
+                        "primary": "#3525cd",
+                        "inverse-surface": "#2d3133",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#3a485c",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#d5e3fd",
+                        "on-primary": "#ffffff",
+                        "surface": "#f7f9fb",
+                        "on-primary-container": "#dad7ff",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "primary-container": "#4f46e5",
+                        "inverse-on-surface": "#eff1f3",
+                        "outline": "#777587",
+                        "secondary": "#515f74",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-container": "#eceef0",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary-container": "#d4dbf5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "sm": "1rem",
+                        "margin": "2rem",
+                        "xl": "3rem",
+                        "xs": "0.5rem",
+                        "unit": "4px",
+                        "gutter": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "h3": ["Inter"], "h1": ["Inter"], "h2": ["Inter"], "body-lg": ["Inter"], "body-sm": ["Inter"], "label-sm": ["Inter"], "label-md": ["Inter"], "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h3": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "h1": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .step-active { color: #3525cd; }
+        .step-inactive { color: #777587; }
+        .dark {
+            --tw-bg-opacity: 1;
+            background-color: #0f172a;
+        }
+    </style>
+</head>
+<body class="bg-background dark:bg-slate-950 text-on-background dark:text-slate-100 font-body-md min-h-screen flex flex-col transition-colors duration-300">
+<!-- TopNavBar -->
+<header class="bg-slate-50/90 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">TicketHub</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-200 font-label-md" href="#">Marketplace</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-200 font-label-md" href="#">Events</a>
+<a class="text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400 pb-1 font-label-md" href="#">My Tickets</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-200 font-label-md" href="#">Support</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="p-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md active:scale-95 transition-transform text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined" data-icon="light_mode">light_mode</span>
+</button>
+<button class="p-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md active:scale-95 transition-transform text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="p-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md active:scale-95 transition-transform text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md active:scale-95 transition-transform text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+<button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-label-md hover:bg-indigo-700 active:scale-95 transition-transform">Get Started</button>
+</div>
+</div>
+</header>
+<main class="flex-grow max-w-screen-xl mx-auto w-full px-6 py-12">
+<!-- Progress Stepper -->
+<div class="mb-12 max-w-3xl mx-auto">
+<div class="flex items-center justify-between relative">
+<div class="absolute top-1/2 left-0 w-full h-1 bg-surface-container-highest dark:bg-slate-800 -translate-y-1/2 -z-10"></div>
+<div class="absolute top-1/2 left-0 w-1/2 h-1 bg-primary -translate-y-1/2 -z-10 transition-all duration-500"></div>
+<div class="flex flex-col items-center gap-2 bg-background dark:bg-slate-950 px-4">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<span class="font-label-sm text-primary dark:text-indigo-400">Summary</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-background dark:bg-slate-950 px-4">
+<div class="w-10 h-10 rounded-full border-2 border-primary bg-surface-container-lowest dark:bg-slate-900 text-primary dark:text-indigo-400 flex items-center justify-center shadow-sm">
+<span class="font-label-md">2</span>
+</div>
+<span class="font-label-sm text-primary dark:text-indigo-400">Payment</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-background dark:bg-slate-950 px-4">
+<div class="w-10 h-10 rounded-full border-2 border-outline-variant dark:border-slate-700 bg-surface-container-lowest dark:bg-slate-900 text-outline dark:text-slate-500 flex items-center justify-center">
+<span class="font-label-md">3</span>
+</div>
+<span class="font-label-sm text-outline dark:text-slate-500">Confirm</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Left Column: Forms -->
+<div class="lg:col-span-7 space-y-8">
+<!-- Payment Form Section -->
+<section class="bg-surface-container-lowest dark:bg-slate-900 rounded-xl border border-outline-variant dark:border-slate-800 p-8 shadow-sm">
+<h2 class="font-h2 text-on-surface dark:text-white mb-6">
+<div class="flex items-center justify-between">
+<span>Payment Details</span>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700">
+<span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Powered by</span>
+<span class="text-sm font-bold text-[#635bff]">stripe</span>
+</div>
+</div>
+</h2>
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-full">
+<label class="block font-label-md text-on-surface-variant dark:text-slate-400 mb-2">Cardholder Name</label>
+<input class="w-full border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:dark:text-slate-600" placeholder="Johnathan Doe" type="text"/>
+</div>
+<div class="col-span-full">
+<label class="block font-label-md text-on-surface-variant dark:text-slate-400 mb-2">Card Number</label>
+<div class="relative">
+<input class="w-full border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-3 pl-12 focus:ring-1 focus:ring-[#635bff] focus:border-[#635bff] outline-none transition-all shadow-sm placeholder:dark:text-slate-600" placeholder="0000 0000 0000 0000" type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline dark:text-slate-500" data-icon="credit_card">credit_card</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant dark:text-slate-400 mb-2">Expiry Date</label>
+<input class="w-full border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-3 focus:ring-1 focus:ring-[#635bff] focus:border-[#635bff] outline-none transition-all shadow-sm placeholder:dark:text-slate-600" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant dark:text-slate-400 mb-2">CVV</label>
+<div class="relative">
+<input class="w-full border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-3 focus:ring-1 focus:ring-[#635bff] focus:border-[#635bff] outline-none transition-all shadow-sm placeholder:dark:text-slate-600" placeholder="***" type="password"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline dark:text-slate-500 cursor-help" data-icon="help_outline">help_outline</span>
+</div>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2 text-slate-500 dark:text-slate-400"><span class="material-symbols-outlined text-sm" style="font-variation-settings: 'wght' 300;">lock</span><p class="text-xs">Your payment info is stored and processed securely by Stripe using industry-standard AES-256 encryption.</p></div>
+</form>
+</section>
+<section class="bg-surface-container-lowest dark:bg-slate-900 rounded-xl border border-outline-variant dark:border-slate-800 p-8 shadow-sm">
+<h2 class="font-h2 text-on-surface dark:text-white mb-6">Billing Address</h2>
+<div class="flex items-center gap-3 mb-6 p-4 bg-secondary-container/20 dark:bg-indigo-900/20 rounded-lg border border-secondary-container/50 dark:border-indigo-800/50">
+<input checked="" class="w-5 h-5 text-primary dark:bg-slate-800 border-slate-300 dark:border-slate-700 rounded focus:ring-primary" id="same-as-shipping" type="checkbox"/>
+<label class="font-body-md text-on-secondary-container dark:text-indigo-200" for="same-as-shipping">Same as contact information</label>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-full">
+<label class="block font-label-md text-on-surface-variant dark:text-slate-400 mb-2">Street Address</label>
+<input class="w-full border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:dark:text-slate-600" placeholder="123 Innovation Drive" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant dark:text-slate-400 mb-2">City</label>
+<input class="w-full border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:dark:text-slate-600" placeholder="Palo Alto" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant dark:text-slate-400 mb-2">Postal Code</label>
+<input class="w-full border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-lg p-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all placeholder:dark:text-slate-600" placeholder="94301" type="text"/>
+</div>
+</div>
+</section>
+<div class="flex items-center justify-between pt-4">
+<button class="flex items-center gap-2 font-label-md text-outline dark:text-slate-400 hover:text-on-surface dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+                        Back to Summary
+                    </button>
+<button class="bg-[#635bff] text-on-primary px-8 py-4 rounded-xl font-label-md shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20 hover:bg-[#544dc9] transition-all active:scale-95">
+                        Complete Order ($428.50)
+                    </button>
+</div>
+</div>
+<!-- Right Column: Order Sidebar -->
+<aside class="lg:col-span-5 space-y-6">
+<!-- Order Summary Card -->
+<div class="bg-surface-container-lowest dark:bg-slate-900 rounded-xl border border-outline-variant dark:border-slate-800 overflow-hidden shadow-sm sticky top-24">
+<div class="p-6 border-b border-outline-variant dark:border-slate-800 bg-surface-container-low dark:bg-slate-800/50">
+<h3 class="font-h3 text-on-surface dark:text-white">Order Summary</h3>
+</div>
+<div class="p-6 space-y-6">
+<!-- Ticket Item -->
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A high-energy concert scene with vibrant purple and indigo stage lighting reflecting off a cheering crowd. In the foreground, a large digital screen displays a modern musical artist. The atmosphere is electric and professional, matching a premium ticketing service aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3AZ2cAPsqGKZ5wftS3cOjx-_fHv8OkmgLRfp3l2_CGNw3XUl6z75gnxN95RwWWCNmqjpKq7Q1O2M9qhY9VI8K2VCfhv43ScTuPO-tRk2tZca_cwVB__pwhj4j6tbu-GxuwoDEW2qcEWlq7rwYynHr40EX8ZsmMztv2z611NRufoAZ0x-B409PjwfW--CNAxCAvdpa_MtpHWkGLaomp08Jr0d5QH418H57WIpc5JgQrxqKDkJPZYD5gWCiAJiT4-v2saO7XSgIkC2_"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h4 class="font-label-md text-on-surface dark:text-slate-100">Midnight Echoes Concert</h4>
+<span class="font-label-md text-on-surface dark:text-slate-100">$199.00</span>
+</div>
+<p class="text-sm text-on-surface-variant dark:text-slate-400">General Admission × 2</p>
+<p class="text-xs text-outline dark:text-slate-500 flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-xs" data-icon="calendar_today">calendar_today</span>
+                                    Nov 24, 2024 • 8:00 PM
+                                </p>
+</div>
+</div>
+<!-- Ticket Item 2 -->
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="An overhead view of a modern tech conference hall with sleek rows of white ergonomic chairs and a large glowing blue stage. The lighting is crisp and cool, suggesting an atmosphere of innovation and high-end professional networking. The design reflects a sophisticated and clean corporate event style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzaWFpY1SuEcjm9-wJz5En7j8PVylW0c0Bv3_TBgkpVV-RS5v7tVvcNGXBY4yRi3SlBYmmdNQGw8XF4TgTaAO89CgdFF8uv1yhRwprYrerny4TJKyVzNoDbnoReiVpa-WxLJ7I7E7AHRl1dB902389GVMpFFGvJSN44_ATo-M5awHnWAAhKuQGFzJUdq_w9wtj18TXxSqqUPf92VdK4S-c3J9uTjtmxUZ0liQKACi3AbBFO2_4UYqd5bZF-rSFbcz3FjWf88ma5PgO"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h4 class="font-label-md text-on-surface dark:text-slate-100">Tech Summit 2024</h4>
+<span class="font-label-md text-on-surface dark:text-slate-100">$25.00</span>
+</div>
+<p class="text-sm text-on-surface-variant dark:text-slate-400">Workshop Access × 1</p>
+</div>
+</div>
+<hr class="border-outline-variant dark:border-slate-800"/>
+<!-- Pricing Breakdown -->
+<div class="space-y-3">
+<div class="flex justify-between text-body-sm text-on-surface-variant dark:text-slate-400">
+<span>Subtotal</span>
+<span>$423.00</span>
+</div>
+<div class="flex justify-between text-body-sm text-on-surface-variant dark:text-slate-400">
+<span>Processing Fee</span>
+<span>$5.50</span>
+</div>
+<div class="flex justify-between font-label-md text-on-surface dark:text-white pt-3 border-t border-outline-variant dark:border-slate-800">
+<span class="text-lg">Total</span>
+<span class="text-lg text-primary dark:text-indigo-400">$428.50</span>
+</div>
+</div>
+<!-- Trust Badges -->
+<div class="pt-6 grid grid-cols-2 gap-4">
+<div class="flex items-center gap-2 p-3 bg-surface-container dark:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined text-tertiary dark:text-slate-400" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-outline dark:text-slate-500">Secure SSL</span>
+<span class="text-xs font-semibold text-on-surface dark:text-slate-200">Encrypted</span>
+</div>
+</div>
+<div class="flex items-center gap-2 p-3 bg-surface-container dark:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined text-tertiary dark:text-slate-400" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-outline dark:text-slate-500">Verified By</span>
+<span class="text-xs font-semibold text-on-surface dark:text-slate-200">TicketHub</span>
+</div>
+</div>
+</div>
+<div class="flex justify-center items-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all duration-300 dark:text-slate-400">
+<span class="material-symbols-outlined" data-icon="payment">payment</span>
+<span class="text-xs font-bold">VISA</span>
+<span class="text-xs font-bold">MASTERCARD</span>
+<span class="text-xs font-bold">AMEX</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-900">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 py-12 w-full max-w-screen-2xl mx-auto gap-4">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="text-lg font-bold text-slate-900 dark:text-white">TicketHub</span>
+<p class="font-['Inter'] text-xs leading-relaxed text-slate-500 dark:text-slate-400">© 2024 TicketHub SaaS. Professional Ticketing Infrastructure.</p>
+</div>
+<div class="flex gap-6">
+<a class="font-['Inter'] text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:underline transition-all" href="#">About</a>
+<a class="font-['Inter'] text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:underline transition-all" href="#">Privacy</a>
+<a class="font-['Inter'] text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:underline transition-all" href="#">Terms</a>
+<a class="font-['Inter'] text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:underline transition-all" href="#">SLA</a>
+<a class="font-['Inter'] text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:underline transition-all" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>
