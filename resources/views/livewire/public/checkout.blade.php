@@ -134,9 +134,9 @@
                     <div class="mt-8">
                         <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Quantity</label>
                         <div class="flex items-center gap-4">
-                            <button wire:click="$set('quantity', {{ max(1, $quantity - 1) }})" class="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-white">-</button>
+                            <button wire:click="decreaseQuantity" class="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-white">-</button>
                             <input type="number" wire:model.live="quantity" class="w-20 text-center border-slate-200 dark:border-slate-700 rounded-lg font-bold dark:bg-slate-800 dark:text-white" min="1" />
-                            <button wire:click="$set('quantity', {{ $quantity + 1 }})" class="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-white">+</button>
+                            <button wire:click="increaseQuantity" class="w-10 h-10 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-white">+</button>
                         </div>
                         @error('quantity') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>

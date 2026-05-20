@@ -63,6 +63,21 @@ class Checkout extends Component
         return $allRules;
     }
 
+    public function increaseQuantity(): void
+    {
+        $this->quantity = (int) $this->quantity + 1;
+    }
+
+    public function decreaseQuantity(): void
+    {
+        $this->quantity = max(1, (int) $this->quantity - 1);
+    }
+
+    public function updatedQuantity(): void
+    {
+        $this->quantity = max(1, (int) $this->quantity);
+    }
+
     public function mount($slug)
     {
         $this->event = Event::published()
