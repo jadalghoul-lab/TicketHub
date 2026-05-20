@@ -68,7 +68,7 @@ class RefundManager extends Component
         $organizerId = Auth::user()->organizer->id;
         
         $requests = RefundRequest::with(['order.event', 'user'])
-            ->whereHas('order.event', function ($query) use ($organizerId) {
+            ->whereHas('order', function ($query) use ($organizerId) {
                 $query->where('organizer_id', $organizerId);
             })
             ->latest()
