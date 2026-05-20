@@ -5,12 +5,13 @@ namespace App\Mail;
 use App\Models\Order;
 use App\Services\TicketService;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderTicketsMail extends Mailable
+class OrderTicketsMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
