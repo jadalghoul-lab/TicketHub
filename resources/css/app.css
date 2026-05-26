@@ -46,6 +46,12 @@
 }
 
 @layer base {
+    :root {
+        --input-bg: #f8fafc;
+    }
+    .dark {
+        --input-bg: #1e293b;
+    }
 
     *,
     ::after,
