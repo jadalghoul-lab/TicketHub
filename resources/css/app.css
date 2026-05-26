@@ -48,9 +48,11 @@
 @layer base {
     :root {
         --input-bg: #f8fafc;
+        --card-bg: #ffffff;
     }
     .dark {
         --input-bg: #1e293b;
+        --card-bg: #0f172a;
     }
 
     *,

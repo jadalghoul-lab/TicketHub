@@ -23,7 +23,7 @@
         <!-- Quick Stats Grid -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <!-- Total Revenue -->
-            <div class="bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col justify-between">
+            <div class="bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col justify-between" style="background-color: var(--card-bg) !important;">
                 <div class="flex items-center justify-between mb-3 lg:mb-4">
                     <div class="w-10 h-10 lg:w-12 lg:h-12 bg-green-50 dark:bg-green-900/20 rounded-xl lg:rounded-2xl flex items-center justify-center">
                         <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-xl lg:text-2xl">payments</span>
@@ -37,7 +37,7 @@
             </div>
 
             <!-- Tickets Sold -->
-            <div class="bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col justify-between">
+            <div class="bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col justify-between" style="background-color: var(--card-bg) !important;">
                 <div class="flex items-center justify-between mb-3 lg:mb-4">
                     <div class="w-10 h-10 lg:w-12 lg:h-12 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl lg:rounded-2xl flex items-center justify-center">
                         <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-xl lg:text-2xl">confirmation_number</span>
@@ -51,7 +51,7 @@
             </div>
 
             <!-- Attendance Rate -->
-            <div class="bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col justify-between">
+            <div class="bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col justify-between" style="background-color: var(--card-bg) !important;">
                 <div class="flex items-center justify-between mb-3 lg:mb-4">
                     <div class="w-10 h-10 lg:w-12 lg:h-12 bg-violet-50 dark:bg-violet-900/20 rounded-xl lg:rounded-2xl flex items-center justify-center">
                         <span class="material-symbols-outlined text-violet-600 dark:text-violet-400 text-xl lg:text-2xl">how_to_reg</span>
@@ -70,7 +70,7 @@
             </div>
 
             <!-- Active Events -->
-            <div class="bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col justify-between">
+            <div class="bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-2xl lg:rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col justify-between" style="background-color: var(--card-bg) !important;">
                 <div class="flex items-center justify-between mb-3 lg:mb-4">
                     <div class="w-10 h-10 lg:w-12 lg:h-12 bg-amber-50 dark:bg-amber-900/20 rounded-xl lg:rounded-2xl flex items-center justify-center">
                         <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-xl lg:text-2xl">event_available</span>
@@ -95,7 +95,7 @@
                     </h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         @foreach($topEvents as $topEvent)
-                        <div class="bg-white dark:bg-slate-900 p-4 lg:p-5 rounded-2xl lg:rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4 group hover:border-indigo-200 dark:hover:border-indigo-800 transition-all">
+                        <div class="bg-white dark:bg-slate-900 p-4 lg:p-5 rounded-2xl lg:rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4 group hover:border-indigo-200 dark:hover:border-indigo-800 transition-all" style="background-color: var(--card-bg) !important;">
                             <div class="w-12 h-12 rounded-xl lg:rounded-2xl bg-slate-900 dark:bg-slate-800 flex items-center justify-center text-white font-black flex-shrink-0">
                                 {{ substr($topEvent->title, 0, 1) }}
                             </div>
@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- Recent Orders Table -->
-                <div class="bg-white dark:bg-slate-900 rounded-2xl lg:rounded-[2.5rem] p-5 lg:p-8 border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none">
+                <div class="bg-white dark:bg-slate-900 rounded-2xl lg:rounded-[2.5rem] p-5 lg:p-8 border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none" style="background-color: var(--card-bg) !important;">
                     <div class="flex items-center justify-between mb-6 lg:mb-8">
                         <h2 class="text-lg lg:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                             <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400">history</span>
@@ -205,7 +205,7 @@
                 </div>
 
                 <!-- Quick Scanner Shortcut -->
-                <div class="bg-white dark:bg-slate-900 rounded-2xl lg:rounded-[2.5rem] p-6 lg:p-8 border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none">
+                <div class="bg-white dark:bg-slate-900 rounded-2xl lg:rounded-[2.5rem] p-6 lg:p-8 border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none" style="background-color: var(--card-bg) !important;">
                     <h3 class="font-bold text-slate-900 dark:text-white mb-4 lg:mb-6 flex items-center gap-2">
                         <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400">qr_code_scanner</span>
                         Quick Scanner
@@ -229,7 +229,7 @@
         </div>
 
         <!-- Premium Live Entry Feed -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl lg:rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl lg:rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none overflow-hidden" style="background-color: var(--card-bg) !important;">
             <div class="p-5 lg:p-8 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-800/30">
                 <div>
                     <h3 class="text-lg lg:text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
