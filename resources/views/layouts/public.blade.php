@@ -48,7 +48,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-[#f7f9fb] dark:bg-[#0f172a] text-[#191c1e] dark:text-[#f1f5f9] antialiased transition-colors duration-200">
+<body class="bg-[#f7f9fb] dark:bg-[#0f172a] text-[#191c1e] dark:text-[#f1f5f9] antialiased">
     <!-- TopNavBar -->
     <header class="bg-slate-50/90 dark:bg-slate-900/90 backdrop-blur-md font-['Inter'] antialiased text-sm font-medium docked full-width top-0 sticky border-b border-slate-200 dark:border-slate-800 shadow-sm z-50 transition-colors duration-200">
         <div class="flex justify-between items-center w-full px-4 md:px-6 py-3 max-w-screen-2xl mx-auto">

@@ -18,7 +18,7 @@
             });
         </script>
     </head>
-    <body class="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+    <body class="min-h-screen bg-slate-50 dark:bg-slate-950 antialiased">
         <flux:sidebar sticky collapsible="mobile" class="border-e border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
             <flux:sidebar.header class="border-b border-slate-100 dark:border-slate-800 pb-4">
                 @php

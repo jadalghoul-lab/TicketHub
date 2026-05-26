@@ -29,7 +29,7 @@
             });
         </script>
     </head>
-    <body class="min-h-screen bg-white dark:bg-slate-900 antialiased transition-colors duration-200">
+    <body class="min-h-screen bg-white dark:bg-slate-900 antialiased">
         <div class="relative grid h-dvh flex-col items-center justify-center px-0 lg:max-w-none lg:grid-cols-2 lg:px-0 overflow-hidden">
             <!-- Brand Logo for mobile (absolute top) -->
             <div class="lg:hidden absolute top-8 left-0 right-0 z-50 flex justify-center">

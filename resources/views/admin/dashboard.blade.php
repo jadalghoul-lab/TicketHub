@@ -11,15 +11,15 @@
                 <p class="text-slate-500 dark:text-slate-400 font-medium ml-5">Global metrics and platform health</p>
             </div>
             <div class="flex gap-3">
-                <a href="{{ route('admin.events.index') }}" class="bg-purple-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-purple-100 dark:shadow-none hover:bg-purple-700 transition-all active:scale-95 flex items-center gap-2">
+                <a href="{{ route('admin.events.index') }}" class="bg-purple-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-purple-100 dark:shadow-none hover:bg-purple-700 transition-colors duration-150 active:scale-95 flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">event_note</span>
                     Manage Events
                 </a>
-                <a href="{{ route('admin.organizers.index') }}" class="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all active:scale-95 flex items-center gap-2">
+                <a href="{{ route('admin.organizers.index') }}" class="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-colors duration-150 active:scale-95 flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">group_add</span>
                     Manage Organizers
                 </a>
-                <a href="{{ route('admin.export') }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95">
+                <a href="{{ route('admin.export') }}" class="text-slate-700 dark:text-slate-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-150 active:scale-95 border" style="background-color: var(--btn-export-bg) !important; border-color: var(--btn-export-border) !important;">
                     <span class="material-symbols-outlined text-sm">download</span>
                     Export Report
                 </a>
@@ -28,7 +28,7 @@
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none" style="background-color: var(--card-bg) !important;">
                 <div class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
                     <span class="material-symbols-outlined">payments</span>
                 </div>
@@ -40,7 +40,7 @@
                 </p>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none" style="background-color: var(--card-bg) !important;">
                 <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
                     <span class="material-symbols-outlined">confirmation_number</span>
                 </div>
@@ -52,7 +52,7 @@
                 </p>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none" style="background-color: var(--card-bg) !important;">
                 <div class="w-12 h-12 bg-purple-50 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
                     <span class="material-symbols-outlined">event_available</span>
                 </div>
@@ -64,7 +64,7 @@
                 </p>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none" style="background-color: var(--card-bg) !important;">
                 <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center text-amber-600 dark:text-amber-400 mb-6">
                     <span class="material-symbols-outlined">corporate_fare</span>
                 </div>
@@ -79,7 +79,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Recent Sales -->
-            <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-8">
+            <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-8" style="background-color: var(--card-bg) !important;">
                 <div class="flex justify-between items-center mb-8">
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <span class="material-symbols-outlined text-emerald-500">history</span>
@@ -116,7 +116,7 @@
             </div>
 
             <!-- New Organizers -->
-            <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-8">
+            <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-50 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none p-8" style="background-color: var(--card-bg) !important;">
                 <h3 class="text-lg font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2">
                     <span class="material-symbols-outlined text-amber-500">person_add</span>
                     New Organizers
