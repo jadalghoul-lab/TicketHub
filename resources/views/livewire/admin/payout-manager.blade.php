@@ -18,10 +18,10 @@
             <div class="flex flex-col md:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-[2rem] border border-slate-50 dark:border-slate-800 shadow-sm mb-6">
                 <div class="relative w-full md:w-96">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
-                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search organizer..." class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-indigo-500 transition-all dark:text-white">
+                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search organizer..." class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-indigo-500 transition-colors duration-150 dark:text-white">
                 </div>
                 <div class="w-full md:w-48">
-                    <select wire:model.live="statusFilter" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-sm font-bold text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-all cursor-pointer appearance-none">
+                    <select wire:model.live="statusFilter" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3 px-4 text-sm font-bold text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-indigo-500 transition-colors duration-150 cursor-pointer appearance-none">
                         <option value="">All Statuses</option>
                         <option value="pending">Pending</option>
                         <option value="approved">Approved</option>
