@@ -11,15 +11,15 @@
                 <p class="text-slate-500 dark:text-slate-400 font-medium ml-5">Global metrics and platform health</p>
             </div>
             <div class="flex gap-3">
-                <a href="{{ route('admin.events.index') }}" class="bg-purple-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-purple-100 dark:shadow-none hover:bg-purple-700 transition-all active:scale-95 flex items-center gap-2">
+                <a href="{{ route('admin.events.index') }}" class="bg-purple-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-purple-100 dark:shadow-none hover:bg-purple-700 transition-colors duration-150 active:scale-95 flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">event_note</span>
                     Manage Events
                 </a>
-                <a href="{{ route('admin.organizers.index') }}" class="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all active:scale-95 flex items-center gap-2">
+                <a href="{{ route('admin.organizers.index') }}" class="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-colors duration-150 active:scale-95 flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">group_add</span>
                     Manage Organizers
                 </a>
-                <a href="{{ route('admin.export') }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95">
+                <a href="{{ route('admin.export') }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-150 active:scale-95">
                     <span class="material-symbols-outlined text-sm">download</span>
                     Export Report
                 </a>
