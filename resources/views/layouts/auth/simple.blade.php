@@ -23,7 +23,7 @@
             });
         </script>
     </head>
-    <body class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white antialiased transition-colors duration-200">
+    <body class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white antialiased">
         <div class="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
             <div class="flex w-full max-w-sm flex-col gap-6">
                 <a href="{{ route('home') }}" class="flex flex-col items-center gap-2 font-bold group" wire:navigate>
