@@ -49,10 +49,14 @@
     :root {
         --input-bg: #f8fafc;
         --card-bg: #ffffff;
+        --btn-export-bg: #ffffff;
+        --btn-export-border: #e2e8f0;
     }
     .dark {
         --input-bg: #1e293b;
         --card-bg: #0f172a;
+        --btn-export-bg: #1e293b;
+        --btn-export-border: #334155;
     }
 
     *,

@@ -19,7 +19,7 @@
                     <span class="material-symbols-outlined text-sm">group_add</span>
                     Manage Organizers
                 </a>
-                <a href="{{ route('admin.export') }}" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-150 active:scale-95">
+                <a href="{{ route('admin.export') }}" class="text-slate-700 dark:text-slate-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-150 active:scale-95 border" style="background-color: var(--btn-export-bg) !important; border-color: var(--btn-export-border) !important;">
                     <span class="material-symbols-outlined text-sm">download</span>
                     Export Report
                 </a>
