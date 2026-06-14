@@ -1,0 +1,155 @@
+# Tickethub
+### Een schaalbaar Multi-Tenant SaaS-platform voor event ticketing en real-time toegangscontrole
+
+**Student:** Jihad Alghoul  
+**Opleidingsinstelling:** Syntra West  
+**Opleiding:** Full Stack Web Developer  
+**Academiejaar:** 2025-2026  
+
+---
+
+# 1. Projectomschrijving
+
+### Titel en Korte Samenvatting
+**Tickethub** is een cloud-native SaaS-oplossing (Software as a Service) die organisatoren en eindgebruikers een naadloze en veilige ervaring biedt voor event ticketing. Het systeem beheert het volledige proces: van het aanmaken van evenementen en het verkopen van tickets tot de real-time toegangscontrole aan de deur.
+
+### Probleemstelling en Behoefte
+In de huidige evenementensector lopen veel organisatoren tegen problemen aan zoals overboekingen (race conditions tijdens piekverkoop), trage systemen en dure externe scan-hardware. Er is behoefte aan een toegankelijk, alles-in-één platform dat betrouwbaar presteert onder hoge belasting en waarbij de organisator enkel een smartphone nodig heeft om de toegangscontrole te beheren.
+
+### Doelstelling en Doelgroep
+Het doel is om een frictieloos en betrouwbaar platform te bouwen. 
+De doelgroep bestaat uit twee partijen:
+1. **Organisatoren (B2B):** Kleine tot middelgrote event-planners die een betaalbaar en betrouwbaar ticketingsysteem zoeken.
+2. **Klanten/Bezoekers (B2C):** Mensen die eenvoudig, veilig en snel tickets willen kopen en deze digitaal willen bewaren.
+
+---
+
+# 2. Scope
+
+### Wat werd gebouwd (Binnen scope)
+- **Multi-tenancy:** Logische scheiding van data voor verschillende organisatoren (via `tenant_id`).
+- **Atomic Ticket Reservations:** Een reserveringssysteem waarbij tickets 10 minuten vergrendeld worden in de database tijdens de checkout om overselling te voorkomen.
+- **Stripe Webhook-integratie:** Asynchrone verwerking van betalingen.
+- **Real-time Toegangscontrole:** Een in-browser scanner die de smartphone-camera van de organisator gebruikt om QR-/barcodes te valideren.
+- **PDF-generatie:** Geautomatiseerde ticket-aanmaak via wachtrijen (queues).
+
+### Wat bewust niet werd gebouwd (Buiten scope)
+- **Native iOS/Android apps:** Er is bewust gekozen voor een Progressive Web App (PWA) benadering via de browser om development tijd te besparen en cross-platform compatibiliteit te garanderen.
+- **Interne chat / Customer Support module:** Dit valt buiten de MVP (Minimum Viable Product).
+
+### Uitbreidingsmogelijkheden
+In de toekomst kan het platform worden uitgebreid met:
+- Geavanceerde analytics en grafieken voor organisatoren.
+- Een "Secondary Market" (doorverkoop van tickets) om fraude tegen te gaan.
+- Wachtlijsten voor uitverkochte evenementen.
+
+---
+
+# 3. Analyse
+
+### Functionele vereisten
+- **Role-Based Access Control (RBAC):** Systeem met 3 rollen (Admin, Organizer, Customer).
+- **Event CRUD:** Volledig beheer van evenementen en tickettypes (capaciteit, prijs, datum).
+- **Documentatie & Scanning:** Automatische PDF-tickets na betaling en de mogelijkheid om deze via een mobiele browser te scannen en af te vinken in de database.
+
+### Niet-functionele vereisten
+- **Performantie en Concurrency:** Ondersteuning voor gelijktijdige gebruikers tijdens piekverkoop (Redis caching & Pessimistic locking).
+- **Veiligheid:** Bescherming tegen SQL-injecties, XSS, CSRF en IDOR (gebruik van UUID's voor tickets).
+
+### User Stories
+- **Organisator:** *Als organisator wil ik met mijn smartphone barcodes op tickets kunnen scannen, zodat ik een snelle en fraudebestendige toegangscontrole kan uitvoeren.*
+- **Klant:** *Als klant wil ik dat mijn tickets voor 10 minuten worden gereserveerd zodra ik naar de kassa ga, zodat ik veilig kan betalen zonder bang te zijn dat mijn tickets verdwijnen.*
+- **Admin:** *Als beheerder wil ik de status van organisatoren kunnen opschorten bij misbruik van het platform.*
+
+---
+
+# 4. Technische uitwerking
+
+### Gebruikte technologieën
+- **Backend:** Laravel 13, PHP 8.3, MySQL.
+- **Frontend:** Livewire 4, Alpine.js, Tailwind CSS, Flux UI.
+- **In-Memory & Queues:** Redis (voor caching, sessies en asynchrone jobs), waarbij de wachtrijen (queues) visueel worden getraceerd en gemonitord via **Laravel Horizon**.
+- **Testing:** Pest PHP.
+- **Betalingen:** Stripe API.
+
+### Projectstructuur en Belangrijke Componenten
+Het project volgt het MVC-patroon, maar werd uitgebreid met een **Service Layer**.
+Belangrijke componenten:
+- `App\Services\TicketReservationService`: Bevat de complexe logica voor het 10-minuten vasthouden van tickets met `lockForUpdate()`.
+- `App\Jobs\ReleaseExpiredReservationsJob`: Een asynchrone Redis-taak die op de achtergrond draait om vervallen reserveringen vrij te geven.
+- `App\Livewire\...`: Componenten die de reactieve frontend aansturen zonder volledige page-reloads.
+
+### Databankstructuur
+- **Multi-tenancy:** Laravel Global Scopes zorgen ervoor dat organisator A nooit data van organisator B kan opvragen.
+- **Relationele integriteit:** Strikte foreign keys en het gebruik van UUID's voor de `tickets` tabel.
+
+`[ Plaats hier het Database ERD / Databank diagram ]`
+
+### Externe API's
+Er is een koppeling met de **Stripe API**. De betalingsbevestiging gebeurt niet via de frontend, maar veilig op de achtergrond via **Stripe Webhooks** die door de backend worden afgevangen en geverifieerd.
+
+---
+
+# 5. Ontwerp en UX
+
+### Motivatie layout, kleuren en typografie
+Er is gekozen voor een "Modern Dark/Bright hybrid" thema. Het dashboard voor organisatoren is overwegend clean en rustig om data en tabellen overzichtelijk te houden. Voor de klant-gerichte pagina's is gebruikgemaakt van hoge contrastkleuren en duidelijke 'Call to Actions' (CTA's) om de conversie te verhogen. Typografie is strak en modern (bijv. Inter font) om leesbaarheid te maximaliseren.
+
+### Responsive gedrag en Toegankelijkheid
+- **Mobile-First:** Dankzij Tailwind CSS schalen alle Livewire-componenten vloeiend mee naar smartphone-formaat. Dit was een absolute vereiste voor de barcode-scanner.
+- **Toegankelijkheid (A11y):** Gebruik van semantische HTML, ARIA-labels voor screenreaders en focus-states voor toetsenbordnavigatie (ingebouwd dankzij Flux UI).
+
+`[ Plaats hier screenshots van de applicatie (Desktop & Mobile weergave) ]`
+
+---
+
+# 6. Testing en kwaliteitscontrole
+
+### Wat werd getest
+Met **Pest PHP** (129 tests) zijn de kritieke functionaliteiten afgedekt, zoals het authenticatieproces, de reserverings-locks, kortingscodes (coupons), en de berekening van ordertotalen. 
+
+`[ Plaats hier een screenshot van de succesvolle Pest test-suite in de terminal ]`
+
+### Hoe bugs werden opgelost
+Tijdens de ontwikkeling ontstond er een **Race Condition**: twee gebruikers konden tegelijk het laatste ticket claimen. Dit werd structureel opgelost door `DB::transaction()` te combineren met `lockForUpdate()`. Hierdoor wordt de rij in de database gelocked totdat de transactie van de eerste gebruiker voltooid is.
+
+### Gekende beperkingen
+- Momenteel ondersteunt het scan-systeem enkel actieve internetverbindingen; er is nog geen offline synchronisatie-mogelijkheid gebouwd voor de deuren waar het netwerk slecht is.
+
+---
+
+# 7. Reflectie
+
+### Wat goed ging en wat moeilijk was
+- **Moeilijk:** Het implementeren en lokaal testen van Stripe Webhooks in combinatie met Redis queues vereiste veel troubleshooting via de Stripe CLI en Laravel Horizon. Ook de integratie van de hardware-camera in de browser was een technische uitdaging.
+- **Goed:** De opzet van de architectuur (Service Layer) bleek een gouden zet. Hierdoor was het schrijven van tests en het debuggen van complexe logica (zoals de race conditions) veel overzichtelijker.
+
+### Wat de cursist geleerd heeft
+Ik heb diepgaande kennis opgedaan over concurrency in databases, asynchrone processen (jobs/queues), webhooks en de krachtige combinatie van Laravel met Livewire voor SPA-achtige ervaringen.
+
+### Volgende versie
+In een volgende iteratie zou ik Redis WebSockets (Laravel Reverb) integreren om de dashboard-statistieken in real-time te laten updaten zonder dat de gebruiker hoeft te refreshen.
+
+---
+
+# 8. Documentatie, Bronnen & Installatie
+
+### Installatie-instructies & Demo
+1. Kloon het project: `git clone [repo_url]`
+2. Installeer dependencies: `composer install` & `npm install`
+3. Kopieer de `.env.example` naar `.env` en vul de database credentials in.
+4. Voer migraties uit: `php artisan migrate --seed`
+5. Start de server en queues: `npm run dev` (Dit start Horizon, de server en Vite).
+
+**Test Login Gegevens:**
+- **Admin:** admin@tickethub.com / password
+- **Organisator:** organizer@tickethub.com / password
+- **Klant:** klant@tickethub.com / password
+
+### Gebruikte AI-tools
+Er is op een transparante en kritische manier gebruikgemaakt van AI (zoals GitHub Copilot en ChatGPT). Deze tools fungeerden als debug-partner bij complexe SQL-query optimalisaties en voor het snel genereren van dummy-data (seeders), maar de kernarchitectuur en logica zijn volledig zelfstandig bedacht en geschreven.
+
+### Bronnen en Packages
+- **Frameworks:** Laravel 13, Livewire 4, Tailwind CSS, Alpine.js.
+- **Packages:** `laravel/horizon` (voor queue monitoring), `barryvdh/laravel-dompdf` (voor tickets), `bacon/bacon-qr-code` (voor barcodes).
+- **Documentatie:** Officiële Laravel en Stripe API documentatie.
