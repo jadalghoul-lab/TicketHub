@@ -18,7 +18,7 @@ export default defineConfig({
         cors: true,
 
         hmr: {
-            host: 'academics-helmet-jews-courtesy.trycloudflare.com',
+            host: 'ratio-mailed-somerset-crop.trycloudflare.com',
             protocol: 'wss',
             port: 443,
         }
