@@ -7,7 +7,6 @@ use App\Models\Event;
 use App\Models\Order;
 use App\Models\Organizer;
 use App\Models\Ticket;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -49,39 +48,39 @@ class DashboardController extends Controller
 
     public function export()
     {
-        $fileName = 'ticket_hub_sales_report_' . now()->format('Y-m-d_His') . '.csv';
+        $fileName = 'ticket_hub_sales_report_'.now()->format('Y-m-d_His').'.csv';
         $orders = Order::with(['user', 'event'])->where('status', 'paid')->latest()->get();
 
-        $headers = array(
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        );
+        $headers = [
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=$fileName",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
 
-        $columns = array('Order Number', 'Customer', 'Email', 'Event', 'Amount', 'Date');
+        $columns = ['Order Number', 'Customer', 'Email', 'Event', 'Amount', 'Date'];
 
-        $callback = function() use($orders, $columns) {
+        $callback = function () use ($orders, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
 
             foreach ($orders as $order) {
                 $row['Order Number'] = $order->order_number;
-                $row['Customer']     = $order->user->name;
-                $row['Email']        = $order->user->email;
-                $row['Event']        = $order->event?->title ?? 'Deleted Event';
-                $row['Amount']       = '€' . number_format($order->total_amount, 2);
-                $row['Date']         = $order->created_at->format('Y-m-d H:i');
+                $row['Customer'] = $order->user->name;
+                $row['Email'] = $order->user->email;
+                $row['Event'] = $order->event?->title ?? 'Deleted Event';
+                $row['Amount'] = '€'.number_format($order->total_amount, 2);
+                $row['Date'] = $order->created_at->format('Y-m-d H:i');
 
-                fputcsv($file, array(
-                    $row['Order Number'], 
-                    $row['Customer'], 
-                    $row['Email'], 
-                    $row['Event'], 
-                    $row['Amount'], 
-                    $row['Date']
-                ));
+                fputcsv($file, [
+                    $row['Order Number'],
+                    $row['Customer'],
+                    $row['Email'],
+                    $row['Event'],
+                    $row['Amount'],
+                    $row['Date'],
+                ]);
             }
 
             fclose($file);

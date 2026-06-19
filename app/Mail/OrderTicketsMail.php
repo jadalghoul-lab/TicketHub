@@ -4,9 +4,11 @@ namespace App\Mail;
 
 use App\Models\Order;
 use App\Services\TicketService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -28,9 +30,9 @@ class OrderTicketsMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         $eventTitle = $this->order->event?->title ?? 'Your Event';
-        
+
         return new Envelope(
-            subject: 'Your Tickets for ' . $eventTitle,
+            subject: 'Your Tickets for '.$eventTitle,
         );
     }
 
@@ -40,7 +42,7 @@ class OrderTicketsMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         $ticketService = app(TicketService::class);
-        
+
         $ticketsData = $this->order->tickets->map(function ($ticket) use ($ticketService) {
             return [
                 'number' => $ticket->ticket_number,
@@ -63,17 +65,17 @@ class OrderTicketsMail extends Mailable implements ShouldQueue
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {
         $attachments = [];
 
         foreach ($this->order->tickets as $ticket) {
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.ticket', compact('ticket'));
-            
-            $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromData(
-                fn () => $pdf->output(), 
+            $pdf = Pdf::loadView('pdf.ticket', compact('ticket'));
+
+            $attachments[] = Attachment::fromData(
+                fn () => $pdf->output(),
                 "Ticket-{$ticket->ticket_number}.pdf"
             )->withMime('application/pdf');
         }

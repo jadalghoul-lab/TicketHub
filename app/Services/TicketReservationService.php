@@ -45,8 +45,8 @@ class TicketReservationService
 
             if ($available < $quantity) {
                 throw new \Exception(
-                    "Sorry, only {$available} ticket(s) are currently available. " .
-                    "Some tickets may be temporarily held by other customers."
+                    "Sorry, only {$available} ticket(s) are currently available. ".
+                    'Some tickets may be temporarily held by other customers.'
                 );
             }
 
@@ -60,10 +60,10 @@ class TicketReservationService
             // 4. Create the new reservation
             $reservation = TicketReservation::create([
                 'ticket_type_id' => $lockedType->id,
-                'user_id'        => $userId,
-                'session_id'     => $sessionId,
-                'quantity'       => $quantity,
-                'expires_at'     => now()->addMinutes(self::HOLD_MINUTES),
+                'user_id' => $userId,
+                'session_id' => $sessionId,
+                'quantity' => $quantity,
+                'expires_at' => now()->addMinutes(self::HOLD_MINUTES),
             ]);
 
             Log::info("Reservation #{$reservation->id} created: {$quantity}x TicketType#{$lockedType->id} for User#{$userId}");
@@ -108,7 +108,7 @@ class TicketReservationService
      * Return the real available quantity for a ticket type,
      * accounting for active (temporary) reservations by OTHER users.
      *
-     * @param int|null $excludeUserId  Exclude this user's own reservation from the held count
+     * @param  int|null  $excludeUserId  Exclude this user's own reservation from the held count
      */
     public function getAvailableQuantity(TicketType $ticketType, ?int $excludeUserId = null): int
     {

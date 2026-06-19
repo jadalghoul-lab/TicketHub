@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Event;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class EventPolicy
 {
@@ -21,8 +20,10 @@ class EventPolicy
      */
     public function view(User $user, Event $event): bool
     {
-        if ($user->isAdmin()) return true;
-        
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $user->isOrganizer() && $user->organizer && $user->organizer->id === $event->organizer_id;
     }
 
@@ -39,7 +40,9 @@ class EventPolicy
      */
     public function update(User $user, Event $event): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
 
         return $user->isOrganizer() && $user->organizer && $user->organizer->id === $event->organizer_id;
     }
@@ -49,7 +52,9 @@ class EventPolicy
      */
     public function delete(User $user, Event $event): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
 
         return $user->isOrganizer() && $user->organizer && $user->organizer->id === $event->organizer_id;
     }

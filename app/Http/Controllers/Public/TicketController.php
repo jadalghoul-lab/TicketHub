@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Ticket;
-use Illuminate\Support\Facades\Auth;
 use App\Services\TicketService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -49,7 +49,7 @@ class TicketController extends Controller
         }
 
         // Generate the PDF
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.ticket', compact('ticket'));
+        $pdf = Pdf::loadView('pdf.ticket', compact('ticket'));
 
         // Output the generated PDF to Browser
         return $pdf->download("ticket-{$ticket->ticket_number}.pdf");

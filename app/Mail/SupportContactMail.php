@@ -5,6 +5,8 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -29,9 +31,9 @@ class SupportContactMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Support Request: ' . $this->data['subject'],
+            subject: 'New Support Request: '.$this->data['subject'],
             replyTo: [
-                new \Illuminate\Mail\Mailables\Address($this->data['email'], $this->data['name']),
+                new Address($this->data['email'], $this->data['name']),
             ],
         );
     }
@@ -55,7 +57,7 @@ class SupportContactMail extends Mailable implements ShouldQueue
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {

@@ -59,7 +59,7 @@
                        class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group rounded-2xl">
                         <div class="w-16 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden flex-shrink-0">
                             @if($event->image)
-                                <img src="{{ Storage::url($event->image) }}" class="w-full h-full object-cover">
+                                <img src="{{ $event->image_url }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-slate-700">
                                     <span class="material-symbols-outlined text-sm">image</span>

@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Enums\EventStatus;
 use App\Models\Event;
-use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use App\Enums\EventStatus;
+use Illuminate\Support\Str;
 
 class EventService
 {
@@ -16,8 +16,8 @@ class EventService
     public function createEvent(array $data, ?UploadedFile $image = null): Event
     {
         $event = new Event($data);
-        $event->slug = Str::slug($data['title'] . '-' . uniqid());
-        
+        $event->slug = Str::slug($data['title'].'-'.uniqid());
+
         if ($image) {
             $event->image = $image->store('event_images', 'public');
         }
@@ -36,7 +36,7 @@ class EventService
 
         // Update slug if title changed
         if (isset($data['title']) && $event->isDirty('title')) {
-            $event->slug = Str::slug($data['title'] . '-' . uniqid());
+            $event->slug = Str::slug($data['title'].'-'.uniqid());
         }
 
         if ($image) {
@@ -57,6 +57,7 @@ class EventService
     public function changeStatus(Event $event, EventStatus $status): bool
     {
         $event->status = $status;
+
         return $event->save();
     }
 
@@ -66,15 +67,15 @@ class EventService
     public function duplicateEvent(Event $originalEvent): Event
     {
         $newEvent = $originalEvent->replicate();
-        
-        $newEvent->title = $originalEvent->title . ' (Copy)';
-        $newEvent->slug = Str::slug($newEvent->title . '-' . uniqid());
+
+        $newEvent->title = $originalEvent->title.' (Copy)';
+        $newEvent->slug = Str::slug($newEvent->title.'-'.uniqid());
         $newEvent->status = EventStatus::DRAFT;
-        
+
         // Let's copy the image file if it exists, to prevent shared file deletion issues
         if ($originalEvent->image && Storage::disk('public')->exists($originalEvent->image)) {
             $extension = pathinfo($originalEvent->image, PATHINFO_EXTENSION);
-            $newImagePath = 'event_images/' . Str::uuid() . '.' . $extension;
+            $newImagePath = 'event_images/'.Str::uuid().'.'.$extension;
             Storage::disk('public')->copy($originalEvent->image, $newImagePath);
             $newEvent->image = $newImagePath;
         }

@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\User;
+use App\Livewire\Admin\PayoutManager;
 use App\Models\Organizer;
 use App\Models\PayoutRequest;
-use App\Livewire\Admin\PayoutManager;
-use Livewire\Livewire;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
@@ -21,12 +21,12 @@ it('renders the admin payout manager component', function () {
 it('can update payout request status', function () {
     $admin = User::factory()->create(['role' => 'admin']);
     $organizer = Organizer::factory()->create();
-    
+
     $payout = PayoutRequest::create([
         'organizer_id' => $organizer->id,
         'amount' => 100.00,
         'status' => 'pending',
-        'bank_details' => 'BE1234'
+        'bank_details' => 'BE1234',
     ]);
 
     Livewire::actingAs($admin)
@@ -35,26 +35,26 @@ it('can update payout request status', function () {
 
     $this->assertDatabaseHas('payout_requests', [
         'id' => $payout->id,
-        'status' => 'approved'
+        'status' => 'approved',
     ]);
 });
 
 it('filters payouts by status', function () {
     $admin = User::factory()->create(['role' => 'admin']);
     $organizer = Organizer::factory()->create();
-    
+
     $pending = PayoutRequest::create([
         'organizer_id' => $organizer->id,
         'amount' => 100.00,
         'status' => 'pending',
-        'bank_details' => 'BE1234'
+        'bank_details' => 'BE1234',
     ]);
 
     $paid = PayoutRequest::create([
         'organizer_id' => $organizer->id,
         'amount' => 50.00,
         'status' => 'paid',
-        'bank_details' => 'BE1234'
+        'bank_details' => 'BE1234',
     ]);
 
     Livewire::actingAs($admin)

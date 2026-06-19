@@ -4,8 +4,6 @@ namespace App\Notifications;
 
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class OrderConfirmed extends Notification
@@ -32,7 +30,7 @@ class OrderConfirmed extends Notification
             'title' => 'Order Confirmed!',
             'message' => "Your order #{$this->order->order_number} for {$this->order->event->title} has been confirmed.",
             'url' => route('public.tickets.index'),
-            'icon' => 'shopping_bag'
+            'icon' => 'shopping_bag',
         ];
     }
 }

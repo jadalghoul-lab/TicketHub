@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Coupon;
-use App\Models\User;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class CouponService
@@ -16,7 +16,7 @@ class CouponService
     {
         $coupon = Coupon::where('code', $code)->first();
 
-        if (!$coupon) {
+        if (! $coupon) {
             return ['valid' => false, 'message' => 'Invalid coupon code.'];
         }
 
@@ -48,7 +48,7 @@ class CouponService
         return [
             'valid' => true,
             'coupon' => $coupon,
-            'message' => 'Coupon applied successfully!'
+            'message' => 'Coupon applied successfully!',
         ];
     }
 

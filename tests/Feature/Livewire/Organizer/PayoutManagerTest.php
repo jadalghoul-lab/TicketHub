@@ -1,13 +1,12 @@
 <?php
 
-use App\Models\User;
-use App\Models\Organizer;
+use App\Livewire\Organizer\PayoutManager;
 use App\Models\Event;
 use App\Models\Order;
-use App\Models\PayoutRequest;
-use App\Livewire\Organizer\PayoutManager;
-use Livewire\Livewire;
+use App\Models\Organizer;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
@@ -32,7 +31,7 @@ it('can submit a payout request successfully', function () {
         'organizer_id' => $organizer->id,
         'event_id' => $event->id,
         'status' => 'paid',
-        'total_amount' => 500.00
+        'total_amount' => 500.00,
     ]);
 
     Livewire::actingAs($user)
@@ -45,7 +44,7 @@ it('can submit a payout request successfully', function () {
     $this->assertDatabaseHas('payout_requests', [
         'organizer_id' => $organizer->id,
         'amount' => 200.00,
-        'status' => 'pending'
+        'status' => 'pending',
     ]);
 });
 
@@ -59,7 +58,7 @@ it('prevents requesting more than available balance', function () {
         'organizer_id' => $organizer->id,
         'event_id' => $event->id,
         'status' => 'paid',
-        'total_amount' => 100.00
+        'total_amount' => 100.00,
     ]);
 
     Livewire::actingAs($user)

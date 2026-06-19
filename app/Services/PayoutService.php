@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Order;
-use App\Models\PayoutRequest;
 use App\Models\Organizer;
+use App\Models\PayoutRequest;
 
 class PayoutService
 {

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class TicketReservation extends Model
 {
@@ -20,7 +20,7 @@ class TicketReservation extends Model
     {
         return [
             'expires_at' => 'datetime',
-            'quantity'   => 'integer',
+            'quantity' => 'integer',
         ];
     }
 
@@ -49,7 +49,7 @@ class TicketReservation extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->whereNull('order_id')
-                     ->where('expires_at', '>', now());
+            ->where('expires_at', '>', now());
     }
 
     /**
@@ -58,7 +58,7 @@ class TicketReservation extends Model
     public function scopeExpired(Builder $query): Builder
     {
         return $query->whereNull('order_id')
-                     ->where('expires_at', '<=', now());
+            ->where('expires_at', '<=', now());
     }
 
     // ─── Helpers ────────────────────────────────────────────────────────────────

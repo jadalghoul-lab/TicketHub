@@ -1,12 +1,12 @@
 <?php
 
-use App\Models\User;
-use App\Models\Organizer;
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\Order;
+use App\Models\Organizer;
 use App\Models\Ticket;
 use App\Models\TicketType;
-use App\Enums\EventStatus;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 
@@ -63,7 +63,7 @@ test('organizer dashboard displays correct statistics and data', function () {
     ]);
 
     $customer = User::factory()->create();
-    
+
     // Create an order
     $order = Order::create([
         'user_id' => $customer->id,
@@ -77,13 +77,13 @@ test('organizer dashboard displays correct statistics and data', function () {
     ]);
 
     // Create 2 valid tickets
-    for ($i=0; $i<2; $i++) {
+    for ($i = 0; $i < 2; $i++) {
         Ticket::create([
             'order_id' => $order->id,
             'event_id' => $event->id,
             'ticket_type_id' => $ticketType->id,
             'user_id' => $customer->id,
-            'ticket_number' => 'TKT-' . $i,
+            'ticket_number' => 'TKT-'.$i,
             'uuid' => Str::uuid(),
             'status' => 'valid',
         ]);
@@ -112,14 +112,14 @@ test('organizer dashboard displays correct statistics and data', function () {
             'topEvents',
             'recentOrders',
             'upcomingEvents',
-            'period'
+            'period',
         ]);
 
     $this->assertEquals(100, $response->viewData('totalRevenue'));
     $this->assertEquals(3, $response->viewData('totalTickets'));
     // Attendance rate = (1 used / 3 total) * 100 = 33.33...
     $this->assertEquals(33, $response->viewData('attendanceRate'));
-    
+
     $this->assertCount(1, $response->viewData('events'));
     $this->assertCount(1, $response->viewData('topEvents'));
     $this->assertCount(1, $response->viewData('recentOrders'));

@@ -12,22 +12,30 @@ class CouponManager extends Component
     use WithPagination;
 
     public $showModal = false;
+
     public $isEditing = false;
-    
+
     // Form fields
     public $couponId;
+
     public $code;
+
     public $type = 'percentage';
+
     public $value;
+
     public $event_id = null;
+
     public $expires_at;
+
     public $max_usages;
+
     public $once_per_customer = false;
 
     protected function rules()
     {
         return [
-            'code' => 'required|string|max:50|unique:coupons,code,' . $this->couponId,
+            'code' => 'required|string|max:50|unique:coupons,code,'.$this->couponId,
             'type' => 'required|in:percentage,fixed',
             'value' => 'required|numeric|min:0',
             'event_id' => 'nullable|exists:events,id',
@@ -48,7 +56,7 @@ class CouponManager extends Component
     public function editCoupon($id)
     {
         $this->resetValidation();
-        
+
         $coupon = Coupon::where('organizer_id', auth()->user()->organizer->id)->findOrFail($id);
         $this->couponId = $coupon->id;
         $this->code = $coupon->code;
@@ -58,7 +66,7 @@ class CouponManager extends Component
         $this->expires_at = $coupon->expires_at ? $coupon->expires_at->format('Y-m-d') : null;
         $this->max_usages = $coupon->max_usages;
         $this->once_per_customer = $coupon->once_per_customer;
-        
+
         $this->isEditing = true;
         $this->showModal = true;
     }
@@ -110,7 +118,7 @@ class CouponManager extends Component
 
         return view('livewire.organizer.coupon-manager', [
             'coupons' => $coupons,
-            'events' => $events
+            'events' => $events,
         ])->layout('layouts.app');
     }
 }

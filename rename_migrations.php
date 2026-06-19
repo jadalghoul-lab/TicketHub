@@ -15,14 +15,14 @@ $migrations = [
     'create_activity_logs_table.php' => '2026_05_02_103612_create_activity_logs_table.php',
 ];
 
-$dir = __DIR__ . '/database/migrations/';
-$files = glob($dir . '*.php');
+$dir = __DIR__.'/database/migrations/';
+$files = glob($dir.'*.php');
 
 foreach ($files as $file) {
     foreach ($migrations as $search => $newName) {
         if (str_ends_with($file, $search)) {
-            rename($file, $dir . $newName);
-            echo "Renamed to: " . $newName . "\n";
+            rename($file, $dir.$newName);
+            echo 'Renamed to: '.$newName."\n";
         }
     }
 }

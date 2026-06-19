@@ -1,25 +1,25 @@
 <?php
 
+use App\Enums\Role;
 use App\Livewire\Organizer\GlobalScanner;
 use App\Models\Event;
 use App\Models\Organizer;
 use App\Models\Ticket;
 use App\Models\TicketType;
 use App\Models\User;
-use App\Enums\Role;
-use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create(['role' => Role::ORGANIZER]);
     $this->organizer = Organizer::factory()->create(['user_id' => $this->user->id]);
-    
+
     // Multiple events
     $this->event1 = Event::factory()->create(['organizer_id' => $this->organizer->id, 'title' => 'Event One']);
     $this->event2 = Event::factory()->create(['organizer_id' => $this->organizer->id, 'title' => 'Event Two']);
-    
+
     $this->type1 = TicketType::factory()->create(['event_id' => $this->event1->id]);
     $this->type2 = TicketType::factory()->create(['event_id' => $this->event2->id]);
 });
@@ -61,7 +61,7 @@ test('global scanner does not validate tickets from other organizers', function 
     $otherOrganizer = Organizer::factory()->create(['user_id' => $otherUser->id]);
     $otherEvent = Event::factory()->create(['organizer_id' => $otherOrganizer->id]);
     $otherType = TicketType::factory()->create(['event_id' => $otherEvent->id]);
-    
+
     $otherTicket = Ticket::factory()->create([
         'event_id' => $otherEvent->id,
         'ticket_type_id' => $otherType->id,

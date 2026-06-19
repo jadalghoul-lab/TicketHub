@@ -2,16 +2,20 @@
 
 namespace App\Livewire\Public;
 
-use Livewire\Component;
 use App\Mail\SupportContactMail;
 use Illuminate\Support\Facades\Mail;
+use Livewire\Component;
 
 class SupportForm extends Component
 {
     public $name = '';
+
     public $email = '';
+
     public $subject = '';
+
     public $message = '';
+
     public $success = false;
 
     public function mount()
@@ -43,12 +47,12 @@ class SupportForm extends Component
 
             $this->success = true;
             $this->reset(['subject', 'message']);
-            
-            if (!auth()->check()) {
+
+            if (! auth()->check()) {
                 $this->reset(['name', 'email']);
             }
         } catch (\Exception $e) {
-            \Log::error('Failed to send support email: ' . $e->getMessage());
+            \Log::error('Failed to send support email: '.$e->getMessage());
             $this->addError('general', 'We encountered an error while trying to send your message. Please try again later.');
         }
     }

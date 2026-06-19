@@ -1,14 +1,14 @@
 <?php
 
+use App\Enums\Role;
 use App\Livewire\Organizer\Scanner;
 use App\Models\Event;
 use App\Models\Organizer;
 use App\Models\Ticket;
 use App\Models\TicketType;
 use App\Models\User;
-use App\Enums\Role;
-use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 

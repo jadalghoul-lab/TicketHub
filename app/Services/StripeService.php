@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Stripe\StripeClient;
 use Illuminate\Support\Facades\Log;
+use Stripe\StripeClient;
 
 class StripeService
 {
@@ -23,7 +23,7 @@ class StripeService
         if (str_starts_with($paymentIntentId, 'pi_mock_')) {
             return [
                 'success' => true,
-                'refund_id' => 'ref_mock_' . str()->random(10),
+                'refund_id' => 'ref_mock_'.str()->random(10),
                 'status' => 'succeeded',
             ];
         }
@@ -49,9 +49,9 @@ class StripeService
                 'status' => $refund->status,
             ];
         } catch (\Exception $e) {
-            Log::error('Stripe Refund Error: ' . $e->getMessage(), [
+            Log::error('Stripe Refund Error: '.$e->getMessage(), [
                 'payment_intent_id' => $paymentIntentId,
-                'exception' => $e
+                'exception' => $e,
             ]);
 
             return [

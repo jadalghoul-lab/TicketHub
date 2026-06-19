@@ -21,6 +21,7 @@
 use App\Enums\EventStatus;
 use App\Enums\Role;
 use App\Jobs\ReleaseExpiredReservationsJob;
+use App\Jobs\SendOrderTicketsJob;
 use App\Livewire\Public\Checkout;
 use App\Models\Event;
 use App\Models\Order;
@@ -28,42 +29,44 @@ use App\Models\Organizer;
 use App\Models\TicketReservation;
 use App\Models\TicketType;
 use App\Models\User;
+use App\Services\CheckoutService;
 use App\Services\TicketReservationService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 // ─── Shared Setup ────────────────────────────────────────────────────────────
 
 beforeEach(function () {
     // Organizer
     $this->organizerUser = User::factory()->create(['role' => Role::ORGANIZER]);
-    $this->organizer     = Organizer::create([
-        'user_id'      => $this->organizerUser->id,
+    $this->organizer = Organizer::create([
+        'user_id' => $this->organizerUser->id,
         'company_name' => 'Test Org',
-        'slug'         => 'test-org-' . Str::random(4),
+        'slug' => 'test-org-'.Str::random(4),
     ]);
 
     // Published event
     $this->event = Event::create([
         'organizer_id' => $this->organizer->id,
-        'title'        => 'Test Event',
-        'slug'         => 'test-event-' . Str::random(4),
-        'category'     => 'music',
-        'city'         => 'Brussels',
-        'country'      => 'Belgium',
-        'start_date'   => now()->addDays(10),
-        'status'       => EventStatus::PUBLISHED,
+        'title' => 'Test Event',
+        'slug' => 'test-event-'.Str::random(4),
+        'category' => 'music',
+        'city' => 'Brussels',
+        'country' => 'Belgium',
+        'start_date' => now()->addDays(10),
+        'status' => EventStatus::PUBLISHED,
     ]);
 
     // Ticket type with only 1 seat — key for race condition tests
     $this->ticketType = TicketType::create([
-        'event_id'      => $this->event->id,
-        'name'          => 'General',
-        'price'         => 50,
-        'quantity'      => 1,
+        'event_id' => $this->event->id,
+        'name' => 'General',
+        'price' => 50,
+        'quantity' => 1,
         'max_per_order' => 5,
     ]);
 
@@ -94,8 +97,8 @@ test('user can reserve a ticket and reservation is stored in database', function
 
     $this->assertDatabaseHas('ticket_reservations', [
         'ticket_type_id' => $this->ticketType->id,
-        'user_id'        => $this->userA->id,
-        'quantity'       => 1,
+        'user_id' => $this->userA->id,
+        'quantity' => 1,
     ]);
 });
 
@@ -113,14 +116,13 @@ test('second user cannot reserve a ticket already held by first user', function 
     );
 
     // User B tries to grab the same seat — must be blocked
-    expect(fn () =>
-        $this->service->reserve(
-            $this->ticketType,
-            quantity: 1,
-            userId: $this->userB->id,
-            sessionId: 'sess_userB'
-        )
-    )->toThrow(\Exception::class);
+    expect(fn () => $this->service->reserve(
+        $this->ticketType,
+        quantity: 1,
+        userId: $this->userB->id,
+        sessionId: 'sess_userB'
+    )
+    )->toThrow(Exception::class);
 
     // Only one reservation should exist
     expect(TicketReservation::active()->where('ticket_type_id', $this->ticketType->id)->count())->toBe(1);
@@ -184,10 +186,10 @@ test('expired reservation does not block other users from reserving', function (
     // Create an already-expired reservation
     TicketReservation::create([
         'ticket_type_id' => $this->ticketType->id,
-        'user_id'        => $this->userA->id,
-        'session_id'     => 'sess_expired',
-        'quantity'       => 1,
-        'expires_at'     => now()->subMinutes(5), // already past!
+        'user_id' => $this->userA->id,
+        'session_id' => 'sess_expired',
+        'quantity' => 1,
+        'expires_at' => now()->subMinutes(5), // already past!
     ]);
 
     // User B should still be able to reserve
@@ -209,34 +211,34 @@ test('ReleaseExpiredReservationsJob removes all expired unconfirmed reservations
     // 2 expired reservations
     TicketReservation::create([
         'ticket_type_id' => $this->ticketType->id,
-        'user_id'        => $this->userA->id,
-        'session_id'     => 'sess_old_1',
-        'quantity'       => 1,
-        'expires_at'     => now()->subMinutes(15),
+        'user_id' => $this->userA->id,
+        'session_id' => 'sess_old_1',
+        'quantity' => 1,
+        'expires_at' => now()->subMinutes(15),
     ]);
 
     $ticketTypeB = TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'VIP',
-        'price'    => 100,
+        'name' => 'VIP',
+        'price' => 100,
         'quantity' => 10,
     ]);
 
     TicketReservation::create([
         'ticket_type_id' => $ticketTypeB->id,
-        'user_id'        => $this->userB->id,
-        'session_id'     => 'sess_old_2',
-        'quantity'       => 2,
-        'expires_at'     => now()->subSeconds(30),
+        'user_id' => $this->userB->id,
+        'session_id' => 'sess_old_2',
+        'quantity' => 2,
+        'expires_at' => now()->subSeconds(30),
     ]);
 
     // 1 still active reservation (should NOT be deleted)
     TicketReservation::create([
         'ticket_type_id' => $ticketTypeB->id,
-        'user_id'        => $this->userB->id,
-        'session_id'     => 'sess_active',
-        'quantity'       => 1,
-        'expires_at'     => now()->addMinutes(8),
+        'user_id' => $this->userB->id,
+        'session_id' => 'sess_active',
+        'quantity' => 1,
+        'expires_at' => now()->addMinutes(8),
     ]);
 
     $count = $this->service->cleanupExpired();
@@ -252,16 +254,16 @@ test('ReleaseExpiredReservationsJob removes all expired unconfirmed reservations
 test('ReleaseExpiredReservationsJob can be dispatched and runs correctly', function () {
     TicketReservation::create([
         'ticket_type_id' => $this->ticketType->id,
-        'user_id'        => $this->userA->id,
-        'session_id'     => 'sess_dispatch_test',
-        'quantity'       => 1,
-        'expires_at'     => now()->subMinutes(1),
+        'user_id' => $this->userA->id,
+        'session_id' => 'sess_dispatch_test',
+        'quantity' => 1,
+        'expires_at' => now()->subMinutes(1),
     ]);
 
     expect(TicketReservation::expired()->count())->toBe(1);
 
     // Run the job inline (QUEUE_CONNECTION=sync in testing)
-    (new ReleaseExpiredReservationsJob())->handle($this->service);
+    (new ReleaseExpiredReservationsJob)->handle($this->service);
 
     expect(TicketReservation::expired()->count())->toBe(0);
 });
@@ -279,12 +281,12 @@ test('confirmReservation links the reservation to an order', function () {
     );
 
     $order = Order::create([
-        'organizer_id'   => $this->organizer->id,
-        'event_id'       => $this->event->id,
-        'user_id'        => $this->userA->id,
-        'order_number'   => 'ORD-CNF-001',
-        'total_amount'   => 50,
-        'status'         => 'paid',
+        'organizer_id' => $this->organizer->id,
+        'event_id' => $this->event->id,
+        'user_id' => $this->userA->id,
+        'order_number' => 'ORD-CNF-001',
+        'total_amount' => 50,
+        'status' => 'paid',
         'payment_intent_id' => 'pi_confirmed_001',
     ]);
 
@@ -313,32 +315,32 @@ test('CheckoutService::fulfillOrder confirms the reservation after successful pa
     );
 
     $order = Order::create([
-        'organizer_id'      => $this->organizer->id,
-        'event_id'          => $this->event->id,
-        'user_id'           => $this->userA->id,
-        'reservation_id'    => $reservation->id,
-        'order_number'      => 'ORD-FULFILL-001',
-        'total_amount'      => 50,
-        'status'            => 'pending',
+        'organizer_id' => $this->organizer->id,
+        'event_id' => $this->event->id,
+        'user_id' => $this->userA->id,
+        'reservation_id' => $reservation->id,
+        'order_number' => 'ORD-FULFILL-001',
+        'total_amount' => 50,
+        'status' => 'pending',
         'payment_intent_id' => 'cs_fulfill_001',
     ]);
 
     $session = (object) [
-        'id'             => 'cs_fulfill_001',
+        'id' => 'cs_fulfill_001',
         'payment_intent' => 'pi_fulfill_001',
-        'amount_total'   => 5000,
-        'currency'       => 'eur',
-        'metadata'       => (object) [
-            'order_id'       => $order->id,
+        'amount_total' => 5000,
+        'currency' => 'eur',
+        'metadata' => (object) [
+            'order_id' => $order->id,
             'ticket_type_id' => $this->ticketType->id,
-            'quantity'       => 1,
+            'quantity' => 1,
             'reservation_id' => $reservation->id,
         ],
     ];
 
     Bus::fake();
 
-    $checkoutService = new \App\Services\CheckoutService();
+    $checkoutService = new CheckoutService;
     $checkoutService->fulfillOrder($session);
 
     // Reservation should now be confirmed (has order_id)
@@ -352,7 +354,7 @@ test('CheckoutService::fulfillOrder confirms the reservation after successful pa
     $order->refresh();
     expect($order->status)->toBe('paid');
 
-    Bus::assertDispatched(\App\Jobs\SendOrderTicketsJob::class);
+    Bus::assertDispatched(SendOrderTicketsJob::class);
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -402,18 +404,18 @@ test('same user reserving again replaces their existing reservation without doub
 test('TicketReservation isExpired() returns correct value based on expires_at', function () {
     $active = TicketReservation::create([
         'ticket_type_id' => $this->ticketType->id,
-        'user_id'        => $this->userA->id,
-        'session_id'     => 'sess_is_expired_a',
-        'quantity'       => 1,
-        'expires_at'     => now()->addMinutes(5),
+        'user_id' => $this->userA->id,
+        'session_id' => 'sess_is_expired_a',
+        'quantity' => 1,
+        'expires_at' => now()->addMinutes(5),
     ]);
 
     $expired = TicketReservation::create([
         'ticket_type_id' => $this->ticketType->id,
-        'user_id'        => $this->userB->id,
-        'session_id'     => 'sess_is_expired_b',
-        'quantity'       => 1,
-        'expires_at'     => now()->subSeconds(1),
+        'user_id' => $this->userB->id,
+        'session_id' => 'sess_is_expired_b',
+        'quantity' => 1,
+        'expires_at' => now()->subSeconds(1),
     ]);
 
     expect($active->isExpired())->toBeFalse();

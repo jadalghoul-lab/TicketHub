@@ -4,15 +4,19 @@ namespace App\Livewire\Organizer;
 
 use App\Models\Ticket;
 use App\Services\TicketService;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 class GlobalScanner extends Component
 {
     public string $manualCode = '';
+
     public ?array $scanResult = null;
+
     public ?Ticket $lastTicket = null;
+
     public int $totalTicketsToday = 0;
+
     public int $checkedInToday = 0;
 
     public function mount()
@@ -23,25 +27,27 @@ class GlobalScanner extends Component
     public function refreshStats()
     {
         $organizerId = auth()->user()->organizer->id;
-        
-        $this->totalTicketsToday = Ticket::whereHas('event', function($q) use ($organizerId) {
+
+        $this->totalTicketsToday = Ticket::whereHas('event', function ($q) use ($organizerId) {
             $q->where('organizer_id', $organizerId)
-              ->whereDate('start_date', '<=', now())
-              ->whereDate('start_date', '>=', now()->subDays(1));
+                ->whereDate('start_date', '<=', now())
+                ->whereDate('start_date', '>=', now()->subDays(1));
         })->count();
 
-        $this->checkedInToday = Ticket::whereHas('event', function($q) use ($organizerId) {
+        $this->checkedInToday = Ticket::whereHas('event', function ($q) use ($organizerId) {
             $q->where('organizer_id', $organizerId);
         })->where('status', 'used')
-          ->whereDate('scanned_at', now())
-          ->count();
+            ->whereDate('scanned_at', now())
+            ->count();
     }
 
-    public function scan(string $code = null)
+    public function scan(?string $code = null)
     {
         $code = $code ?: $this->manualCode;
 
-        if (!$code) return;
+        if (! $code) {
+            return;
+        }
 
         $ticketService = app(TicketService::class);
         $result = $ticketService->validateAndCheckInGlobal(

@@ -1,16 +1,15 @@
 <?php
 
-use App\Models\User;
-use App\Models\Organizer;
-use App\Models\Event;
-use App\Enums\Role;
 use App\Enums\EventStatus;
+use App\Enums\Role;
 use App\Livewire\Organizer\EventManager;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Event;
+use App\Models\Organizer;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create(['role' => Role::ORGANIZER]);
@@ -93,7 +92,7 @@ test('organizer can soft delete and restore an event', function () {
 
     $component = Livewire::actingAs($this->user)
         ->test(EventManager::class);
-        
+
     $component->call('deleteEvent', $event->id);
     expect($event->refresh()->trashed())->toBeTrue();
 
