@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('max_capacity')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->index('organizer_id');
         });
     }

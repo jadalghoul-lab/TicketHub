@@ -34,7 +34,7 @@
     <div class="bg-white dark:bg-zinc-800 rounded-[2rem] border border-slate-50 dark:border-zinc-700 p-6 flex flex-col md:flex-row gap-6 items-center shadow-sm">
         <div class="w-full md:w-32 h-32 rounded-2xl bg-slate-100 dark:bg-zinc-700 overflow-hidden flex-shrink-0">
             @if($event->image)
-                <img src="{{ Storage::url($event->image) }}" class="w-full h-full object-cover">
+                <img src="{{ $event->image_url }}" class="w-full h-full object-cover">
             @else
                 <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-zinc-600">
                     <span class="material-symbols-outlined text-4xl">image</span>

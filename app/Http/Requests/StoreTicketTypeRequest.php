@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Event;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,15 +14,15 @@ class StoreTicketTypeRequest extends FormRequest
     public function authorize(): bool
     {
         $eventId = $this->input('event_id');
-        $event = \App\Models\Event::find($eventId);
-        
+        $event = Event::find($eventId);
+
         return $event && auth()->check() && auth()->user()->can('update', $event);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {

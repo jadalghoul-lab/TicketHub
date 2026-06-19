@@ -1,28 +1,31 @@
 <?php
 
-use App\Models\User;
-use App\Models\Event;
-use App\Models\TicketType;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\Payment;
-use App\Models\Ticket;
 use App\Enums\EventStatus;
 use App\Enums\Role;
+use App\Jobs\SendOrderTicketsJob;
+use App\Models\Event;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Organizer;
+use App\Models\Ticket;
+use App\Models\TicketType;
+use App\Models\User;
+use App\Services\CheckoutService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
-use Stripe\Checkout\Session;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create(['role' => Role::CUSTOMER]);
     $this->organizerUser = User::factory()->create(['role' => Role::ORGANIZER]);
-    $this->organizer = \App\Models\Organizer::create([
+    $this->organizer = Organizer::create([
         'user_id' => $this->organizerUser->id,
         'company_name' => 'Test Org',
         'slug' => 'test-org',
     ]);
-    
+
     $this->event = Event::create([
         'organizer_id' => $this->organizer->id,
         'title' => 'Test Event',
@@ -62,26 +65,26 @@ test('order system fulfills order and creates all required records', function ()
     ]);
 
     // 2. Simulate Webhook
-    $session = (object)[
+    $session = (object) [
         'id' => 'cs_test_123',
         'payment_intent' => 'pi_test_123',
         'amount_total' => 5000, // 50.00
         'currency' => 'eur',
-        'metadata' => (object)[
+        'metadata' => (object) [
             'order_id' => $order->id,
             'ticket_type_id' => $this->ticketType->id,
             'quantity' => 1,
-        ]
+        ],
     ];
 
-    \Illuminate\Support\Facades\Bus::fake();
+    Bus::fake();
 
-    $service = new \App\Services\CheckoutService();
+    $service = new CheckoutService;
     $service->fulfillOrder($session);
 
     // 3. Assertions
-    \Illuminate\Support\Facades\Bus::assertDispatched(\App\Jobs\SendOrderTicketsJob::class);
-    
+    Bus::assertDispatched(SendOrderTicketsJob::class);
+
     $order->refresh();
     expect($order->status)->toBe('paid');
 
@@ -100,7 +103,7 @@ test('order system fulfills order and creates all required records', function ()
     ]);
 
     expect(Ticket::where('order_id', $order->id)->count())->toBe(1);
-    
+
     $this->ticketType->refresh();
     expect($this->ticketType->quantity)->toBe(99);
 });
@@ -116,11 +119,11 @@ test('webhook handles payment failure', function () {
         'payment_intent_id' => 'pi_fail_123',
     ]);
 
-    $intent = (object)[
+    $intent = (object) [
         'id' => 'pi_fail_123',
     ];
 
-    $service = new \App\Services\CheckoutService();
+    $service = new CheckoutService;
     $service->handleFailure($intent);
 
     $order->refresh();
@@ -148,15 +151,15 @@ test('webhook handles charge refund', function () {
         'status' => 'valid',
     ]);
 
-    $charge = (object)[
+    $charge = (object) [
         'payment_intent' => 'pi_refund_123',
     ];
 
-    $service = new \App\Services\CheckoutService();
+    $service = new CheckoutService;
     $service->handleRefund($charge);
 
     $order->refresh();
     expect($order->status)->toBe('refunded');
-    
+
     expect(Ticket::where('order_id', $order->id)->first()->status)->toBe('refunded');
 });

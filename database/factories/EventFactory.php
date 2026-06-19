@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enums\EventStatus;
 use App\Models\Event;
 use App\Models\Organizer;
 use App\Models\Venue;
-use App\Enums\EventStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -16,11 +16,12 @@ class EventFactory extends Factory
     public function definition(): array
     {
         $title = $this->faker->sentence(3);
+
         return [
             'organizer_id' => Organizer::factory(),
             'venue_id' => Venue::factory(),
             'title' => $title,
-            'slug' => Str::slug($title) . '-' . $this->faker->numberBetween(100, 999),
+            'slug' => Str::slug($title).'-'.$this->faker->numberBetween(100, 999),
             'description' => $this->faker->paragraph(),
             'category' => $this->faker->randomElement(['music', 'sports', 'theater', 'festival', 'other']),
             'start_date' => now()->addDays($this->faker->numberBetween(1, 60)),

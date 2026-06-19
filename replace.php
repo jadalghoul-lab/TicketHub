@@ -1,4 +1,5 @@
 <?php
+
 $file = 'resources/views/organizer/dashboard.blade.php';
 $content = file_get_contents($file);
 
@@ -28,4 +29,4 @@ $replacements = [
 
 $content = str_replace(array_keys($replacements), array_values($replacements), $content);
 file_put_contents($file, $content);
-echo "Replaced styling in dashboard.blade.php";
+echo 'Replaced styling in dashboard.blade.php';

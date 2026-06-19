@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\BelongsToOrganizer;
 use App\Enums\EventStatus;
+use App\Traits\BelongsToOrganizer;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Event extends Model
 {
-    use SoftDeletes, BelongsToOrganizer, HasFactory;
+    use BelongsToOrganizer, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'organizer_id',
@@ -74,7 +74,7 @@ class Event extends Model
      */
     public function getImageUrlAttribute()
     {
-        if (!$this->image) {
+        if (! $this->image) {
             return 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400';
         }
 
@@ -82,7 +82,7 @@ class Event extends Model
             return $this->image;
         }
 
-        return \Illuminate\Support\Facades\Storage::url($this->image);
+        return Storage::url($this->image);
     }
 
     public function getRouteKeyName()

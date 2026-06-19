@@ -1,17 +1,18 @@
 <?php
 
-use App\Models\User;
-use App\Models\Event;
-use App\Models\Organizer;
-use App\Models\TicketType;
-use App\Models\Ticket;
-use App\Models\Order;
-use App\Enums\Role;
 use App\Enums\EventStatus;
+use App\Enums\Role;
+use App\Models\Event;
+use App\Models\Order;
+use App\Models\Organizer;
+use App\Models\Ticket;
+use App\Models\TicketType;
+use App\Models\User;
 use App\Services\TicketService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->organizerUser = User::factory()->create(['role' => Role::ORGANIZER]);
@@ -20,7 +21,7 @@ beforeEach(function () {
         'company_name' => 'Test Org',
         'slug' => 'test-org',
     ]);
-    
+
     $this->event = Event::create([
         'organizer_id' => $this->organizer->id,
         'title' => 'Test Event',
@@ -40,7 +41,7 @@ beforeEach(function () {
     ]);
 
     $this->customer = User::factory()->create(['role' => Role::CUSTOMER]);
-    
+
     $this->order = Order::create([
         'organizer_id' => $this->organizer->id,
         'event_id' => $this->event->id,
@@ -62,12 +63,12 @@ beforeEach(function () {
 });
 
 test('organizer can validate and check-in a valid ticket', function () {
-    $service = new TicketService();
+    $service = new TicketService;
     $result = $service->validateAndCheckIn($this->ticket->uuid, $this->event->id, $this->organizerUser->id);
 
     expect($result['success'])->toBeTrue();
     expect($result['message'])->toBe('Access Granted!');
-    
+
     $this->ticket->refresh();
     expect($this->ticket->status)->toBe('used');
     expect($this->ticket->scanned_at)->not->toBeNull();
@@ -77,7 +78,7 @@ test('organizer can validate and check-in a valid ticket', function () {
 test('scanner denies used tickets', function () {
     $this->ticket->update(['status' => 'used', 'scanned_at' => now()]);
 
-    $service = new TicketService();
+    $service = new TicketService;
     $result = $service->validateAndCheckIn($this->ticket->uuid, $this->event->id, $this->organizerUser->id);
 
     expect($result['success'])->toBeFalse();
@@ -96,7 +97,7 @@ test('scanner denies tickets from other events', function () {
         'status' => EventStatus::PUBLISHED,
     ]);
 
-    $service = new TicketService();
+    $service = new TicketService;
     $result = $service->validateAndCheckIn($this->ticket->uuid, $otherEvent->id, $this->organizerUser->id);
 
     expect($result['success'])->toBeFalse();
@@ -104,7 +105,7 @@ test('scanner denies tickets from other events', function () {
 });
 
 test('scanner denies invalid codes', function () {
-    $service = new TicketService();
+    $service = new TicketService;
     $result = $service->validateAndCheckIn('INVALID-CODE', $this->event->id, $this->organizerUser->id);
 
     expect($result['success'])->toBeFalse();

@@ -171,7 +171,7 @@ $migrations = [
     ",
 ];
 
-$files = glob(__DIR__ . '/database/migrations/*.php');
+$files = glob(__DIR__.'/database/migrations/*.php');
 
 foreach ($files as $file) {
     foreach ($migrations as $name => $content) {
@@ -184,7 +184,7 @@ foreach ($files as $file) {
                 $code
             );
             file_put_contents($file, $code);
-            echo "Updated: " . basename($file) . "\n";
+            echo 'Updated: '.basename($file)."\n";
         }
     }
 }

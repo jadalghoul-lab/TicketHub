@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\PayoutRequest;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\PayoutRequest;
 
 class PayoutManager extends Component
 {
     use WithPagination;
 
     public $search = '';
+
     public $statusFilter = '';
 
     public function updated($property)
@@ -23,7 +24,7 @@ class PayoutManager extends Component
     public function updateStatus($id, $newStatus)
     {
         $payout = PayoutRequest::findOrFail($id);
-        
+
         if (in_array($newStatus, ['approved', 'paid', 'rejected'])) {
             $payout->update(['status' => $newStatus]);
             session()->flash('success', "Payout request #{$id} marked as {$newStatus}.");
@@ -42,12 +43,12 @@ class PayoutManager extends Component
         if ($this->search) {
             $query->whereHas('organizer.user', function ($q) {
                 $q->where('name', 'like', "%{$this->search}%")
-                  ->orWhere('email', 'like', "%{$this->search}%");
+                    ->orWhere('email', 'like', "%{$this->search}%");
             });
         }
 
         return view('livewire.admin.payout-manager', [
-            'payouts' => $query->paginate(15)
+            'payouts' => $query->paginate(15),
         ])->layout('layouts.app');
     }
 }

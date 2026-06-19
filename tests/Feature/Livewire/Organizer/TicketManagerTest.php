@@ -1,15 +1,16 @@
 <?php
 
-use App\Models\User;
-use App\Models\Organizer;
-use App\Models\Event;
-use App\Models\TicketType;
-use App\Enums\Role;
 use App\Enums\EventStatus;
+use App\Enums\Role;
 use App\Livewire\Organizer\TicketManager;
+use App\Models\Event;
+use App\Models\Organizer;
+use App\Models\TicketType;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create(['role' => Role::ORGANIZER]);
@@ -18,7 +19,7 @@ beforeEach(function () {
         'company_name' => 'Test Company',
         'slug' => 'test-company',
     ]);
-    
+
     $this->event = Event::create([
         'organizer_id' => $this->organizer->id,
         'title' => 'Test Event',

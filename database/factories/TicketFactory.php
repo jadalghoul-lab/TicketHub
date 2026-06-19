@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Ticket;
 use App\Models\Event;
+use App\Models\Order;
+use App\Models\Ticket;
 use App\Models\TicketType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -16,12 +17,12 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         return [
-            'order_id' => \App\Models\Order::factory(),
+            'order_id' => Order::factory(),
             'event_id' => Event::factory(),
             'ticket_type_id' => TicketType::factory(),
             'user_id' => User::factory(),
             'uuid' => (string) Str::uuid(),
-            'ticket_number' => 'TKT-' . strtoupper(Str::random(8)),
+            'ticket_number' => 'TKT-'.strtoupper(Str::random(8)),
             'status' => 'valid',
             'scanned_at' => null,
             'scanned_by' => null,

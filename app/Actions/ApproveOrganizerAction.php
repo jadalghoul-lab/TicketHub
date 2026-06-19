@@ -9,14 +9,12 @@ class ApproveOrganizerAction
     /**
      * Approve or reject an organizer.
      *
-     * @param Organizer $organizer
-     * @param string $status 'active' or 'inactive'
-     * @return Organizer
+     * @param  string  $status  'active' or 'inactive'
      */
     public function execute(Organizer $organizer, string $status = 'active'): Organizer
     {
-        if (!in_array($status, ['active', 'inactive'])) {
-            throw new \InvalidArgumentException("Invalid status provided.");
+        if (! in_array($status, ['active', 'inactive'])) {
+            throw new \InvalidArgumentException('Invalid status provided.');
         }
 
         $organizer->status = $status;

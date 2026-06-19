@@ -2,23 +2,47 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Event;
 use App\Enums\EventStatus;
+use App\Models\Event;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\Laravel\Facades\Image;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class EventManager extends Component
 {
-    use WithPagination, \Livewire\WithFileUploads;
+    use \Livewire\WithFileUploads, WithPagination;
 
     public $search = '';
+
     public $statusFilter = 'all';
+
     public $showModal = false;
+
     public $isEditing = false;
+
     public $editingEventId;
 
     // Form fields
-    public $title, $category = 'Music', $start_date, $time, $capacity, $city, $country, $description, $image;
+    public $title;
+
+    public $category = 'Music';
+
+    public $start_date;
+
+    public $time;
+
+    public $capacity;
+
+    public $city;
+
+    public $country;
+
+    public $description;
+
+    public $image;
 
     protected $rules = [
         'title' => 'required|min:5',
@@ -41,7 +65,7 @@ class EventManager extends Component
         $this->city = $event->city;
         $this->country = $event->country;
         $this->description = $event->description;
-        
+
         $this->isEditing = true;
         $this->showModal = true;
     }
@@ -51,7 +75,7 @@ class EventManager extends Component
         $this->validate();
 
         $event = Event::withoutGlobalScopes()->findOrFail($this->editingEventId);
-        
+
         $data = [
             'title' => $this->title,
             'category' => $this->category,
@@ -63,18 +87,18 @@ class EventManager extends Component
             'description' => $this->description,
         ];
 
-        if ($this->image && !is_string($this->image)) {
-            $img = \Intervention\Image\Laravel\Facades\Image::read($this->image->getRealPath());
+        if ($this->image && ! is_string($this->image)) {
+            $img = Image::read($this->image->getRealPath());
             $img->scaleDown(width: 1200);
-            $encoded = $img->encode(new \Intervention\Image\Encoders\WebpEncoder(80));
-            $filename = \Illuminate\Support\Str::random(40) . '.webp';
-            $path = 'events/' . $filename;
-            \Illuminate\Support\Facades\Storage::disk('public')->put($path, (string) $encoded);
+            $encoded = $img->encode(new WebpEncoder(80));
+            $filename = Str::random(40).'.webp';
+            $path = 'events/'.$filename;
+            Storage::disk('public')->put($path, (string) $encoded);
             $data['image'] = $path;
         }
 
         $event->update($data);
-        
+
         $this->showModal = false;
         session()->flash('success', 'Event updated by Admin.');
     }
@@ -96,7 +120,7 @@ class EventManager extends Component
     public function toggleBlock($id)
     {
         $event = Event::withoutGlobalScopes()->findOrFail($id);
-        
+
         if ($event->status === EventStatus::BLOCKED) {
             $event->status = EventStatus::PUBLISHED;
             session()->flash('success', 'Event unblocked.');
@@ -104,7 +128,7 @@ class EventManager extends Component
             $event->status = EventStatus::BLOCKED;
             session()->flash('success', 'Event blocked successfully.');
         }
-        
+
         $event->save();
     }
 
@@ -113,10 +137,10 @@ class EventManager extends Component
         $query = Event::withoutGlobalScopes()->with('organizer')->withTrashed();
 
         if ($this->search) {
-            $query->where('title', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('organizer', function($q) {
-                      $q->where('company_name', 'like', '%' . $this->search . '%');
-                  });
+            $query->where('title', 'like', '%'.$this->search.'%')
+                ->orWhereHas('organizer', function ($q) {
+                    $q->where('company_name', 'like', '%'.$this->search.'%');
+                });
         }
 
         if ($this->statusFilter === 'published') {
@@ -128,7 +152,7 @@ class EventManager extends Component
         }
 
         return view('livewire.admin.event-manager', [
-            'events' => $query->latest()->paginate(12)
+            'events' => $query->latest()->paginate(12),
         ])->layout('layouts.app');
     }
 }

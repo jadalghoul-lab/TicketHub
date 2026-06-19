@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Organizer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Order;
 use App\Models\Ticket;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -16,8 +16,8 @@ class DashboardController extends Controller
         $organizer = Auth::user()->organizer;
         $events = Event::where('organizer_id', $organizer->id)->latest()->get();
         $period = $request->get('period', 'month');
-        
-        $dateFilter = match($period) {
+
+        $dateFilter = match ($period) {
             'today' => now()->startOfDay(),
             'week' => now()->startOfWeek(),
             'month' => now()->startOfMonth(),
@@ -75,7 +75,7 @@ class DashboardController extends Controller
             ->get();
 
         return view('organizer.dashboard', compact(
-            'organizer', 'events', 'totalRevenue', 'totalTickets', 
+            'organizer', 'events', 'totalRevenue', 'totalTickets',
             'attendanceRate', 'recentOrders', 'upcomingEvents', 'topEvents', 'period', 'recentScans'
         ));
     }

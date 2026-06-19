@@ -2,18 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Services\OrganizerService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Services\OrganizerService;
 
 class OrganizerProfile extends Component
 {
     use WithFileUploads;
 
     public $company_name = '';
+
     public $contact_email = '';
+
     public $payout_email = '';
+
     public $logo; // new upload
+
     public $current_logo = null;
 
     public function mount()

@@ -1,9 +1,10 @@
 <?php
 
+use App\Livewire\Public\SupportForm;
 use App\Mail\SupportContactMail;
 use Illuminate\Support\Facades\Mail;
-use App\Livewire\Public\SupportForm;
 use Livewire\Livewire;
+
 use function Pest\Laravel\get;
 
 it('can view the support page', function () {

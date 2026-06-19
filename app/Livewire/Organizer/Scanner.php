@@ -5,16 +5,21 @@ namespace App\Livewire\Organizer;
 use App\Models\Event;
 use App\Models\Ticket;
 use App\Services\TicketService;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 class Scanner extends Component
 {
     public Event $event;
+
     public string $manualCode = '';
+
     public ?array $scanResult = null;
+
     public ?Ticket $lastTicket = null;
+
     public int $totalTickets = 0;
+
     public int $checkedInCount = 0;
 
     public function mount(Event $event)
@@ -35,11 +40,13 @@ class Scanner extends Component
         $this->checkedInCount = Ticket::where('event_id', $this->event->id)->where('status', 'used')->count();
     }
 
-    public function scan(string $code = null)
+    public function scan(?string $code = null)
     {
         $code = $code ?: $this->manualCode;
 
-        if (!$code) return;
+        if (! $code) {
+            return;
+        }
 
         $ticketService = app(TicketService::class);
         $result = $ticketService->validateAndCheckIn(

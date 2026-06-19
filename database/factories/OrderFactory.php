@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Order;
-use App\Models\User;
 use App\Models\Event;
+use App\Models\Order;
 use App\Models\Organizer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -19,10 +19,10 @@ class OrderFactory extends Factory
             'organizer_id' => Organizer::factory(),
             'event_id' => Event::factory(),
             'user_id' => User::factory(),
-            'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+            'order_number' => 'ORD-'.strtoupper(Str::random(10)),
             'total_amount' => $this->faker->numberBetween(50, 200),
             'status' => 'paid',
-            'payment_intent_id' => 'pi_' . Str::random(24),
+            'payment_intent_id' => 'pi_'.Str::random(24),
         ];
     }
 }

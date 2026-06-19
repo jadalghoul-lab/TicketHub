@@ -49,7 +49,7 @@
 
                 <div class="h-40 bg-slate-100 dark:bg-slate-800 relative overflow-hidden">
                     @if($event->image)
-                        <img src="{{ Storage::url($event->image) }}" class="w-full h-full object-cover" alt="{{ $event->title }}">
+                        <img src="{{ $event->image_url }}" class="w-full h-full object-cover" alt="{{ $event->title }}">
                     @else
                         <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-slate-700">
                             <span class="material-symbols-outlined text-4xl">image</span>

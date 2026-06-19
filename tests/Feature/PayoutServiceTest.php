@@ -1,9 +1,8 @@
 <?php
 
-use App\Models\User;
-use App\Models\Organizer;
 use App\Models\Event;
 use App\Models\Order;
+use App\Models\Organizer;
 use App\Models\PayoutRequest;
 use App\Services\PayoutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,14 +18,14 @@ it('calculates available balance correctly', function () {
         'organizer_id' => $organizer->id,
         'event_id' => $event->id,
         'status' => 'paid',
-        'total_amount' => 100.00
+        'total_amount' => 100.00,
     ]);
-    
+
     Order::factory()->create([
         'organizer_id' => $organizer->id,
         'event_id' => $event->id,
         'status' => 'paid',
-        'total_amount' => 50.00
+        'total_amount' => 50.00,
     ]);
 
     // Unpaid order should be ignored
@@ -34,10 +33,10 @@ it('calculates available balance correctly', function () {
         'organizer_id' => $organizer->id,
         'event_id' => $event->id,
         'status' => 'pending',
-        'total_amount' => 200.00
+        'total_amount' => 200.00,
     ]);
 
-    $service = new PayoutService();
+    $service = new PayoutService;
     $balance = $service->getAvailableBalance($organizer->id);
 
     expect($balance)->toBe(150.00);
@@ -51,17 +50,17 @@ it('deducts requested payouts from available balance', function () {
         'organizer_id' => $organizer->id,
         'event_id' => $event->id,
         'status' => 'paid',
-        'total_amount' => 200.00
+        'total_amount' => 200.00,
     ]);
 
     PayoutRequest::create([
         'organizer_id' => $organizer->id,
         'amount' => 50.00,
         'status' => 'pending',
-        'bank_details' => 'BE1234'
+        'bank_details' => 'BE1234',
     ]);
 
-    $service = new PayoutService();
+    $service = new PayoutService;
     $balance = $service->getAvailableBalance($organizer->id);
 
     // 200 - 50 = 150
@@ -76,10 +75,10 @@ it('prevents requesting payout more than available balance', function () {
         'organizer_id' => $organizer->id,
         'event_id' => $event->id,
         'status' => 'paid',
-        'total_amount' => 100.00
+        'total_amount' => 100.00,
     ]);
 
-    $service = new PayoutService();
+    $service = new PayoutService;
     $result = $service->requestPayout($organizer, 150.00, 'BE1234');
 
     expect($result['success'])->toBeFalse()
@@ -94,10 +93,10 @@ it('creates payout request successfully', function () {
         'organizer_id' => $organizer->id,
         'event_id' => $event->id,
         'status' => 'paid',
-        'total_amount' => 100.00
+        'total_amount' => 100.00,
     ]);
 
-    $service = new PayoutService();
+    $service = new PayoutService;
     $result = $service->requestPayout($organizer, 50.00, 'BE1234');
 
     expect($result['success'])->toBeTrue()
@@ -107,6 +106,6 @@ it('creates payout request successfully', function () {
     $this->assertDatabaseHas('payout_requests', [
         'organizer_id' => $organizer->id,
         'amount' => 50.00,
-        'status' => 'pending'
+        'status' => 'pending',
     ]);
 });

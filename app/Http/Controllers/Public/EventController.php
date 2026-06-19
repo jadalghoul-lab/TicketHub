@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Enums\EventStatus;
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Order;
+use App\Services\CheckoutService;
+use App\Services\TicketReservationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
 
 class EventController extends Controller
 {
@@ -20,9 +28,9 @@ class EventController extends Controller
 
         // Search filter
         if ($request->search) {
-            $query->where(function($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->search . '%')
-                  ->orWhere('description', 'like', '%' . $request->search . '%');
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%'.$request->search.'%')
+                    ->orWhere('description', 'like', '%'.$request->search.'%');
             });
         }
 
@@ -33,7 +41,7 @@ class EventController extends Controller
 
         // City filter
         if ($request->city) {
-            $query->where('city', 'like', '%' . $request->city . '%');
+            $query->where('city', 'like', '%'.$request->city.'%');
         }
 
         // Date range filter
@@ -47,27 +55,27 @@ class EventController extends Controller
 
         // Free / Paid filter
         if ($request->type === 'free') {
-            $query->whereHas('ticketTypes', fn($q) => $q->where('price', 0));
+            $query->whereHas('ticketTypes', fn ($q) => $q->where('price', 0));
         } elseif ($request->type === 'paid') {
-            $query->whereHas('ticketTypes', fn($q) => $q->where('price', '>', 0));
+            $query->whereHas('ticketTypes', fn ($q) => $q->where('price', '>', 0));
         }
 
         // Price filter
         if ($request->max_price && $request->max_price < 500) {
-            $query->whereHas('ticketTypes', fn($q) => $q->where('price', '<=', $request->max_price));
+            $query->whereHas('ticketTypes', fn ($q) => $q->where('price', '<=', $request->max_price));
         }
 
         // Available only (stock check)
         if ($request->available_only) {
-            $query->whereHas('ticketTypes', fn($q) => $q->where('quantity', '>', 0));
+            $query->whereHas('ticketTypes', fn ($q) => $q->where('quantity', '>', 0));
         }
 
         // Sorting
         match ($request->sort) {
             'price_asc' => $query->join('ticket_types', 'events.id', '=', 'ticket_types.event_id')
-                                 ->orderBy('ticket_types.price')->select('events.*'),
-            'newest'    => $query->orderByDesc('events.created_at'),
-            default     => $query->orderBy('start_date'),
+                ->orderBy('ticket_types.price')->select('events.*'),
+            'newest' => $query->orderByDesc('events.created_at'),
+            default => $query->orderBy('start_date'),
         };
 
         $events = $query->paginate(12);
@@ -87,11 +95,11 @@ class EventController extends Controller
             ->firstOrFail();
 
         $user = auth()->user();
-        
+
         // Robust Admin check
         $isAdmin = false;
         if ($user) {
-            $isAdmin = $user->role === \App\Enums\Role::ADMIN || $user->role->value === 'admin' || (method_exists($user, 'isAdmin') && $user->isAdmin());
+            $isAdmin = $user->role === Role::ADMIN || $user->role->value === 'admin' || (method_exists($user, 'isAdmin') && $user->isAdmin());
         }
 
         // Owner check
@@ -101,31 +109,31 @@ class EventController extends Controller
         }
 
         // Publicly visible only if published and NOT trashed
-        $isPubliclyVisible = $event->status === \App\Enums\EventStatus::PUBLISHED && !$event->trashed();
+        $isPubliclyVisible = $event->status === EventStatus::PUBLISHED && ! $event->trashed();
 
-        if (!$isPubliclyVisible && !$isAdmin && !$isOwner) {
+        if (! $isPubliclyVisible && ! $isAdmin && ! $isOwner) {
             // Log for debugging if it's the specific slug the user mentioned
             if ($slug === 'food-wine-festival-223') {
-                \Log::info("Access denied for food-wine-festival-223. User: " . ($user ? $user->email : 'Guest') . " Admin: " . ($isAdmin ? 'Yes' : 'No'));
+                \Log::info('Access denied for food-wine-festival-223. User: '.($user ? $user->email : 'Guest').' Admin: '.($isAdmin ? 'Yes' : 'No'));
             }
             abort(404);
         }
 
         // Compute live availability per ticket type (accounts for active holds)
-        $reservationService = app(\App\Services\TicketReservationService::class);
+        $reservationService = app(TicketReservationService::class);
         $ticketAvailability = [];
 
         foreach ($event->ticketTypes as $ticketType) {
             $available = $reservationService->getAvailableQuantity($ticketType, auth()->id());
-            $rawStock  = $ticketType->quantity;
+            $rawStock = $ticketType->quantity;
             $heldCount = $rawStock - $available;
 
             $ticketAvailability[$ticketType->id] = [
-                'available'   => $available,
-                'raw_stock'   => $rawStock,
-                'held_count'  => $heldCount,
-                'is_held'     => $heldCount > 0 && $available === 0,
-                'is_low'      => $available > 0 && $available <= 5,
+                'available' => $available,
+                'raw_stock' => $rawStock,
+                'held_count' => $heldCount,
+                'is_held' => $heldCount > 0 && $available === 0,
+                'is_low' => $available > 0 && $available <= 5,
                 'is_sold_out' => $rawStock === 0,
             ];
         }
@@ -137,24 +145,24 @@ class EventController extends Controller
     /**
      * Handle successful checkout redirect.
      */
-    public function checkoutSuccess(string $orderNumber, \App\Services\CheckoutService $checkoutService)
+    public function checkoutSuccess(string $orderNumber, CheckoutService $checkoutService)
     {
-        $order = \App\Models\Order::where('order_number', $orderNumber)
-            ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+        $order = Order::where('order_number', $orderNumber)
+            ->where('user_id', Auth::id())
             ->firstOrFail();
 
         // Real-time Verification for Test Mode (Retrieves actual Stripe session)
-        if ($order->status === 'pending' && $order->payment_intent_id && !str_starts_with($order->payment_intent_id, 'pi_mock_')) {
+        if ($order->status === 'pending' && $order->payment_intent_id && ! str_starts_with($order->payment_intent_id, 'pi_mock_')) {
             try {
-                \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-                $session = \Stripe\Checkout\Session::retrieve($order->payment_intent_id);
-                
+                Stripe::setApiKey(config('services.stripe.secret'));
+                $session = Session::retrieve($order->payment_intent_id);
+
                 if ($session->payment_status === 'paid') {
                     $checkoutService->fulfillOrder($session);
                     $order->refresh();
                 }
             } catch (\Exception $e) {
-                \Log::error("Stripe Verification Error: " . $e->getMessage());
+                \Log::error('Stripe Verification Error: '.$e->getMessage());
             }
         }
 
@@ -166,8 +174,8 @@ class EventController extends Controller
      */
     public function checkoutCancel(string $orderNumber)
     {
-        $order = \App\Models\Order::where('order_number', $orderNumber)
-            ->where('user_id', \Illuminate\Support\Facades\Auth::id())
+        $order = Order::where('order_number', $orderNumber)
+            ->where('user_id', Auth::id())
             ->firstOrFail();
 
         // Redirect back to event page with info

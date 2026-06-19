@@ -2,25 +2,32 @@
 
 namespace App\Livewire\Organizer;
 
-use Livewire\Component;
 use App\Models\Event;
-use App\Models\TicketType;
+use Livewire\Component;
 
 class TicketManager extends Component
 {
     public Event $event;
 
     public $showModal = false;
+
     public $isEditing = false;
+
     public $ticketTypeId;
 
     // Form fields
     public $name;
+
     public $price;
+
     public $quantity;
+
     public $sales_start;
+
     public $sales_end;
+
     public $max_per_order = 5;
+
     public $description;
 
     public function mount(Event $event)
@@ -59,7 +66,7 @@ class TicketManager extends Component
     {
         $this->resetValidation();
         $ticket = $this->event->ticketTypes()->findOrFail($id);
-        
+
         $this->ticketTypeId = $ticket->id;
         $this->name = $ticket->name;
         $this->price = $ticket->price;
@@ -109,7 +116,7 @@ class TicketManager extends Component
     public function render()
     {
         return view('livewire.organizer.ticket-manager', [
-            'ticketTypes' => $this->event->ticketTypes()->get()
+            'ticketTypes' => $this->event->ticketTypes()->get(),
         ])->layout('layouts.app');
     }
 }

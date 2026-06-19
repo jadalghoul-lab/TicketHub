@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +12,9 @@ class CustomerDashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         $totalTickets = Ticket::where('user_id', $user->id)->count();
-        
+
         $recentOrders = Order::with('event')
             ->where('user_id', $user->id)
             ->latest()

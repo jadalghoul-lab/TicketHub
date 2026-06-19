@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->foreignId('reservation_id')
-                  ->nullable()
-                  ->after('coupon_id')
-                  ->constrained('ticket_reservations')
-                  ->nullOnDelete();
+                ->nullable()
+                ->after('coupon_id')
+                ->constrained('ticket_reservations')
+                ->nullOnDelete();
         });
     }
 

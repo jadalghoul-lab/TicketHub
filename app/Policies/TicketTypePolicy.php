@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\TicketType;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TicketTypePolicy
 {
@@ -37,7 +36,9 @@ class TicketTypePolicy
      */
     public function update(User $user, TicketType $ticketType): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
 
         return $user->isOrganizer() && $user->organizer && $user->organizer->id === $ticketType->event->organizer_id;
     }
@@ -47,7 +48,9 @@ class TicketTypePolicy
      */
     public function delete(User $user, TicketType $ticketType): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
 
         return $user->isOrganizer() && $user->organizer && $user->organizer->id === $ticketType->event->organizer_id;
     }

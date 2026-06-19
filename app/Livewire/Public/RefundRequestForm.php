@@ -4,13 +4,15 @@ namespace App\Livewire\Public;
 
 use App\Models\Order;
 use App\Models\RefundRequest;
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class RefundRequestForm extends Component
 {
     public Order $order;
+
     public $reason = '';
+
     public $showModal = false;
 
     protected $rules = [
@@ -30,6 +32,7 @@ class RefundRequestForm extends Component
         if (RefundRequest::where('order_id', $this->order->id)->exists()) {
             session()->flash('error', 'A refund request already exists for this order.');
             $this->showModal = false;
+
             return;
         }
 
@@ -37,12 +40,14 @@ class RefundRequestForm extends Component
         if ($this->order->event->start_date->isPast()) {
             session()->flash('error', 'Refunds are not allowed after the event has started.');
             $this->showModal = false;
+
             return;
         }
 
         if ($this->order->event->refund_deadline && $this->order->event->refund_deadline->isPast()) {
             session()->flash('error', 'The refund deadline for this event has passed.');
             $this->showModal = false;
+
             return;
         }
 

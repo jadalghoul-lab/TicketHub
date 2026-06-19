@@ -2,17 +2,19 @@
 
 namespace App\Livewire\Organizer;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\PayoutRequest;
 use App\Services\PayoutService;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class PayoutManager extends Component
 {
     use WithPagination;
 
     public $amount;
+
     public $bank_details;
+
     public $showModal = false;
 
     protected function rules()
@@ -39,6 +41,7 @@ class PayoutManager extends Component
 
         if ($this->amount > $availableBalance) {
             $this->addError('amount', 'You cannot request more than your available balance.');
+
             return;
         }
 
@@ -56,7 +59,7 @@ class PayoutManager extends Component
     {
         $organizer = auth()->user()->organizer;
         $availableBalance = $payoutService->getAvailableBalance($organizer->id);
-        
+
         $payouts = PayoutRequest::where('organizer_id', $organizer->id)
             ->orderBy('created_at', 'desc')
             ->paginate(10);

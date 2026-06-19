@@ -2,18 +2,18 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Organizer;
-use App\Models\Event;
-use App\Models\TicketType;
-use App\Models\Order;
-use App\Models\Ticket;
-use App\Enums\Role;
 use App\Enums\EventStatus;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+use App\Enums\Role;
+use App\Models\Event;
+use App\Models\Order;
+use App\Models\Organizer;
+use App\Models\Ticket;
+use App\Models\TicketType;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class TestDataSeeder extends Seeder
 {
@@ -51,7 +51,7 @@ class TestDataSeeder extends Seeder
         foreach ($orgData as $data) {
             $user = User::create([
                 'name' => $data['name'],
-                'email' => Str::slug($data['name']) . '@example.com',
+                'email' => Str::slug($data['name']).'@example.com',
                 'password' => Hash::make('password'),
                 'role' => Role::ORGANIZER,
             ]);
@@ -66,31 +66,31 @@ class TestDataSeeder extends Seeder
 
         // 3. Create 20 Events
         $eventTitles = [
-            'Neon Horizons Tour', 'Cyber Security Summit', 'World Cup Qualifiers', 
+            'Neon Horizons Tour', 'Cyber Security Summit', 'World Cup Qualifiers',
             'Jazz in the Park', 'Food & Wine Festival', 'AI Innovation Night',
             'Abstract Art Gallery', 'Node.js Deep Dive', 'Opera Gala Night',
             'Alpine Ski Cup', 'Blockchain Expo', 'Retro Rock Revival',
             'Shakespeare: Macbeth', 'City Marathon 2024', 'Dota 2 Masters',
             'E-commerce Summit', 'Cloud Native Day', 'Sundance Film Opening',
-            'Street Photo Workshop', 'Master Chef Class'
+            'Street Photo Workshop', 'Master Chef Class',
         ];
 
         $categories = ['music', 'festival', 'sports', 'workshop', 'theater'];
         $cities = ['Brussels', 'Antwerp', 'Ghent', 'Paris', 'London', 'Berlin'];
-        
+
         $createdEvents = [];
         foreach ($eventTitles as $index => $title) {
             $org = $organizers[$index % count($organizers)];
             $event = Event::create([
                 'organizer_id' => $org->id,
                 'title' => $title,
-                'slug' => Str::slug($title . '-' . rand(100, 999)),
+                'slug' => Str::slug($title.'-'.rand(100, 999)),
                 'category' => $categories[$index % count($categories)],
                 'city' => $cities[$index % count($cities)],
                 'country' => 'Belgium',
                 'start_date' => now()->addDays(rand(-10, 60)),
                 'status' => EventStatus::PUBLISHED,
-                'description' => 'Experience the best of ' . $title . ' in ' . $cities[$index % count($cities)] . '.',
+                'description' => 'Experience the best of '.$title.' in '.$cities[$index % count($cities)].'.',
             ]);
 
             // Create 2 ticket types for each event
@@ -115,8 +115,8 @@ class TestDataSeeder extends Seeder
         $customers = [];
         for ($i = 0; $i < 20; $i++) {
             $customers[] = User::create([
-                'name' => 'Customer ' . ($i + 1),
-                'email' => 'customer' . ($i + 1) . '@example.com',
+                'name' => 'Customer '.($i + 1),
+                'email' => 'customer'.($i + 1).'@example.com',
                 'password' => Hash::make('password'),
                 'role' => Role::CUSTOMER,
             ]);
@@ -133,21 +133,21 @@ class TestDataSeeder extends Seeder
                 'organizer_id' => $event->organizer_id,
                 'event_id' => $event->id,
                 'user_id' => $customer->id,
-                'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+                'order_number' => 'ORD-'.strtoupper(Str::random(10)),
                 'total_amount' => $ticketType->price * $quantity,
                 'status' => 'paid',
             ]);
 
             for ($j = 0; $j < $quantity; $j++) {
                 $isScanned = rand(1, 100) <= 30; // 30% chance to be scanned
-                
+
                 Ticket::create([
                     'order_id' => $order->id,
                     'event_id' => $event->id,
                     'ticket_type_id' => $ticketType->id,
                     'user_id' => $customer->id,
                     'uuid' => (string) Str::uuid(),
-                    'ticket_number' => 'TKT-' . strtoupper(Str::random(12)),
+                    'ticket_number' => 'TKT-'.strtoupper(Str::random(12)),
                     'status' => $isScanned ? 'used' : 'valid',
                     'scanned_at' => $isScanned ? now()->subMinutes(rand(1, 120)) : null,
                     'scanned_by' => $isScanned ? $event->organizer->user_id : null,

@@ -2,17 +2,23 @@
 
 namespace App\Livewire\Organizer;
 
+use App\Enums\EventStatus;
+use App\Models\Event;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use App\Models\Event;
-use Illuminate\Support\Str;
 
 class EventManager extends Component
 {
     use WithFileUploads, WithPagination;
 
     public $showModal = false;
+
     public $isEditing = false;
 
     public function mount()
@@ -21,17 +27,26 @@ class EventManager extends Component
             $this->createEvent();
         }
     }
-    
+
     // Form fields
     public $eventId;
+
     public $title;
+
     public $description;
+
     public $category = 'Music';
+
     public $start_date;
+
     public $time;
+
     public $city;
+
     public $country;
+
     public $capacity;
+
     public $image;
 
     // Filters
@@ -63,7 +78,7 @@ class EventManager extends Component
     public function editEvent($id)
     {
         $this->resetValidation();
-        
+
         $event = Event::withTrashed()->where('organizer_id', auth()->user()->organizer->id)->findOrFail($id);
         $this->eventId = $event->id;
         $this->title = $event->title;
@@ -74,7 +89,7 @@ class EventManager extends Component
         $this->city = $event->city;
         $this->country = $event->country;
         $this->capacity = $event->capacity;
-        
+
         $this->isEditing = true;
         $this->showModal = true;
     }
@@ -88,7 +103,7 @@ class EventManager extends Component
         $data = [
             'organizer_id' => $organizer->id,
             'title' => $this->title,
-            'slug' => Str::slug($this->title) . '-' . rand(100, 999),
+            'slug' => Str::slug($this->title).'-'.rand(100, 999),
             'description' => $this->description,
             'category' => $this->category,
             'start_date' => $this->start_date,
@@ -100,27 +115,27 @@ class EventManager extends Component
         ];
 
         if ($this->image) {
-            $manager = \Intervention\Image\ImageManager::usingDriver(\Intervention\Image\Drivers\Gd\Driver::class);
+            $manager = ImageManager::usingDriver(Driver::class);
             $img = $manager->decodePath($this->image->getRealPath());
-            
+
             // Resize image if it's wider than 1200px, keeping aspect ratio
             $img->scaleDown(width: 1200);
-            
+
             // Convert to highly optimized WebP format
-            $encoded = $img->encode(new \Intervention\Image\Encoders\WebpEncoder(80));
-            
-            $filename = Str::random(40) . '.webp';
-            $path = 'events/' . $filename;
-            
-            \Illuminate\Support\Facades\Storage::disk('public')->put($path, (string) $encoded);
-            
+            $encoded = $img->encode(new WebpEncoder(80));
+
+            $filename = Str::random(40).'.webp';
+            $path = 'events/'.$filename;
+
+            Storage::disk('public')->put($path, (string) $encoded);
+
             $data['image'] = $path;
         }
 
         if ($this->isEditing) {
             $event = Event::withTrashed()->where('organizer_id', $organizer->id)->findOrFail($this->eventId);
             unset($data['slug']); // Keep original slug
-            if (!$this->image) {
+            if (! $this->image) {
                 unset($data['image']);
             }
             $event->update($data);
@@ -150,9 +165,9 @@ class EventManager extends Component
     public function togglePublish($id)
     {
         $event = Event::where('organizer_id', auth()->user()->organizer->id)->findOrFail($id);
-        $event->status = $event->status === \App\Enums\EventStatus::PUBLISHED 
-            ? \App\Enums\EventStatus::DRAFT 
-            : \App\Enums\EventStatus::PUBLISHED;
+        $event->status = $event->status === EventStatus::PUBLISHED
+            ? EventStatus::DRAFT
+            : EventStatus::PUBLISHED;
         $event->save();
         session()->flash('success', 'Event status updated.');
     }
@@ -170,7 +185,7 @@ class EventManager extends Component
         $events = $query->orderBy('created_at', 'desc')->paginate(10);
 
         return view('livewire.organizer.event-manager', [
-            'events' => $events
+            'events' => $events,
         ])->layout('layouts.app');
     }
 }

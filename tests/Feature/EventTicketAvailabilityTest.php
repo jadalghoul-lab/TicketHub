@@ -33,32 +33,33 @@ use App\Models\TicketReservation;
 use App\Models\TicketType;
 use App\Models\User;
 use App\Services\TicketReservationService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 // ─── Shared Setup ────────────────────────────────────────────────────────────
 
 beforeEach(function () {
     $organizerUser = User::factory()->create(['role' => Role::ORGANIZER]);
     $this->organizer = Organizer::create([
-        'user_id'      => $organizerUser->id,
+        'user_id' => $organizerUser->id,
         'company_name' => 'Live Org',
-        'slug'         => 'live-org-' . Str::random(4),
+        'slug' => 'live-org-'.Str::random(4),
     ]);
 
     $this->event = Event::create([
         'organizer_id' => $this->organizer->id,
-        'title'        => 'Live Availability Event',
-        'slug'         => 'live-avail-' . Str::random(4),
-        'category'     => 'music',
-        'city'         => 'Brussels',
-        'country'      => 'Belgium',
-        'start_date'   => now()->addDays(10),
-        'status'       => EventStatus::PUBLISHED,
+        'title' => 'Live Availability Event',
+        'slug' => 'live-avail-'.Str::random(4),
+        'category' => 'music',
+        'city' => 'Brussels',
+        'country' => 'Belgium',
+        'start_date' => now()->addDays(10),
+        'status' => EventStatus::PUBLISHED,
     ]);
 
-    $this->customer  = User::factory()->create(['role' => Role::CUSTOMER]);
+    $this->customer = User::factory()->create(['role' => Role::CUSTOMER]);
     $this->customerB = User::factory()->create(['role' => Role::CUSTOMER]);
 
     $this->service = app(TicketReservationService::class);
@@ -70,10 +71,10 @@ function holdTicket(TicketType $tt, User $user, int $qty = 1): TicketReservation
 {
     return TicketReservation::create([
         'ticket_type_id' => $tt->id,
-        'user_id'        => $user->id,
-        'session_id'     => 'sess_' . Str::random(6),
-        'quantity'       => $qty,
-        'expires_at'     => now()->addMinutes(10),
+        'user_id' => $user->id,
+        'session_id' => 'sess_'.Str::random(6),
+        'quantity' => $qty,
+        'expires_at' => now()->addMinutes(10),
     ]);
 }
 
@@ -84,15 +85,15 @@ function holdTicket(TicketType $tt, User $user, int $qty = 1): TicketReservation
 test('event show page passes ticketAvailability variable to the view', function () {
     TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 10,
     ]);
 
     $this->actingAs($this->customer)
-         ->get(route('public.events.show', $this->event->slug))
-         ->assertStatus(200)
-         ->assertViewHas('ticketAvailability');
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200)
+        ->assertViewHas('ticketAvailability');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -102,15 +103,15 @@ test('event show page passes ticketAvailability variable to the view', function 
 test('available ticket shows correct available count badge on event page', function () {
     TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 20,
     ]);
 
     $this->actingAs($this->customer)
-         ->get(route('public.events.show', $this->event->slug))
-         ->assertStatus(200)
-         ->assertSee('20 available');
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200)
+        ->assertSee('20 available');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -120,16 +121,16 @@ test('available ticket shows correct available count badge on event page', funct
 test('Buy Now link is visible when tickets are available', function () {
     TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 5,
     ]);
 
     $this->actingAs($this->customer)
-         ->get(route('public.events.show', $this->event->slug))
-         ->assertStatus(200)
-         ->assertSee('Buy Now')
-         ->assertSee(route('public.checkout', $this->event->slug));
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200)
+        ->assertSee('Buy Now')
+        ->assertSee(route('public.checkout', $this->event->slug));
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -139,15 +140,15 @@ test('Buy Now link is visible when tickets are available', function () {
 test('low stock ticket shows "Only X left!" warning badge', function () {
     TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'VIP',
-        'price'    => 100,
+        'name' => 'VIP',
+        'price' => 100,
         'quantity' => 3,
     ]);
 
     $this->actingAs($this->customer)
-         ->get(route('public.events.show', $this->event->slug))
-         ->assertStatus(200)
-         ->assertSee('Only 3 left!');
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200)
+        ->assertSee('Only 3 left!');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -157,17 +158,17 @@ test('low stock ticket shows "Only X left!" warning badge', function () {
 test('held ticket shows "Temporarily Held" badge on event page', function () {
     $tt = TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 1,
     ]);
 
     holdTicket($tt, $this->customerB); // customer B holds the only ticket
 
     $this->actingAs($this->customer) // customer A views the page
-         ->get(route('public.events.show', $this->event->slug))
-         ->assertStatus(200)
-         ->assertSee('Temporarily Held');
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200)
+        ->assertSee('Temporarily Held');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -177,19 +178,19 @@ test('held ticket shows "Temporarily Held" badge on event page', function () {
 test('when all tickets are held the Buy Now button is replaced with In Checkout notice', function () {
     $tt = TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 1,
     ]);
 
     holdTicket($tt, $this->customerB);
 
     $response = $this->actingAs($this->customer)
-                     ->get(route('public.events.show', $this->event->slug));
+        ->get(route('public.events.show', $this->event->slug));
 
     $response->assertStatus(200)
-             ->assertSee('In Checkout')
-             ->assertDontSee(route('public.checkout', $this->event->slug)); // link gone
+        ->assertSee('In Checkout')
+        ->assertDontSee(route('public.checkout', $this->event->slug)); // link gone
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -199,17 +200,17 @@ test('when all tickets are held the Buy Now button is replaced with In Checkout 
 test('global "Being purchased right now" notice appears when all tickets are held', function () {
     $tt = TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 1,
     ]);
 
     holdTicket($tt, $this->customerB);
 
     $this->actingAs($this->customer)
-         ->get(route('public.events.show', $this->event->slug))
-         ->assertStatus(200)
-         ->assertSee('Being purchased right now');
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200)
+        ->assertSee('Being purchased right now');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -219,15 +220,15 @@ test('global "Being purchased right now" notice appears when all tickets are hel
 test('sold out ticket shows "Sold Out" badge on event page', function () {
     TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 0,
     ]);
 
     $this->actingAs($this->customer)
-         ->get(route('public.events.show', $this->event->slug))
-         ->assertStatus(200)
-         ->assertSee('Sold Out');
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200)
+        ->assertSee('Sold Out');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -237,15 +238,15 @@ test('sold out ticket shows "Sold Out" badge on event page', function () {
 test('sold out event does not show Buy Now link', function () {
     TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 0,
     ]);
 
     $this->actingAs($this->customer)
-         ->get(route('public.events.show', $this->event->slug))
-         ->assertStatus(200)
-         ->assertDontSee(route('public.checkout', $this->event->slug));
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200)
+        ->assertDontSee(route('public.checkout', $this->event->slug));
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -255,27 +256,27 @@ test('sold out event does not show Buy Now link', function () {
 test('Buy Now is still available when one ticket type is held but another is available', function () {
     $general = TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 30,
+        'name' => 'General',
+        'price' => 30,
         'quantity' => 1,
     ]);
 
     $vip = TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'VIP',
-        'price'    => 100,
+        'name' => 'VIP',
+        'price' => 100,
         'quantity' => 10,
     ]);
 
     holdTicket($general, $this->customerB); // General is held
 
     $response = $this->actingAs($this->customer)
-                     ->get(route('public.events.show', $this->event->slug));
+        ->get(route('public.events.show', $this->event->slug));
 
     $response->assertStatus(200)
-             ->assertSee('Temporarily Held')  // General shows held
-             ->assertSee('Buy Now')            // VIP is still available
-             ->assertSee(route('public.checkout', $this->event->slug));
+        ->assertSee('Temporarily Held')  // General shows held
+        ->assertSee('Buy Now')            // VIP is still available
+        ->assertSee(route('public.checkout', $this->event->slug));
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -285,23 +286,23 @@ test('Buy Now is still available when one ticket type is held but another is ava
 test('expired reservation does not show Temporarily Held on event page', function () {
     $tt = TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 1,
     ]);
 
     // Create an EXPIRED hold
     TicketReservation::create([
         'ticket_type_id' => $tt->id,
-        'user_id'        => $this->customerB->id,
-        'session_id'     => 'sess_expired',
-        'quantity'       => 1,
-        'expires_at'     => now()->subMinutes(5), // past!
+        'user_id' => $this->customerB->id,
+        'session_id' => 'sess_expired',
+        'quantity' => 1,
+        'expires_at' => now()->subMinutes(5), // past!
     ]);
 
     $response = $this->actingAs($this->customer)
-                     ->get(route('public.events.show', $this->event->slug))
-                     ->assertStatus(200);
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200);
 
     // qty=1 triggers is_low (≤5) so view shows "Only 1 left!" — NOT "Temporarily Held"
     $response->assertSee('Only 1 left!');
@@ -315,34 +316,34 @@ test('expired reservation does not show Temporarily Held on event page', functio
 test('confirmed reservation with order_id does not block ticket availability display', function () {
     $tt = TicketType::create([
         'event_id' => $this->event->id,
-        'name'     => 'General',
-        'price'    => 50,
+        'name' => 'General',
+        'price' => 50,
         'quantity' => 20, // use >5 so we avoid is_low badge
     ]);
 
     $order = Order::create([
-        'organizer_id'      => $this->organizer->id,
-        'event_id'          => $this->event->id,
-        'user_id'           => $this->customerB->id,
-        'order_number'      => 'ORD-CONF-TEST',
-        'total_amount'      => 50,
-        'status'            => 'paid',
+        'organizer_id' => $this->organizer->id,
+        'event_id' => $this->event->id,
+        'user_id' => $this->customerB->id,
+        'order_number' => 'ORD-CONF-TEST',
+        'total_amount' => 50,
+        'status' => 'paid',
         'payment_intent_id' => 'pi_confirmed',
     ]);
 
     // Confirmed reservation — has order_id, so NOT counted as an active hold
     TicketReservation::create([
         'ticket_type_id' => $tt->id,
-        'user_id'        => $this->customerB->id,
-        'session_id'     => 'sess_confirmed',
-        'quantity'       => 1,
-        'expires_at'     => now()->addMinutes(5),
-        'order_id'       => $order->id, // confirmed!
+        'user_id' => $this->customerB->id,
+        'session_id' => 'sess_confirmed',
+        'quantity' => 1,
+        'expires_at' => now()->addMinutes(5),
+        'order_id' => $order->id, // confirmed!
     ]);
 
     $response = $this->actingAs($this->customer)
-                     ->get(route('public.events.show', $this->event->slug))
-                     ->assertStatus(200);
+        ->get(route('public.events.show', $this->event->slug))
+        ->assertStatus(200);
 
     // 20 tickets available, confirmed reservation should NOT subtract from display
     $response->assertSee('20 available');
@@ -358,7 +359,7 @@ test('ticketAvailability array is keyed by ticket type ID', function () {
     $tt2 = TicketType::create(['event_id' => $this->event->id, 'name' => 'VIP',     'price' => 80, 'quantity' => 5]);
 
     $response = $this->actingAs($this->customer)
-                     ->get(route('public.events.show', $this->event->slug));
+        ->get(route('public.events.show', $this->event->slug));
 
     $availability = $response->viewData('ticketAvailability');
 
@@ -373,11 +374,11 @@ test('ticketAvailability array is keyed by ticket type ID', function () {
 // ─────────────────────────────────────────────────────────────────────────────
 
 test('is_low flag is true only when available quantity is 5 or fewer', function () {
-    $ttLow  = TicketType::create(['event_id' => $this->event->id, 'name' => 'Low',  'price' => 50, 'quantity' => 5]);
+    $ttLow = TicketType::create(['event_id' => $this->event->id, 'name' => 'Low',  'price' => 50, 'quantity' => 5]);
     $ttHigh = TicketType::create(['event_id' => $this->event->id, 'name' => 'High', 'price' => 50, 'quantity' => 6]);
 
     $response = $this->actingAs($this->customer)
-                     ->get(route('public.events.show', $this->event->slug));
+        ->get(route('public.events.show', $this->event->slug));
 
     $availability = $response->viewData('ticketAvailability');
 

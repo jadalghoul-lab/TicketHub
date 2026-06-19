@@ -5,6 +5,7 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -28,10 +29,10 @@ class AppServiceProvider extends ServiceProvider
         // Dynamic Ngrok URL Detection
         if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
             $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
-            \Illuminate\Support\Facades\URL::forceRootUrl("https://{$host}");
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+            URL::forceRootUrl("https://{$host}");
+            URL::forceScheme('https');
         } elseif (str_starts_with(config('app.url'), 'https://')) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+            URL::forceScheme('https');
         }
     }
 

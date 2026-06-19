@@ -2,31 +2,38 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\User;
 use App\Models\Organizer;
-use App\Enums\Role;
-use Livewire\Component;
-use Livewire\WithPagination;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class OrganizerManager extends Component
 {
     use WithPagination;
 
     public $showModal = false;
+
     public $isEditing = false;
+
     public $editingOrganizerId;
 
     // Form fields
     public $name;
+
     public $email;
+
     public $password;
+
     public $company_name;
+
     public $role = 'organizer';
+
     public $status = 'active';
 
     public $search = '';
+
     public $filterStatus = 'all';
 
     protected $rules = [
@@ -65,12 +72,12 @@ class OrganizerManager extends Component
     public function saveOrganizer()
     {
         $validationRules = $this->rules;
-        if (!$this->isEditing) {
+        if (! $this->isEditing) {
             $validationRules['email'] .= '|unique:users,email';
             $validationRules['password'] = 'required|min:8';
         } else {
             $organizer = Organizer::findOrFail($this->editingOrganizerId);
-            $validationRules['email'] .= '|unique:users,email,' . $organizer->user_id;
+            $validationRules['email'] .= '|unique:users,email,'.$organizer->user_id;
         }
 
         $this->validate($validationRules);
@@ -82,7 +89,7 @@ class OrganizerManager extends Component
                 'email' => $this->email,
                 'role' => $this->role,
             ]);
-            
+
             if ($this->password) {
                 $organizer->user->update(['password' => Hash::make($this->password)]);
             }
@@ -152,12 +159,12 @@ class OrganizerManager extends Component
         $query = Organizer::with('user')->withTrashed();
 
         if ($this->search) {
-            $query->where(function($q) {
-                $q->where('company_name', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('user', function($uq) {
-                      $uq->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%');
-                  });
+            $query->where(function ($q) {
+                $q->where('company_name', 'like', '%'.$this->search.'%')
+                    ->orWhereHas('user', function ($uq) {
+                        $uq->where('name', 'like', '%'.$this->search.'%')
+                            ->orWhere('email', 'like', '%'.$this->search.'%');
+                    });
             });
         }
 
@@ -168,7 +175,7 @@ class OrganizerManager extends Component
         }
 
         return view('livewire.admin.organizer-manager', [
-            'organizers' => $query->latest()->paginate(10)
+            'organizers' => $query->latest()->paginate(10),
         ])->layout('layouts.app');
     }
 }

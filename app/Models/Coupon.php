@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\BelongsToOrganizer;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Coupon extends Model
 {
-    use SoftDeletes, BelongsToOrganizer, HasFactory;
+    use BelongsToOrganizer, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'organizer_id',
@@ -48,11 +48,11 @@ class Coupon extends Model
 
         if ($this->once_per_customer && $user) {
             // Check if this user has already used this coupon in any successful order
-            $usedCount = \App\Models\Order::where('user_id', $user->id)
+            $usedCount = Order::where('user_id', $user->id)
                 ->where('coupon_id', $this->id)
                 ->where('status', 'paid')
                 ->count();
-            
+
             if ($usedCount > 0) {
                 return false;
             }

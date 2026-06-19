@@ -112,7 +112,7 @@
                     <div class="h-52 overflow-hidden relative">
                         @if($event->image)
                             <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                 src="{{ Storage::url($event->image) }}" alt="{{ $event->title }}" />
+                                 src="{{ $event->image_url }}" alt="{{ $event->title }}" />
                         @else
                             <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                                 <span class="material-symbols-outlined text-white text-5xl">event</span>

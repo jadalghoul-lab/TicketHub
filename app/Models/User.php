@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -29,7 +30,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'role' => \App\Enums\Role::class,
+            'role' => Role::class,
         ];
     }
 
@@ -47,17 +48,17 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role === \App\Enums\Role::ADMIN;
+        return $this->role === Role::ADMIN;
     }
 
     public function isOrganizer(): bool
     {
-        return $this->role === \App\Enums\Role::ORGANIZER;
+        return $this->role === Role::ORGANIZER;
     }
 
     public function isCustomer(): bool
     {
-        return $this->role === \App\Enums\Role::CUSTOMER;
+        return $this->role === Role::CUSTOMER;
     }
 
     public function organizer()

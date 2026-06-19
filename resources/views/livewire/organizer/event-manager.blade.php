@@ -50,7 +50,7 @@
 
                 <div class="h-48 bg-slate-100 dark:bg-zinc-700 relative overflow-hidden">
                     @if($event->image)
-                        <img src="{{ Storage::url($event->image) }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ $event->title }}">
+                        <img src="{{ $event->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ $event->title }}">
                     @else
                         <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-zinc-600">
                             <span class="material-symbols-outlined text-5xl">image</span>

@@ -254,7 +254,7 @@
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm sticky top-24">
                     <div class="h-32 relative">
                         @if($event->image)
-                            <img src="{{ Storage::url($event->image) }}" class="w-full h-full object-cover" />
+                            <img src="{{ $event->image_url }}" class="w-full h-full object-cover" />
                         @else
                             <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600"></div>
                         @endif
