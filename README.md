@@ -109,6 +109,11 @@ Volg deze stappen om het project lokaal uit te voeren ter evaluatie:
    ```
    *Tip: Start Laravel Horizon (`php artisan horizon`) in een aparte terminal om de krachtige Redis-gebaseerde queue workers te activeren voor asynchrone e-mails en webhooks!*
 
+### 📱 QR Scanner Lokaal Testen
+Let op: Om de ingebouwde QR-scanner (camera functionaliteit) lokaal op een smartphone te kunnen testen, eist de mobiele browser een veilige **HTTPS** verbinding. 
+- Gebruik een tool zoals **Cloudflared tunnel** (`cloudflared tunnel --url http://localhost:8000`) of **Ngrok** om de lokale server tijdelijk via HTTPS beschikbaar te maken.
+- In een live (productie) omgeving met een geïnstalleerd SSL-certificaat werkt de scanner uiteraard direct, robuust en zonder verdere configuratie.
+
 ---
 
 ## 🎓 Over dit Project
