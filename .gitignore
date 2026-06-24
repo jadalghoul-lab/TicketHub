@@ -22,3 +22,27 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.zip
+*.bak
+*.sql
+*.tar.gz
+
+# Custom scripts and temp files
+rename_*.php
+replace*.php
+update_*.php
+label_issues.*
+
+# Extracted designs
+extracted_*/
