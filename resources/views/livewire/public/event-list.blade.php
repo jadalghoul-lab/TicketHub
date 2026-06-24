@@ -91,8 +91,19 @@
             </div>
         </div>
 
+        <!-- Event Grid Loader -->
+        <div wire:loading wire:target="search, categories, dateRange, type, maxPrice, city, sort" class="w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                @for($i = 0; $i < 6; $i++)
+                    <div class="h-[400px]">
+                        <x-skeleton.card />
+                    </div>
+                @endfor
+            </div>
+        </div>
+
         <!-- Event Grid -->
-        <div wire:loading.class="opacity-50 blur-sm scale-95 transition-all duration-300" wire:target="search, categories, dateRange, type, maxPrice, city, sort">
+        <div wire:loading.remove wire:target="search, categories, dateRange, type, maxPrice, city, sort">
             @if($events->count())
             <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
                 @foreach($events as $event)
