@@ -34,8 +34,8 @@ Het platform verbindt evenementenorganisatoren (B2B) met eindgebruikers (B2C) vi
 
 ## 🛠️ Technologische Stack
 
-- **Backend:** Laravel 11/10 (PHP 8.3+)
-- **Frontend:** Livewire 3, Alpine.js, Tailwind CSS, Flux UI (Inclusief native Dark Mode en Skeleton Loading patronen).
+- **Backend:** Laravel 13 (PHP 8.3+)
+- **Frontend:** Livewire 4, Alpine.js, Tailwind CSS, Flux UI (Inclusief native Dark Mode en Skeleton Loading patronen).
 - **Database:** MySQL
 - **Betalingen:** Stripe API & **Stripe Webhooks** (Asynchrone betalingsverificatie).
 - **Testing:** Pest PHP
