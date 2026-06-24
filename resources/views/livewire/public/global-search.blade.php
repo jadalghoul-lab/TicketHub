@@ -47,65 +47,70 @@
          class="absolute top-full left-0 right-0 mt-4 bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden z-50 p-2"
          x-cloak>
         
-        @if(count($results) > 0)
+        <!-- Skeleton Loader -->
+        <div wire:loading wire:target="search, city" class="w-full">
             <div class="p-4 border-b border-slate-50 dark:border-slate-800">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Suggested Events</p>
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Searching...</p>
             </div>
+            <x-skeleton.list items="4" />
+        </div>
 
-            <div class="max-h-96 overflow-y-auto">
-                @foreach($results as $event)
-                    <a href="{{ route('public.events.show', $event->slug) }}" 
-                       wire:navigate
-                       class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group rounded-2xl">
-                        <div class="w-16 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden flex-shrink-0">
-                            @if($event->image)
-                                <img src="{{ $event->image_url }}" class="w-full h-full object-cover">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-slate-700">
-                                    <span class="material-symbols-outlined text-sm">image</span>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="flex-grow min-w-0">
-                            <h4 class="font-bold text-slate-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{{ $event->title }}</h4>
-                            <div class="flex items-center gap-3 text-[10px] font-bold text-slate-400">
-                                <span class="flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[12px]">calendar_month</span>
-                                    {{ $event->start_date->format('M d, Y') }}
-                                </span>
-                                <span class="flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[12px]">location_on</span>
-                                    {{ $event->city }}
-                                </span>
+        <!-- Results / No Results -->
+        <div wire:loading.remove wire:target="search, city">
+            @if(count($results) > 0)
+                <div class="p-4 border-b border-slate-50 dark:border-slate-800">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Suggested Events</p>
+                </div>
+
+                <div class="max-h-96 overflow-y-auto">
+                    @foreach($results as $event)
+                        <a href="{{ route('public.events.show', $event->slug) }}" 
+                           wire:navigate
+                           class="flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group rounded-2xl">
+                            <div class="w-16 h-12 bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden flex-shrink-0">
+                                @if($event->image)
+                                    <img src="{{ $event->image_url }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-slate-300 dark:text-slate-700">
+                                        <span class="material-symbols-outlined text-sm">image</span>
+                                    </div>
+                                @endif
                             </div>
-                        </div>
-                        <div class="text-right flex-shrink-0">
-                            @php $minPrice = $event->ticketTypes->min('price'); @endphp
-                            <p class="text-sm font-black text-indigo-600 dark:text-indigo-400">
-                                {{ $minPrice > 0 ? '€' . number_format($minPrice, 2) : 'Free' }}
-                            </p>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase">Book Now</span>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
+                            <div class="flex-grow min-w-0">
+                                <h4 class="font-bold text-slate-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{{ $event->title }}</h4>
+                                <div class="flex items-center gap-3 text-[10px] font-bold text-slate-400">
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[12px]">calendar_month</span>
+                                        {{ $event->start_date->format('M d, Y') }}
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[12px]">location_on</span>
+                                        {{ $event->city }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-right flex-shrink-0">
+                                @php $minPrice = $event->ticketTypes->min('price'); @endphp
+                                <p class="text-sm font-black text-indigo-600 dark:text-indigo-400">
+                                    {{ $minPrice > 0 ? '€' . number_format($minPrice, 2) : 'Free' }}
+                                </p>
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">Book Now</span>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
 
-            <a href="{{ route('public.events.index', ['search' => $search, 'city' => $city]) }}" 
-               wire:navigate
-               class="block p-4 text-center bg-slate-50 dark:bg-slate-800 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest hover:text-indigo-600 dark:hover:text-indigo-400 transition-all rounded-b-[2rem]">
-                See all results for "{{ $search }}"
-            </a>
-        @else
-            <div class="p-8 text-center">
-                <div wire:loading.remove wire:target="search">
+                <a href="{{ route('public.events.index', ['search' => $search, 'city' => $city]) }}" 
+                   wire:navigate
+                   class="block p-4 text-center bg-slate-50 dark:bg-slate-800 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest hover:text-indigo-600 dark:hover:text-indigo-400 transition-all rounded-b-[2rem]">
+                    See all results for "{{ $search }}"
+                </a>
+            @else
+                <div class="p-8 text-center">
                     <span class="material-symbols-outlined text-4xl text-slate-200 dark:text-slate-700 mb-4">search_off</span>
                     <p class="text-slate-500 dark:text-slate-400 font-bold">No events found matching your search.</p>
                 </div>
-                <div wire:loading wire:target="search" class="flex flex-col items-center">
-                    <div class="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <p class="text-slate-500 dark:text-slate-400 font-bold">Searching for "{{ $search }}"...</p>
-                </div>
-            </div>
-        @endif
+            @endif
+        </div>
     </div>
 </div>

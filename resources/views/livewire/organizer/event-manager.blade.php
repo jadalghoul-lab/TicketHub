@@ -30,8 +30,19 @@
         </div>
     @endif
 
+    <!-- Events Grid Loader -->
+    <div wire:loading wire:target="statusFilter" class="w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @for($i = 0; $i < 6; $i++)
+                <div class="h-[400px]">
+                    <x-skeleton.card />
+                </div>
+            @endfor
+        </div>
+    </div>
+
     <!-- Events Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div wire:loading.remove wire:target="statusFilter" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse($events as $event)
             <div class="bg-white dark:bg-zinc-800 rounded-[2rem] border border-slate-50 dark:border-zinc-700 shadow-xl shadow-slate-100/50 dark:shadow-none overflow-hidden flex flex-col group relative {{ $event->trashed() ? 'opacity-75 grayscale' : '' }}">
                 
