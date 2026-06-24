@@ -5,6 +5,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Stripe](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)
 ![Pest](https://img.shields.io/badge/Pest-F1E852?style=for-the-badge&logo=php&logoColor=black)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 
 **TicketHub** is een geavanceerd, multi-tenant SaaS (Software as a Service) platform voor de verkoop en het beheer van evenemententickets. Dit project is ontwikkeld als eindwerk voor het **Traject B (Full Stack Web Developer)** aan Syntra West.
 
@@ -38,7 +39,7 @@ Het platform verbindt evenementenorganisatoren (B2B) met eindgebruikers (B2C) vi
 - **Database:** MySQL
 - **Betalingen:** Stripe API & **Stripe Webhooks** (Asynchrone betalingsverificatie).
 - **Testing:** Pest PHP
-- **Achtergrondprocessen:** Laravel Queues voor e-mails en PDF-generatie.
+- **Achtergrondprocessen:** Laravel Horizon & Redis voor high-performance queue-management (e-mails en PDF-generatie).
 
 ---
 
@@ -50,6 +51,7 @@ Om te voldoen aan de hoge eisen van een Traject B eindproject, is er strikt vast
 2. **Atomic Locks & Race Conditions:** Om "overbooking" te voorkomen bij zeer populaire evenementen, wordt er op databaseniveau gebruik gemaakt van atomic locks. Dit garandeert dat twee gebruikers nooit gelijktijdig hetzelfde laatste ticket kunnen afrekenen.
 3. **Multi-Tenancy:** Strikte data-isolatie via Eloquent Global Scopes en Policies zorgt ervoor dat organisatoren uitsluitend toegang hebben tot hun eigen data.
 4. **Stripe Webhooks:** Betalingen worden 100% asynchroon afgehandeld. De orderstatus in de database wordt pas definitief gemaakt na ontvangst van een veilige en geverifieerde `checkout.session.completed` webhook vanuit de Stripe servers.
+5. **High-Performance Queues & Monitoring:** **Redis** functioneert als de in-memory message broker. **Laravel Horizon** is geïmplementeerd om background jobs (zoals PDF-generatie en Stripe webhooks) visueel te monitoren, doorvoer (throughput) te analyseren en workers dynamisch te balanceren.
 
 ---
 
@@ -75,6 +77,7 @@ Volg deze stappen om het project lokaal uit te voeren ter evaluatie:
 - Node.js & NPM
 - MySQL of vergelijkbare database
 - Stripe Account (Test Mode)
+- Redis Server (Actief op de achtergrond)
 
 ### Stappen
 1. **Kloon de repository:**
@@ -104,7 +107,7 @@ Volg deze stappen om het project lokaal uit te voeren ter evaluatie:
    ```bash
    php artisan serve
    ```
-   *Tip: Vergeet niet de queue worker te starten (`php artisan queue:work`) om de asynchrone verzending van PDF-tickets mogelijk te maken!*
+   *Tip: Start Laravel Horizon (`php artisan horizon`) in een aparte terminal om de krachtige Redis-gebaseerde queue workers te activeren voor asynchrone e-mails en webhooks!*
 
 ---
 
